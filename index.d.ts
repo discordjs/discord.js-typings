@@ -129,6 +129,27 @@ declare module "discord.js" {
         stopTyping(force?: boolean): void;
         toString(): string;
     }
+    export class GroupDMChannel extends Channel {
+        lastMessageID: string;
+        messages: Collection<string, {}>;
+        recipients: Collection<string, {}>;
+        owner: {};
+        typing: boolean;
+        typingCount: number;
+        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, {}>>;
+        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, {}>;
+        createCollector(filter: {}, options?: {}): {};
+        fetchMessage(messageID: string): Promise<{}>;
+        fetchMessages(options?: {}): Promise<Collection<string, {}>>;
+        fetchPinnedMessages(): Promise<Collection<string, {}>>;
+        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
+        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        startTyping(count?: number): void;
+        stopTyping(force?: boolean): void;
+        toString(): string;
+    }
     export class Collection<key, value> extends Map<key, value> {
         array(): Array<value>;
         deleteAll(): Array<Promise<void>>;
