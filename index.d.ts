@@ -32,19 +32,19 @@ declare module "discord.js" {
         token: string;
         uptime: number;
         user: ClientUser;
-        users: Collection<string, {}>;
-        voiceConnections: Collection<string, {}>;
+        users: Collection<string, User>;
+        voiceConnections: Collection<string, VoiceConnection>;
         destroy(): Promise<void>;
-        fetchInvite(code: string): Promise<{}>;
-        fetchUser(id: string): Promise<{}>;
+        fetchInvite(code: string): Promise<Invite>;
+        fetchUser(id: string): Promise<User>;
         login(tokenOrEmail: string, password?: string): Promise<string>;
         sweepMessages(lifetime?: number): number;
         syncGuilds(guilds?: Array<{}>): void;
         on(event: "debug", listener: (the: string) => void): this;
         on(event: "disconnect", listener: () => void): this;
         on(event: "error", listener: (error: Error) => void): this;
-        on(event: "guildBanAdd", listener: (guild: {}, user: {}) => void): this;
-        on(event: "guildBanRemove", listener: (guild: {}, user: {}) => void): this;
+        on(event: "guildBanAdd", listener: (guild: {}, user: User) => void): this;
+        on(event: "guildBanRemove", listener: (guild: {}, user: User) => void): this;
         on(event: "guildCreate", listener: (guild: {}) => void): this;
         on(event: "guildDelete", listener: (guild: {}) => void): this;
         on(event: "guildMemberAdd", listener: (guild: {}, member: {}) => void): this;
@@ -66,7 +66,7 @@ declare module "discord.js" {
         on(event: "messageDelete", listener: (message: {}) => void): this;
         on(event: "messageDeleteBulk", listener: (messages: Collection<string, {}>) => void): this;
         on(event: "messageUpdate", listener: (oldMessage: {}, newMessage: {}) => void): this;
-        on(event: "presenceUpdate", listener: (oldUser: {}, newUser: {}) => void): this;
+        on(event: "presenceUpdate", listener: (oldUser: User, newUser: User) => void): this;
         on(event: "ready", listener: () => void): this;
         on(event: "reconnecting", listener: () => void): this;
         on(event: "typingStart", listener: (channel: {}, user: {}) => void): this;
@@ -75,34 +75,14 @@ declare module "discord.js" {
         on(event: "voiceStateUpdate", listener: (oldMember: {}, newMember: {}) => void): this;
         on(event: "warn", listener: (the: string) => void): this;
     }
-    export class ClientUser {
-        avatar: string;
-        avatarURL: string;
-        bot: boolean;
-        client: Client;
-        creationDate: Date;
-        discriminator: string;
+    export class ClientUser extends User {
         email: string;
-        game: string;
-        id: string;
-        status: string;
-        username: string;
         verified: boolean;
-        deleteDM(): Promise<{}>;
-        equals(user: {}): boolean;
-        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
-        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
-        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
         setAvatar(avatar: {}): Promise<ClientUser>;
         setEmail(email: string): Promise<ClientUser>;
         setPassword(password: string): Promise<ClientUser>;
-        setStatus(status?: string, game?: string | { name: string }, url?: string): Promise<ClientUser>;
+        setStatus(status?: string, game?: string | Game, url?: string): Promise<ClientUser>;
         setUsername(username: string): Promise<ClientUser>;
-        toString(): string;
-        typingDurationIn(channel: {}): number;
-        typingIn(channel: {}): boolean;
-        typingSinceIn(channel: {}): Date;
     }
     export class Channel {
         client: Client;
@@ -157,13 +137,52 @@ declare module "discord.js" {
         name: string;
         permissionOverwrites: Collection<string, {}>;
         position: number;
-        createInvite(options?: {}): Promise<{}>;
+        createInvite(options?: {}): Promise<Invite>;
         equals(channel: GuildChannel): boolean;
         overwritePermissions(userOrRole: {} | {}): Promise<void>;
         permissionsFor(member: {}): EvaluatedPermissions;
         setName(name: string): Promise<GuildChannel>;
         setPosition(position: number): Promise<GuildChannel>;
         setTopic(topic: string): Promise<GuildChannel>;
+        toString(): string;
+    }
+    interface Game {
+        name: string;
+        url?: string;
+        type?: number;
+    }
+    export class User {
+        avatar: string;
+        avatarURL: string;
+        bot: boolean;
+        client: Client;
+        creationDate: Date;
+        discriminator: string;
+        game: Game;
+        id: string;
+        status: string;
+        username: string;
+        deleteDM(): Promise<DMChannel>;
+        equals(user: User): boolean;
+        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
+        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        toString(): string;
+    }
+    export class Invite {
+        client: Client;
+        code: string;
+        createdAt: Date;
+        creationDate: Date;
+        guild: {} | {};
+        channel: GuildChannel | {};
+        inviter: User;
+        maxUses: number;
+        temporary: boolean;
+        url: string;
+        uses: number;
+        delete(): Promise<Invite>;
         toString(): string;
     }
     export class VoiceChannel extends GuildChannel {
@@ -262,12 +281,12 @@ declare module "discord.js" {
     class VoiceReceiver extends EventEmitter {
         connection: VoiceConnection;
         destroyed: boolean;
-        createOpusStream(user: {}): ReadableStream;
-        createPCMStream(user: {}): ReadableStream;
+        createOpusStream(user: User): ReadableStream;
+        createPCMStream(user: User): ReadableStream;
         destroy(): void;
         recreate(): void;
-        on(event: "opus", listener: (user: {}, buffer: Buffer) => void): this;
-        on(event: "pcm", listener: (user: {}, buffer: Buffer) => void): this;
+        on(event: "opus", listener: (user: User, buffer: Buffer) => void): this;
+        on(event: "pcm", listener: (user: User, buffer: Buffer) => void): this;
         on(event: "warn", listener: (message: string) => void): this;
     }
     export class Collection<key, value> extends Map<key, value> {
