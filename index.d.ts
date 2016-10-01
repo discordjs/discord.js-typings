@@ -57,7 +57,7 @@ declare module "discord.js" {
         on(event: "guildRoleDelete", listener: (guild: Guild, role: {}) => void): this;
         on(event: "guildRoleUpdate", listener: (guild: Guild, oldRole: {}, newRole: {}) => void): this;
         on(event: "guildUnavailable", listener: (guild: Guild) => void): this;
-        on(event: "guildUpdate", listener: (oldguild: Guild, newguild: Guild) => void): this;
+        on(event: "guildUpdate", listener: (oldGuild: Guild, newGuild: Guild) => void): this;
         on(event: "channelCreate", listener: (channel: Channel) => void): this;
         on(event: "channelDelete", listener: (channel: Channel) => void): this;
         on(event: "channelPinsUpdate", listener: (channel: Channel, time: Date) => void): this;
