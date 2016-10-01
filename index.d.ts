@@ -179,7 +179,7 @@ declare module "discord.js" {
         channel: VoiceChannel;
         player: {};
         ready: boolean;
-        createReceiver(): {};
+        createReceiver(): VoiceReceiver;
         playConvertedStream(stream: ReadableStream, options?: {}): {};
         playFile(file: string, options?: {}): {};
         playStream(stream: ReadableStream, options?: {}): {};
@@ -187,6 +187,17 @@ declare module "discord.js" {
         on(event: "error", listener: (error: Error) => void): this;
         on(event: "ready", listener: () => void): this;
         on(event: "speaking", listener: (user: {}, speaking: boolean) => void): this;
+    }
+    export class VoiceReceiver extends EventEmitter {
+        connection: VoiceConnection;
+        destroyed: boolean;
+        createOpusStream(user: {}): ReadableStream;
+        createPCMStream(user: {}): ReadableStream;
+        destroy(): void;
+        recreate(): void;
+        on(event: "opus", listener: (user: {}, buffer: Buffer) => void): this;
+        on(event: "pcm", listener: (user: {}, buffer: Buffer) => void): this;
+        on(event: "warn", listener: (message: string) => void): this;
     }
     export class Collection<key, value> extends Map<key, value> {
         array(): Array<value>;
