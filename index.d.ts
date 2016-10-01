@@ -164,6 +164,15 @@ declare module "discord.js" {
         setTopic(topic: string): Promise<GuildChannel>;
         toString(): string;
     }
+    export class VoiceChannel extends GuildChannel {
+        bitrate: number;
+        connection: {};
+        members: Collection<string, {}>;
+        userLimit: number;
+        join(): Promise<{}>;
+        leave(): null;
+        setBitrate(bitrate: number): Promise<VoiceChannel>;
+    }
     export class Collection<key, value> extends Map<key, value> {
         array(): Array<value>;
         deleteAll(): Array<Promise<void>>;
