@@ -1,6 +1,7 @@
 declare module "discord.js" {
     import { EventEmitter } from "events";
     import { Readable as ReadableStream } from "stream";
+    import { ChildProcess } from "child_process";
     interface ClientOptions {
         api_request_method?: string;
         shard_id?: number;
@@ -173,6 +174,26 @@ declare module "discord.js" {
         join(): Promise<VoiceConnection>;
         leave(): null;
         setBitrate(bitrate: number): Promise<VoiceChannel>;
+    }
+    export class Shard {
+        id: string;
+        manager: {};
+        process: ChildProcess;
+        eval(script: string): Promise<any>;
+        fetchClientValue(prop: string): Promise<any>;
+        send(message: any): Promise<Shard>;
+    }
+    export class ShardManager extends EventEmitter {
+        constructor(file: string, totalShards?: number, respawn?: boolean);
+        file: string; 
+        shards: Collection<number, Shard>;
+        totalShards: number;         
+        broadcast(message: any): Promise<Array<Shard>>;
+        broadcastEval(script: string): Promise<Array<any>>;
+        createShard(id: number): Promise<Shard>;
+        fetchClientValues(prop: string): Promise<Array<any>>;
+        spawn(amount?: number, delay?: number): Promise<Collection<number, Shard>>;
+        on(event: "launch", listener: (shard: Shard) => void): this;
     }
     class VoiceConnection extends EventEmitter {
         endpoint: string;
