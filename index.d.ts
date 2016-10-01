@@ -53,9 +53,9 @@ declare module "discord.js" {
         on(event: "guildMembersChunk", listener: (guild: Guild, members: Array<{}>) => void): this;
         on(event: "guildMemberSpeaking", listener: (member: {}, speaking: boolean) => void): this;
         on(event: "guildMemberUpdate", listener: (guild: Guild, oldMember: {}, newMember: {}) => void): this;
-        on(event: "guildRoleCreate", listener: (guild: Guild, role: {}) => void): this;
-        on(event: "guildRoleDelete", listener: (guild: Guild, role: {}) => void): this;
-        on(event: "guildRoleUpdate", listener: (guild: Guild, oldRole: {}, newRole: {}) => void): this;
+        on(event: "guildRoleCreate", listener: (guild: Guild, role: Role) => void): this;
+        on(event: "guildRoleDelete", listener: (guild: Guild, role: Role) => void): this;
+        on(event: "guildRoleUpdate", listener: (guild: Guild, oldRole: Role, newRole: Role) => void): this;
         on(event: "guildUnavailable", listener: (guild: Guild) => void): this;
         on(event: "guildUpdate", listener: (oldGuild: Guild, newGuild: Guild) => void): this;
         on(event: "channelCreate", listener: (channel: Channel) => void): this;
@@ -69,8 +69,8 @@ declare module "discord.js" {
         on(event: "presenceUpdate", listener: (oldUser: User, newUser: User) => void): this;
         on(event: "ready", listener: () => void): this;
         on(event: "reconnecting", listener: () => void): this;
-        on(event: "typingStart", listener: (channel: {}, user: User) => void): this;
-        on(event: "typingStop", listener: (channel: {}, user: User) => void): this;
+        on(event: "typingStart", listener: (channel: Channel, user: User) => void): this;
+        on(event: "typingStop", listener: (channel: Channel, user: User) => void): this;
         on(event: "userUpdate", listener: (oldClientUser: ClientUser, newClientUser: ClientUser) => void): this;
         on(event: "voiceStateUpdate", listener: (oldMember: {}, newMember: {}) => void): this;
         on(event: "warn", listener: (the: string) => void): this;
@@ -139,7 +139,7 @@ declare module "discord.js" {
         position: number;
         createInvite(options?: {}): Promise<Invite>;
         equals(channel: GuildChannel): boolean;
-        overwritePermissions(userOrRole: {} | {}): Promise<void>;
+        overwritePermissions(userOrRole: Role | {}): Promise<void>;
         permissionsFor(member: {}): EvaluatedPermissions;
         setName(name: string): Promise<GuildChannel>;
         setPosition(position: number): Promise<GuildChannel>;
@@ -282,38 +282,66 @@ declare module "discord.js" {
         on(event: "speaking", listener: (value: boolean) => void): this;
         on(event: "start", listener: () => void): this;
     }
+    interface Permissions {
+        CREATE_INSTANT_INVITE: boolean;
+        KICK_MEMBERS: boolean;
+        BAN_MEMBERS: boolean;
+        ADMINISTRATOR: boolean;
+        MANAGE_CHANNELS: boolean;
+        MANAGE_GUILD: boolean;
+        READ_MESSAGES: boolean;
+        SEND_MESSAGES: boolean;
+        SEND_TTS_MESSAGES: boolean;
+        MANAGE_MESSAGES: boolean;
+        EMBED_LINKS: boolean;
+        ATTACH_FILES: boolean;
+        READ_MESSAGE_HISTORY: boolean;
+        MENTION_EVERYONE: boolean;
+        USE_EXTERNAL_EMOJIS: boolean;
+        CONNECT: boolean;
+        SPEAK: boolean;
+        MUTE_MEMBERS: boolean;
+        DEAFEN_MEMBERS: boolean;
+        MOVE_MEMBERS: boolean;
+        USE_VAD: boolean;
+        CHANGE_NICKNAME: boolean;
+        MANAGE_NICKNAMES: boolean;
+        MANAGE_ROLES: boolean;
+        MANAGE_WEBHOOKS: boolean;
+    }
     export class EvaluatedPermissions {
         member: {};
         raw: number;
         hasPermission(permission: {}, explicit?: boolean): boolean;
         hasPermissions(permission: Array<{}>, explicit?: boolean): boolean;
-        serialize(): {
-            CREATE_INSTANT_INVITE: boolean;
-            KICK_MEMBERS: boolean;
-            BAN_MEMBERS: boolean;
-            ADMINISTRATOR: boolean;
-            MANAGE_CHANNELS: boolean;
-            MANAGE_GUILD: boolean;
-            READ_MESSAGES: boolean;
-            SEND_MESSAGES: boolean;
-            SEND_TTS_MESSAGES: boolean;
-            MANAGE_MESSAGES: boolean;
-            EMBED_LINKS: boolean;
-            ATTACH_FILES: boolean;
-            READ_MESSAGE_HISTORY: boolean;
-            MENTION_EVERYONE: boolean;
-            USE_EXTERNAL_EMOJIS: boolean;
-            CONNECT: boolean;
-            SPEAK: boolean;
-            MUTE_MEMBERS: boolean;
-            DEAFEN_MEMBERS: boolean;
-            MOVE_MEMBERS: boolean;
-            USE_VAD: boolean;
-            CHANGE_NICKNAME: boolean;
-            MANAGE_NICKNAMES: boolean;
-            MANAGE_ROLES: boolean;
-            MANAGE_WEBHOOKS: boolean;
-        };
+        serialize(): Permissions;
+    }
+    export class Role {
+        client: Client;
+        color: number;
+        creationDate: Date;
+        guild: Guild;
+        hexColor: string;
+        hoist: boolean;
+        id: string;
+        managed: boolean;
+        members: Collection<string, {}>;
+        mentionable: boolean;
+        name: string;
+        permissions: number;
+        position: number;
+        delete(): Promise<Role>;
+        edit(data: {}): Promise<Role>;
+        equals(role: Role): boolean;
+        hasPermission(permission: {}, explicit?: boolean): boolean;
+        hasPermissions(permissions: Array<{}>, explicit?: boolean): boolean;
+        serialize(): Permissions;
+        setColor(color: string | number): Promise<Role>;
+        setHoist(hoist: boolean): Promise<Role>;
+        setName(name: string): Promise<Role>;
+        setPermissions(permissions: Array<string>): Promise<Role>;
+        setPosition(position: number): Promise<Role>;
+        toString(): string;
     }
     class VoiceConnection extends EventEmitter {
         endpoint: string;
