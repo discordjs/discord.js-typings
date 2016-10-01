@@ -177,7 +177,7 @@ declare module "discord.js" {
     }
     export class Shard {
         id: string;
-        manager: {};
+        manager: ShardManager;
         process: ChildProcess;
         eval(script: string): Promise<any>;
         fetchClientValue(prop: string): Promise<any>;
@@ -195,15 +195,32 @@ declare module "discord.js" {
         spawn(amount?: number, delay?: number): Promise<Collection<number, Shard>>;
         on(event: "launch", listener: (shard: Shard) => void): this;
     }
+    export class StreamDispatcher extends EventEmitter {
+        passes: number;
+        time: number;
+        totalStreamTime: number;
+        volume: number;
+        end(): void;
+        pause(): void;
+        resume(): void;
+        setVolume(volume: number): void;
+        setVolumeDecibels(db: number): void;
+        setVolumeLogarithmic(value: number): void;
+        on(event: "debug", listener: (information: string) => void): this;
+        on(event: "end", listener: () => void): this;
+        on(event: "error", listener: (err: Error) => void): this;
+        on(event: "speaking", listener: (value: boolean) => void): this;
+        on(event: "start", listener: () => void): this;
+    }
     class VoiceConnection extends EventEmitter {
         endpoint: string;
         channel: VoiceChannel;
         player: {};
         ready: boolean;
         createReceiver(): VoiceReceiver;
-        playConvertedStream(stream: ReadableStream, options?: {}): {};
-        playFile(file: string, options?: {}): {};
-        playStream(stream: ReadableStream, options?: {}): {};
+        playConvertedStream(stream: ReadableStream, options?: {}): StreamDispatcher;
+        playFile(file: string, options?: {}): StreamDispatcher;
+        playStream(stream: ReadableStream, options?: {}): StreamDispatcher;
         on(event: "disconnected", listener: (error: Error) => void): this;
         on(event: "error", listener: (error: Error) => void): this;
         on(event: "ready", listener: () => void): this;
