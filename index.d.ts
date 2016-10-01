@@ -167,14 +167,14 @@ declare module "discord.js" {
     }
     export class VoiceChannel extends GuildChannel {
         bitrate: number;
-        connection: voiceConnection;
+        connection: VoiceConnection;
         members: Collection<string, {}>;
         userLimit: number;
-        join(): Promise<voiceConnection>;
+        join(): Promise<VoiceConnection>;
         leave(): null;
         setBitrate(bitrate: number): Promise<VoiceChannel>;
     }
-    export class voiceConnection extends EventEmitter {
+    export class VoiceConnection extends EventEmitter {
         endpoint: string;
         channel: VoiceChannel;
         player: {};
