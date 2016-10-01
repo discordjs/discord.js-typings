@@ -24,7 +24,7 @@ declare module "discord.js" {
         email: string;
         emojis: Collection<string, {}>;
         guilds: Collection<string, {}>;
-        channels: Collection<string, {}>;
+        channels: Collection<string, Channel>;
         options: ClientOptions;
         password: string;
         readyTime: Date;
@@ -58,10 +58,10 @@ declare module "discord.js" {
         on(event: "guildRoleUpdate", listener: (guild: {}, oldRole: {}, newRole: {}) => void): this;
         on(event: "guildUnavailable", listener: (guild: {}) => void): this;
         on(event: "guildUpdate", listener: (oldGuild: {}, newGuild: {}) => void): this;
-        on(event: "channelCreate", listener: (channel: {}) => void): this;
-        on(event: "channelDelete", listener: (channel: {}) => void): this;
-        on(event: "channelPinsUpdate", listener: (channel: {}, time: Date) => void): this;
-        on(event: "channelUpdate", listener: (oldChannel: {}, newChannel: {}) => void): this;
+        on(event: "channelCreate", listener: (channel: Channel) => void): this;
+        on(event: "channelDelete", listener: (channel: Channel) => void): this;
+        on(event: "channelPinsUpdate", listener: (channel: Channel, time: Date) => void): this;
+        on(event: "channelUpdate", listener: (oldChannel: Channel, newChannel: Channel) => void): this;
         on(event: "message", listener: (message: {}) => void): this;
         on(event: "messageDelete", listener: (message: {}) => void): this;
         on(event: "messageDeleteBulk", listener: (messages: Collection<string, {}>) => void): this;
@@ -104,6 +104,13 @@ declare module "discord.js" {
         typingIn(channel: {}): boolean;
         typingSinceIn(channel: {}): Date;
     }
+    export class Channel {
+        client: Client;
+        creationDate: Date;
+        id: string;
+        type: string;
+        delete(): Promise<Channel>;
+    } 
     export class Collection<key, value> extends Map<key, value> {
         array(): Array<value>;
         deleteAll(): Array<Promise<void>>;
