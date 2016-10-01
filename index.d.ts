@@ -1,5 +1,6 @@
 declare module "discord.js" {
     import { EventEmitter } from "events";
+    import { Readable as ReadableStream } from "stream";
     interface ClientOptions {
         api_request_method?: string;
         shard_id?: number;
@@ -166,12 +167,26 @@ declare module "discord.js" {
     }
     export class VoiceChannel extends GuildChannel {
         bitrate: number;
-        connection: {};
+        connection: voiceConnection;
         members: Collection<string, {}>;
         userLimit: number;
-        join(): Promise<{}>;
+        join(): Promise<voiceConnection>;
         leave(): null;
         setBitrate(bitrate: number): Promise<VoiceChannel>;
+    }
+    export class voiceConnection extends EventEmitter {
+        endpoint: string;
+        channel: VoiceChannel;
+        player: {};
+        ready: boolean;
+        createReceiver(): {};
+        playConvertedStream(stream: ReadableStream, options?: {}): {};
+        playFile(file: string, options?: {}): {};
+        playStream(stream: ReadableStream, options?: {}): {};
+        on(event: "disconnected", listener: (error: Error) => void): this;
+        on(event: "error", listener: (error: Error) => void): this;
+        on(event: "ready", listener: () => void): this;
+        on(event: "speaking", listener: (user: {}, speaking: boolean) => void): this;
     }
     export class Collection<key, value> extends Map<key, value> {
         array(): Array<value>;
