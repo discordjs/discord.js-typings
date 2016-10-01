@@ -174,7 +174,7 @@ declare module "discord.js" {
         leave(): null;
         setBitrate(bitrate: number): Promise<VoiceChannel>;
     }
-    export class VoiceConnection extends EventEmitter {
+    class VoiceConnection extends EventEmitter {
         endpoint: string;
         channel: VoiceChannel;
         player: {};
@@ -188,7 +188,7 @@ declare module "discord.js" {
         on(event: "ready", listener: () => void): this;
         on(event: "speaking", listener: (user: {}, speaking: boolean) => void): this;
     }
-    export class VoiceReceiver extends EventEmitter {
+    class VoiceReceiver extends EventEmitter {
         connection: VoiceConnection;
         destroyed: boolean;
         createOpusStream(user: {}): ReadableStream;
