@@ -1,4 +1,4 @@
-/// <reference path="node.d.ts" />
+/// <reference path="node.d.ts" /> // used for getting type definitions for node's modules
 
 declare module "discord.js" {
     import { EventEmitter } from "events";
@@ -31,7 +31,7 @@ declare module "discord.js" {
         status: number;
         token: string;
         uptime: number;
-        user: {};
+        user: ClientUser;
         users: Collection<string, {}>;
         voiceConnections: Collection<string, {}>;
         destroy(): Promise<void>;
@@ -71,9 +71,38 @@ declare module "discord.js" {
         on(event: "reconnecting", listener: () => void): this;
         on(event: "typingStart", listener: (channel: {}, user: {}) => void): this;
         on(event: "typingStop", listener: (channel: {}, user: {}) => void): this;
-        on(event: "userUpdate", listener: (oldClientUser: {}, newClientUser: {}) => void): this;
+        on(event: "userUpdate", listener: (oldClientUser: ClientUser, newClientUser: ClientUser) => void): this;
         on(event: "voiceStateUpdate", listener: (oldMember: {}, newMember: {}) => void): this;
         on(event: "warn", listener: (the: string) => void): this;
+    }
+    export class ClientUser {
+        avatar: string;
+        avatarURL: string;
+        bot: boolean;
+        client: Client;
+        creationDate: Date;
+        discriminator: string;
+        email: string;
+        game: string;
+        id: string;
+        status: string;
+        username: string;
+        verified: boolean;
+        deleteDM(): Promise<{}>;
+        equals(user: {}): boolean;
+        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
+        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        setAvatar(avatar: {}): Promise<ClientUser>;
+        setEmail(email: string): Promise<ClientUser>;
+        setPassword(password: string): Promise<ClientUser>;
+        setStatus(status?: string, game?: string | { name: string }, url?: string): Promise<ClientUser>;
+        setUsername(username: string): Promise<ClientUser>;
+        toString(): string;
+        typingDurationIn(channel: {}): number;
+        typingIn(channel: {}): boolean;
+        typingSinceIn(channel: {}): Date;
     }
     export class Collection<key, value> extends Map<key, value> {
         array(): Array<value>;
