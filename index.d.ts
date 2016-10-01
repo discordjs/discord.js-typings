@@ -150,6 +150,20 @@ declare module "discord.js" {
         stopTyping(force?: boolean): void;
         toString(): string;
     }
+    export class GuildChannel extends Channel {
+        guild: {};
+        name: string;
+        permissionOverwrites: Collection<string, {}>;
+        position: number;
+        createInvite(options?: {}): Promise<{}>;
+        equals(channel: GuildChannel): boolean;
+        overwritePermissions(userOrRole: {} | {}): Promise<void>;
+        permissionsFor(member: {}): {};
+        setName(name: string): Promise<GuildChannel>;
+        setPosition(position: number): Promise<GuildChannel>;
+        setTopic(topic: string): Promise<GuildChannel>;
+        toString(): string;
+    }
     export class Collection<key, value> extends Map<key, value> {
         array(): Array<value>;
         deleteAll(): Array<Promise<void>>;
