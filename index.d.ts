@@ -160,7 +160,7 @@ declare module "discord.js" {
         createInvite(options?: {}): Promise<{}>;
         equals(channel: GuildChannel): boolean;
         overwritePermissions(userOrRole: {} | {}): Promise<void>;
-        permissionsFor(member: {}): {};
+        permissionsFor(member: {}): EvaluatedPermissions;
         setName(name: string): Promise<GuildChannel>;
         setPosition(position: number): Promise<GuildChannel>;
         setTopic(topic: string): Promise<GuildChannel>;
@@ -185,9 +185,9 @@ declare module "discord.js" {
     }
     export class ShardManager extends EventEmitter {
         constructor(file: string, totalShards?: number, respawn?: boolean);
-        file: string; 
+        file: string;
         shards: Collection<number, Shard>;
-        totalShards: number;         
+        totalShards: number;
         broadcast(message: any): Promise<Array<Shard>>;
         broadcastEval(script: string): Promise<Array<any>>;
         createShard(id: number): Promise<Shard>;
@@ -211,6 +211,39 @@ declare module "discord.js" {
         on(event: "error", listener: (err: Error) => void): this;
         on(event: "speaking", listener: (value: boolean) => void): this;
         on(event: "start", listener: () => void): this;
+    }
+    export class EvaluatedPermissions {
+        member: {};
+        raw: number;
+        hasPermission(permission: {}, explicit?: boolean): boolean;
+        hasPermissions(permission: Array<{}>, explicit?: boolean): boolean;
+        serialize(): {
+            CREATE_INSTANT_INVITE: boolean;
+            KICK_MEMBERS: boolean;
+            BAN_MEMBERS: boolean;
+            ADMINISTRATOR: boolean;
+            MANAGE_CHANNELS: boolean;
+            MANAGE_GUILD: boolean;
+            READ_MESSAGES: boolean;
+            SEND_MESSAGES: boolean;
+            SEND_TTS_MESSAGES: boolean;
+            MANAGE_MESSAGES: boolean;
+            EMBED_LINKS: boolean;
+            ATTACH_FILES: boolean;
+            READ_MESSAGE_HISTORY: boolean;
+            MENTION_EVERYONE: boolean;
+            USE_EXTERNAL_EMOJIS: boolean;
+            CONNECT: boolean;
+            SPEAK: boolean;
+            MUTE_MEMBERS: boolean;
+            DEAFEN_MEMBERS: boolean;
+            MOVE_MEMBERS: boolean;
+            USE_VAD: boolean;
+            CHANGE_NICKNAME: boolean;
+            MANAGE_NICKNAMES: boolean;
+            MANAGE_ROLES: boolean;
+            MANAGE_WEBHOOKS: boolean;
+        };
     }
     class VoiceConnection extends EventEmitter {
         endpoint: string;
