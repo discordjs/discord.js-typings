@@ -47,10 +47,10 @@ declare module "discord.js" {
         on(event: "guildBanRemove", listener: (guild: Guild, user: User) => void): this;
         on(event: "guildCreate", listener: (guild: Guild) => void): this;
         on(event: "guildDelete", listener: (guild: Guild) => void): this;
-        on(event: "guildMemberAdd", listener: (guild: Guild, member: {}) => void): this;
-        on(event: "guildMemberAvailable", listener: (guild: Guild, member: {}) => void): this;
-        on(event: "guildMemberRemove", listener: (guild: Guild, member: {}) => void): this;
-        on(event: "guildMembersChunk", listener: (guild: Guild, members: Array<{}>) => void): this;
+        on(event: "guildMemberAdd", listener: (guild: Guild, member: GuildMember) => void): this;
+        on(event: "guildMemberAvailable", listener: (guild: Guild, member: GuildMember) => void): this;
+        on(event: "guildMemberRemove", listener: (guild: Guild, member: GuildMember) => void): this;
+        on(event: "guildMembersChunk", listener: (guild: Guild, members: Array<GuildMember>) => void): this;
         on(event: "guildMemberSpeaking", listener: (member: {}, speaking: boolean) => void): this;
         on(event: "guildMemberUpdate", listener: (guild: Guild, oldMember: {}, newMember: {}) => void): this;
         on(event: "guildRoleCreate", listener: (guild: Guild, role: Role) => void): this;
@@ -72,7 +72,7 @@ declare module "discord.js" {
         on(event: "typingStart", listener: (channel: Channel, user: User) => void): this;
         on(event: "typingStop", listener: (channel: Channel, user: User) => void): this;
         on(event: "userUpdate", listener: (oldClientUser: ClientUser, newClientUser: ClientUser) => void): this;
-        on(event: "voiceStateUpdate", listener: (oldMember: {}, newMember: {}) => void): this;
+        on(event: "voiceStateUpdate", listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
         on(event: "warn", listener: (the: string) => void): this;
     }
     export class ClientUser extends User {
@@ -139,12 +139,32 @@ declare module "discord.js" {
         position: number;
         createInvite(options?: {}): Promise<Invite>;
         equals(channel: GuildChannel): boolean;
-        overwritePermissions(userOrRole: Role | {}): Promise<void>;
+        overwritePermissions(userOrRole: Role | User): Promise<void>;
         permissionsFor(member: {}): EvaluatedPermissions;
         setName(name: string): Promise<GuildChannel>;
         setPosition(position: number): Promise<GuildChannel>;
         setTopic(topic: string): Promise<GuildChannel>;
         toString(): string;
+    }
+    export class TextChannel extends GuildChannel {
+        lastMessageID: string;
+        members: Collection<string, GuildMember>;
+        messages: Collection<string, {}>;
+        topic: string;
+        typing: boolean;
+        typingCount: number;
+        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, {}>>;
+        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, {}>;
+        createCollector(filter: {}, options?: {}): {};
+        fetchMessage(messageID: string): Promise<{}>;
+        fetchMessages(options?: {}): Promise<Collection<string, {}>>;
+        fetchPinnedMessages(): Promise<Collection<string, {}>>;
+        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
+        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        startTyping(count?: number): void;
+        stopTyping(force?: boolean): void;
     }
     interface Game {
         name: string;
@@ -168,27 +188,27 @@ declare module "discord.js" {
         joinDate: Date;
         large: boolean;
         memberCount: number;
-        members: Collection<string, {}>;
+        members: Collection<string, GuildMember>;
         name: string;
-        owner: {};
+        owner: GuildMember;
         ownerID: string;
         region: string;
         roles: Collection<string, Role>;
         splash: string;
         verificationLevel: number;
         voiceConnection: VoiceConnection;
-        ban(user: {}, deleteDays?: number): Promise<{} | User | string>;
-        createChannel(name: string, type: string): Promise<{} | VoiceChannel>;
-        createRole(data?: {}): Promise<{}>;
+        ban(user: GuildMember, deleteDays?: number): Promise<{} | User | string>;
+        createChannel(name: string, type: string): Promise<TextChannel | VoiceChannel>;
+        createRole(data?: {}): Promise<Role>;
         delete(): Promise<Guild>;
         edit(data: {}): Promise<Guild>;
         equals(guild: Guild): boolean;
         fetchBans(): Promise<Collection<string, User>>;
         fetchInvites(): Promise<Collection<string, Invite>>;
-        fetchMember(user: {}): Promise<{}>;
+        fetchMember(user: {}): Promise<GuildMember>;
         fetchMembers(query?: string): Promise<Guild>;
         leave(): Promise<Guild>;
-        member(user: {}): {};
+        member(user: {}): GuildMember;
         pruneMembers(days: number, dry?: boolean): Promise<number>;
         setAFKChannel(afkChannel: {}): Promise<Guild>;
         setAFKTimeout(afkTimeout: number): Promise<Guild>;
@@ -201,6 +221,50 @@ declare module "discord.js" {
         sync(): void;
         toString(): string;
         unban(user: {}): Promise<User>;
+    }
+    export class GuildMember {
+        bannable: boolean;
+        client: Client;
+        deaf: boolean;
+        guild: Guild;
+        highestRole: Role;
+        id: string;
+        joinDate: Date;
+        kickable: boolean;
+        mute: boolean;
+        nickname: string;
+        permissions: EvaluatedPermissions;
+        roles: Collection<string, Role>;
+        selfDeaf: boolean;
+        selfMute: boolean;
+        serverDeaf: boolean;
+        serverMute: boolean;
+        speaking: boolean;
+        user: User;
+        voiceChannel: VoiceChannel;
+        voiceChannelID: string;
+        voiceSessionID: string;
+        addRole(role: Role | string): Promise<GuildMember>;
+        addRoles(roles: Collection<string, Role> | Array<Role> | Array<string>): Promise<GuildMember>;
+        ban(deleteDays?: number): Promise<GuildMember>;
+        deleteDM(): Promise<DMChannel>;
+        edit(data: {}): Promise<GuildMember>;
+        hasPermission(permission: {}, explicit?: boolean): boolean;
+        hasPermissions(permission: Array<{}>, explicit?: boolean): boolean;
+        kick(): Promise<GuildMember>;
+        permissionsIn(channel: {}): EvaluatedPermissions;
+        removeRole(role: Role | string): Promise<GuildMember>;
+        removeRoles(roles: Collection<string, Role> | Array<Role> | Array<string>): Promise<GuildMember>;
+        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
+        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        setDeaf(deaf: boolean): Promise<GuildMember>;
+        setMute(mute: boolean): Promise<GuildMember>;
+        setNickname(nickname: string): Promise<GuildMember>;
+        setRoles(roles: Collection<string, Role> | Array<Role> | Array<string>): Promise<GuildMember>;
+        setVoiceChannel(voiceChannel: {}): Promise<GuildMember>;
+        toString(): string;
     }
     export class User {
         avatar: string;
