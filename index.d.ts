@@ -1,5 +1,3 @@
-/// <reference path="node.d.ts" /> // used for getting type definitions for node's modules
-
 declare module "discord.js" {
     import { EventEmitter } from "events";
     interface ClientOptions {
@@ -110,7 +108,27 @@ declare module "discord.js" {
         id: string;
         type: string;
         delete(): Promise<Channel>;
-    } 
+    }
+    export class DMChannel extends Channel {
+        lastMessageID: string;
+        messages: Collection<string, {}>;
+        recipient: {};
+        typing: boolean;
+        typingCount: number;
+        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, {}>>;
+        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, {}>;
+        createCollector(filter: {}, options?: {}): {};
+        fetchMessage(messageID: string): Promise<{}>;
+        fetchMessages(options?: {}): Promise<Collection<string, {}>>;
+        fetchPinnedMessages(): Promise<Collection<string, {}>>;
+        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
+        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        startTyping(count?: number): void;
+        stopTyping(force?: boolean): void;
+        toString(): string;
+    }
     export class Collection<key, value> extends Map<key, value> {
         array(): Array<value>;
         deleteAll(): Array<Promise<void>>;
