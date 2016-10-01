@@ -23,7 +23,7 @@ declare module "discord.js" {
         constructor(options?: ClientOptions);
         email: string;
         emojis: Collection<string, {}>;
-        guilds: Collection<string, {}>;
+        guilds: Collection<string, Guild>;
         channels: Collection<string, Channel>;
         options: ClientOptions;
         password: string;
@@ -39,25 +39,25 @@ declare module "discord.js" {
         fetchUser(id: string): Promise<User>;
         login(tokenOrEmail: string, password?: string): Promise<string>;
         sweepMessages(lifetime?: number): number;
-        syncGuilds(guilds?: Array<{}>): void;
+        syncGuilds(guilds?: Array<Guild>): void;
         on(event: "debug", listener: (the: string) => void): this;
         on(event: "disconnect", listener: () => void): this;
         on(event: "error", listener: (error: Error) => void): this;
-        on(event: "guildBanAdd", listener: (guild: {}, user: User) => void): this;
-        on(event: "guildBanRemove", listener: (guild: {}, user: User) => void): this;
-        on(event: "guildCreate", listener: (guild: {}) => void): this;
-        on(event: "guildDelete", listener: (guild: {}) => void): this;
-        on(event: "guildMemberAdd", listener: (guild: {}, member: {}) => void): this;
-        on(event: "guildMemberAvailable", listener: (guild: {}, member: {}) => void): this;
-        on(event: "guildMemberRemove", listener: (guild: {}, member: {}) => void): this;
-        on(event: "guildMembersChunk", listener: (guild: {}, members: Array<{}>) => void): this;
+        on(event: "guildBanAdd", listener: (guild: Guild, user: User) => void): this;
+        on(event: "guildBanRemove", listener: (guild: Guild, user: User) => void): this;
+        on(event: "guildCreate", listener: (guild: Guild) => void): this;
+        on(event: "guildDelete", listener: (guild: Guild) => void): this;
+        on(event: "guildMemberAdd", listener: (guild: Guild, member: {}) => void): this;
+        on(event: "guildMemberAvailable", listener: (guild: Guild, member: {}) => void): this;
+        on(event: "guildMemberRemove", listener: (guild: Guild, member: {}) => void): this;
+        on(event: "guildMembersChunk", listener: (guild: Guild, members: Array<{}>) => void): this;
         on(event: "guildMemberSpeaking", listener: (member: {}, speaking: boolean) => void): this;
-        on(event: "guildMemberUpdate", listener: (guild: {}, oldMember: {}, newMember: {}) => void): this;
-        on(event: "guildRoleCreate", listener: (guild: {}, role: {}) => void): this;
-        on(event: "guildRoleDelete", listener: (guild: {}, role: {}) => void): this;
-        on(event: "guildRoleUpdate", listener: (guild: {}, oldRole: {}, newRole: {}) => void): this;
-        on(event: "guildUnavailable", listener: (guild: {}) => void): this;
-        on(event: "guildUpdate", listener: (oldGuild: {}, newGuild: {}) => void): this;
+        on(event: "guildMemberUpdate", listener: (guild: Guild, oldMember: {}, newMember: {}) => void): this;
+        on(event: "guildRoleCreate", listener: (guild: Guild, role: {}) => void): this;
+        on(event: "guildRoleDelete", listener: (guild: Guild, role: {}) => void): this;
+        on(event: "guildRoleUpdate", listener: (guild: Guild, oldRole: {}, newRole: {}) => void): this;
+        on(event: "guildUnavailable", listener: (guild: Guild) => void): this;
+        on(event: "guildUpdate", listener: (oldguild: Guild, newguild: Guild) => void): this;
         on(event: "channelCreate", listener: (channel: Channel) => void): this;
         on(event: "channelDelete", listener: (channel: Channel) => void): this;
         on(event: "channelPinsUpdate", listener: (channel: Channel, time: Date) => void): this;
@@ -69,8 +69,8 @@ declare module "discord.js" {
         on(event: "presenceUpdate", listener: (oldUser: User, newUser: User) => void): this;
         on(event: "ready", listener: () => void): this;
         on(event: "reconnecting", listener: () => void): this;
-        on(event: "typingStart", listener: (channel: {}, user: {}) => void): this;
-        on(event: "typingStop", listener: (channel: {}, user: {}) => void): this;
+        on(event: "typingStart", listener: (channel: {}, user: User) => void): this;
+        on(event: "typingStop", listener: (channel: {}, user: User) => void): this;
         on(event: "userUpdate", listener: (oldClientUser: ClientUser, newClientUser: ClientUser) => void): this;
         on(event: "voiceStateUpdate", listener: (oldMember: {}, newMember: {}) => void): this;
         on(event: "warn", listener: (the: string) => void): this;
@@ -94,7 +94,7 @@ declare module "discord.js" {
     export class DMChannel extends Channel {
         lastMessageID: string;
         messages: Collection<string, {}>;
-        recipient: {};
+        recipient: User;
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: {}, options?: {}): Promise<Collection<string, {}>>;
@@ -115,7 +115,7 @@ declare module "discord.js" {
         lastMessageID: string;
         messages: Collection<string, {}>;
         recipients: Collection<string, {}>;
-        owner: {};
+        owner: User;
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: {}, options?: {}): Promise<Collection<string, {}>>;
@@ -133,7 +133,7 @@ declare module "discord.js" {
         toString(): string;
     }
     export class GuildChannel extends Channel {
-        guild: {};
+        guild: Guild;
         name: string;
         permissionOverwrites: Collection<string, {}>;
         position: number;
@@ -150,6 +150,57 @@ declare module "discord.js" {
         name: string;
         url?: string;
         type?: number;
+    }
+    export class Guild {
+        afkChannelID: string;
+        afkTimeout: number;
+        available: boolean;
+        client: Client;
+        creationDate: Date;
+        defaultChannel: GuildChannel;
+        embedEnabled: boolean;
+        emojis: Collection<string, {}>;
+        features: Array<{}>;
+        channels: Collection<string, GuildChannel>;
+        icon: string;
+        iconURL: string;
+        id: string;
+        joinDate: Date;
+        large: boolean;
+        memberCount: number;
+        members: Collection<string, {}>;
+        name: string;
+        owner: {};
+        ownerID: string;
+        region: string;
+        roles: Collection<string, {}>;
+        splash: string;
+        verificationLevel: number;
+        voiceConnection: VoiceConnection;
+        ban(user: {}, deleteDays?: number): Promise<{} | User | string>;
+        createChannel(name: string, type: string): Promise<{} | VoiceChannel>;
+        createRole(data?: {}): Promise<{}>;
+        delete(): Promise<Guild>;
+        edit(data: {}): Promise<Guild>;
+        equals(guild: Guild): boolean;
+        fetchBans(): Promise<Collection<string, User>>;
+        fetchInvites(): Promise<Collection<string, Invite>>;
+        fetchMember(user: {}): Promise<{}>;
+        fetchMembers(query?: string): Promise<Guild>;
+        leave(): Promise<Guild>;
+        member(user: {}): {};
+        pruneMembers(days: number, dry?: boolean): Promise<number>;
+        setAFKChannel(afkChannel: {}): Promise<Guild>;
+        setAFKTimeout(afkTimeout: number): Promise<Guild>;
+        setIcon(icon: {}): Promise<Guild>;
+        setName(name: string): Promise<Guild>;
+        setOwner(owner: {}): Promise<Guild>;
+        setRegion(region: {}): Promise<Guild>;
+        setSplash(splash: {}): Promise<Guild>;
+        setVerificationLevel(level: number): Promise<Guild>;
+        sync(): void;
+        toString(): string;
+        unban(user: {}): Promise<User>;
     }
     export class User {
         avatar: string;
@@ -175,7 +226,7 @@ declare module "discord.js" {
         code: string;
         createdAt: Date;
         creationDate: Date;
-        guild: {} | {};
+        guild: Guild | {};
         channel: GuildChannel | {};
         inviter: User;
         maxUses: number;
