@@ -114,7 +114,7 @@ declare module "discord.js" {
     export class GroupDMChannel extends Channel {
         lastMessageID: string;
         messages: Collection<string, {}>;
-        recipients: Collection<string, {}>;
+        recipients: Collection<string, User>;
         owner: User;
         typing: boolean;
         typingCount: number;
@@ -173,7 +173,7 @@ declare module "discord.js" {
         owner: {};
         ownerID: string;
         region: string;
-        roles: Collection<string, {}>;
+        roles: Collection<string, Role>;
         splash: string;
         verificationLevel: number;
         voiceConnection: VoiceConnection;
