@@ -1,23 +1,12 @@
+// Type definitions for discord.js 9.3.0
+// Project: https://github.com/hydrabolt/discord.js
+// Definitions by: acdenisSK <acdenisSK@outlook.com> (https://github.com/acdenisSK)
+// License: MIT
+
 declare module "discord.js" {
     import { EventEmitter } from "events";
     import { Readable as ReadableStream } from "stream";
     import { ChildProcess } from "child_process";
-    interface ClientOptions {
-        api_request_method?: string;
-        shard_id?: number;
-        shard_count?: number;
-        max_message_cache?: number;
-        message_cache_lifetime?: number;
-        message_sweep_interval?: number;
-        fetch_all_members?: boolean;
-        disable_everyone?: boolean;
-        rest_ws_bridge_timeout?: number;
-        ws?: WebSocketOptions;
-    }
-    interface WebSocketOptions {
-        large_threshold?: number;
-        compress?: boolean;
-    }
 
     export class Client extends EventEmitter {
         constructor(options?: ClientOptions);
@@ -40,6 +29,7 @@ declare module "discord.js" {
         login(tokenOrEmail: string, password?: string): Promise<string>;
         sweepMessages(lifetime?: number): number;
         syncGuilds(guilds?: Array<Guild>): void;
+        on(event: string, listener: Function): this;
         on(event: "debug", listener: (the: string) => void): this;
         on(event: "disconnect", listener: () => void): this;
         on(event: "error", listener: (error: Error) => void): this;
@@ -527,7 +517,7 @@ declare module "discord.js" {
     class VoiceConnection extends EventEmitter {
         endpoint: string;
         channel: VoiceChannel;
-        player: {};
+        player: {}; // reduntant but gonna stay here until the lib author/contribs decide on this property.
         ready: boolean;
         createReceiver(): VoiceReceiver;
         playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
@@ -586,4 +576,17 @@ declare module "discord.js" {
     type StreamOptions = { seek?: number; volume?: number; passes?: number; };
     type StringResovable = Array<any> | string | any;
     type UserResovable = User | string | Message | Guild | GuildMember;
+    type WebSocketOptions = { large_threshold?: number; compress?: boolean; };
+    type ClientOptions = {
+        api_request_method?: string;
+        shard_id?: number;
+        shard_count?: number;
+        max_message_cache?: number;
+        message_cache_lifetime?: number;
+        message_sweep_interval?: number;
+        fetch_all_members?: boolean;
+        disable_everyone?: boolean;
+        rest_ws_bridge_timeout?: number;
+        ws?: WebSocketOptions;
+    };
 }

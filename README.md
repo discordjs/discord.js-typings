@@ -1,7 +1,14 @@
-# Typings for discord.js
+# Typings for [discord.js](https://github.com/hydrabolt/discord.js)
 
-These are currently WIP so don't expect them to work out of the box.
+These typings should work as the library updates with new things.
+Of course these ones try to mimick the documentation and source code as much as possible.
 
-If you see `{}` then that means that the type definition isn't done yet.
+## FAQ:
 
-If you want to speed the development, just make a pr and i'll merge it! 
+1. Was this machine generated? No
+2. Why not? Well if you ever looked the documentation yourself you would see many errors when it comes to using them. (e.g text linking to a non-existent type). So better off if you figure them out yourself and not rely on machines doing them for you all the time.
+
+
+# License
+
+MIT
