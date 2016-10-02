@@ -51,7 +51,7 @@ declare module "discord.js" {
         on(event: "guildMemberAvailable", listener: (guild: Guild, member: GuildMember) => void): this;
         on(event: "guildMemberRemove", listener: (guild: Guild, member: GuildMember) => void): this;
         on(event: "guildMembersChunk", listener: (guild: Guild, members: Array<GuildMember>) => void): this;
-        on(event: "guildMemberSpeaking", listener: (member: {}, speaking: boolean) => void): this;
+        on(event: "guildMemberSpeaking", listener: (member: GuildMember, speaking: boolean) => void): this;
         on(event: "guildMemberUpdate", listener: (guild: Guild, oldMember: {}, newMember: {}) => void): this;
         on(event: "guildRoleCreate", listener: (guild: Guild, role: Role) => void): this;
         on(event: "guildRoleDelete", listener: (guild: Guild, role: Role) => void): this;
@@ -62,10 +62,10 @@ declare module "discord.js" {
         on(event: "channelDelete", listener: (channel: Channel) => void): this;
         on(event: "channelPinsUpdate", listener: (channel: Channel, time: Date) => void): this;
         on(event: "channelUpdate", listener: (oldChannel: Channel, newChannel: Channel) => void): this;
-        on(event: "message", listener: (message: {}) => void): this;
-        on(event: "messageDelete", listener: (message: {}) => void): this;
-        on(event: "messageDeleteBulk", listener: (messages: Collection<string, {}>) => void): this;
-        on(event: "messageUpdate", listener: (oldMessage: {}, newMessage: {}) => void): this;
+        on(event: "message", listener: (message: Message) => void): this;
+        on(event: "messageDelete", listener: (message: Message) => void): this;
+        on(event: "messageDeleteBulk", listener: (messages: Collection<string, Message>) => void): this;
+        on(event: "messageUpdate", listener: (oldMessage: Message, newMessage: Message) => void): this;
         on(event: "presenceUpdate", listener: (oldUser: User, newUser: User) => void): this;
         on(event: "ready", listener: () => void): this;
         on(event: "reconnecting", listener: () => void): this;
@@ -105,41 +105,41 @@ declare module "discord.js" {
     }
     export class DMChannel extends Channel {
         lastMessageID: string;
-        messages: Collection<string, {}>;
+        messages: Collection<string, Message>;
         recipient: User;
         typing: boolean;
         typingCount: number;
-        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, {}>>;
-        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, {}>;
+        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, Message>>;
+        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, Message>;
         createCollector(filter: {}, options?: {}): {};
-        fetchMessage(messageID: string): Promise<{}>;
-        fetchMessages(options?: {}): Promise<Collection<string, {}>>;
+        fetchMessage(messageID: string): Promise<Message>;
+        fetchMessages(options?: {}): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, {}>>;
-        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
-        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
-        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
+        sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
+        sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
         startTyping(count?: number): void;
         stopTyping(force?: boolean): void;
         toString(): string;
     }
     export class GroupDMChannel extends Channel {
         lastMessageID: string;
-        messages: Collection<string, {}>;
+        messages: Collection<string, Message>;
         recipients: Collection<string, User>;
         owner: User;
         typing: boolean;
         typingCount: number;
-        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, {}>>;
-        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, {}>;
+        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, Message>>;
+        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, Message>;
         createCollector(filter: {}, options?: {}): {};
-        fetchMessage(messageID: string): Promise<{}>;
-        fetchMessages(options?: {}): Promise<Collection<string, {}>>;
+        fetchMessage(messageID: string): Promise<Message>;
+        fetchMessages(options?: {}): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, {}>>;
-        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
-        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
-        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
+        sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
+        sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
         startTyping(count?: number): void;
         stopTyping(force?: boolean): void;
         toString(): string;
@@ -161,20 +161,20 @@ declare module "discord.js" {
     export class TextChannel extends GuildChannel {
         lastMessageID: string;
         members: Collection<string, GuildMember>;
-        messages: Collection<string, {}>;
+        messages: Collection<string, Message>;
         topic: string;
         typing: boolean;
         typingCount: number;
-        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, {}>>;
-        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, {}>;
+        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, Message>>;
+        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, Message>;
         createCollector(filter: {}, options?: {}): {};
-        fetchMessage(messageID: string): Promise<{}>;
-        fetchMessages(options?: {}): Promise<Collection<string, {}>>;
-        fetchPinnedMessages(): Promise<Collection<string, {}>>;
-        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
-        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
-        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        fetchMessage(messageID: string): Promise<Message>;
+        fetchMessages(options?: {}): Promise<Collection<string, Message>>;
+        fetchPinnedMessages(): Promise<Collection<string, Message>>;
+        sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
+        sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
+        sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
         startTyping(count?: number): void;
         stopTyping(force?: boolean): void;
     }
@@ -273,10 +273,10 @@ declare module "discord.js" {
         permissionsIn(channel: {}): EvaluatedPermissions;
         removeRole(role: Role | string): Promise<GuildMember>;
         removeRoles(roles: Collection<string, Role> | Array<Role> | Array<string>): Promise<GuildMember>;
-        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
-        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
-        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
+        sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
+        sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
         setDeaf(deaf: boolean): Promise<GuildMember>;
         setMute(mute: boolean): Promise<GuildMember>;
         setNickname(nickname: string): Promise<GuildMember>;
@@ -297,19 +297,108 @@ declare module "discord.js" {
         username: string;
         deleteDM(): Promise<DMChannel>;
         equals(user: User): boolean;
-        sendCode(lang: string, content: {}, options?: {}): Promise<{} | Array<{}>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<{}>;
-        sendMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
-        sendTTSMessage(content: string, options?: {}): Promise<{} | Array<{}>>;
+        sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
+        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
+        sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
+        sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
         toString(): string;
+    }
+    export class PartialGuildChannel {
+        client: Client;
+        id: string;
+        name: string;
+        type: string;
+    }
+    export class PartialGuild {
+        client: Client;
+        icon: string;
+        id: string;
+        name: string;
+        splash: string;
+    }
+    export class Message {
+        attachments: Collection<string, MessageAttachment>;
+        author: User;
+        cleanContent: string;
+        client: Client;
+        content: string;
+        deletable: boolean;
+        editable: boolean;
+        editedTimestamp: Date;
+        edits: Array<Message>;
+        embeds: Array<MessageEmbed>;
+        guild: Guild;
+        channel: TextChannel | DMChannel | GroupDMChannel;
+        id: string;
+        member: GuildMember;
+        mentions: {
+            users: Collection<string, User>;
+            roles: Collection<string, Role>;
+            channels: Collection<string, GuildChannel>;
+            everyone: boolean;
+        };
+        nonce: string;
+        pinnable: boolean;
+        pinned: boolean;
+        system: boolean;
+        timestamp: Date;
+        tts: boolean;
+        delete(timeout?: number): Promise<Message>;
+        edit(content: {}): Promise<Message>;
+        editCode(lang: string, content: {}): Promise<Message>;
+        equals(message: Message, rawData: Object): boolean;
+        isMentioned(data: GuildChannel | User| Role | string): boolean;
+        pin(): Promise<Message>;
+        reply(content: {}, options: {}): Promise<Message | Array<Message>>;
+        toString(): string;
+        unpin(): Promise<Message>;
+    }
+    export class MessageEmbed {
+        author: MessageEmbedAuthor;
+        client: Client;
+        description: string;
+        message: Message;
+        provider: MessageEmbedProvider;
+        thumbnail: MessageEmbedThumbnail;
+        title: string;
+        type: string;
+        url: string;
+    }
+    export class MessageEmbedThumbnail {
+        embed: MessageEmbed;
+        height: number;
+        proxyURL: string;
+        url: string;
+        width: number;
+    }
+    export class MessageEmbedProvider {
+        embed: MessageEmbed;
+        name: string;
+        url: string;
+    }
+    export class MessageEmbedAuthor {
+        embed: MessageEmbed;
+        name: string;
+        url: string;
+    }
+    export class MessageAttachment {
+        client: Client;
+        filename: string;
+        filesize: number;
+        height: number;
+        id: string;
+        message: Message;
+        proxyURL: string;
+        url: string;
+        width: number;
     }
     export class Invite {
         client: Client;
         code: string;
         createdAt: Date;
         creationDate: Date;
-        guild: Guild | {};
-        channel: GuildChannel | {};
+        guild: Guild | PartialGuild;
+        channel: GuildChannel | PartialGuildChannel;
         inviter: User;
         maxUses: number;
         temporary: boolean;
