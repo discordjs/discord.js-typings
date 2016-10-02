@@ -52,7 +52,7 @@ declare module "discord.js" {
         on(event: "guildMemberRemove", listener: (guild: Guild, member: GuildMember) => void): this;
         on(event: "guildMembersChunk", listener: (guild: Guild, members: Array<GuildMember>) => void): this;
         on(event: "guildMemberSpeaking", listener: (member: GuildMember, speaking: boolean) => void): this;
-        on(event: "guildMemberUpdate", listener: (guild: Guild, oldMember: {}, newMember: {}) => void): this;
+        on(event: "guildMemberUpdate", listener: (guild: Guild, oldMember: GuildMember, newMember: GuildMember) => void): this;
         on(event: "guildRoleCreate", listener: (guild: Guild, role: Role) => void): this;
         on(event: "guildRoleDelete", listener: (guild: Guild, role: Role) => void): this;
         on(event: "guildRoleUpdate", listener: (guild: Guild, oldRole: Role, newRole: Role) => void): this;
@@ -110,11 +110,11 @@ declare module "discord.js" {
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: {}, options?: {}): Promise<Collection<string, Message>>;
-        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, Message>;
-        createCollector(filter: {}, options?: {}): {};
+        bulkDelete(messages: Collection<string, Message> | Array<Message>): Collection<string, Message>;
+        createCollector(filter: {}, options?: {}): MessageCollector;
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: {}): Promise<Collection<string, Message>>;
-        fetchPinnedMessages(): Promise<Collection<string, {}>>;
+        fetchPinnedMessages(): Promise<Collection<string, Message>>;
         sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
         sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
         sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
@@ -131,11 +131,11 @@ declare module "discord.js" {
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: {}, options?: {}): Promise<Collection<string, Message>>;
-        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, Message>;
-        createCollector(filter: {}, options?: {}): {};
+        bulkDelete(messages: Collection<string, Message> | Array<Message>): Collection<string, Message>;
+        createCollector(filter: {}, options?: {}): MessageCollector;
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: {}): Promise<Collection<string, Message>>;
-        fetchPinnedMessages(): Promise<Collection<string, {}>>;
+        fetchPinnedMessages(): Promise<Collection<string, Message>>;
         sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
         sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
         sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
@@ -166,8 +166,8 @@ declare module "discord.js" {
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: {}, options?: {}): Promise<Collection<string, Message>>;
-        bulkDelete(messages: Collection<string, {}> | Array<{}>): Collection<string, Message>;
-        createCollector(filter: {}, options?: {}): {};
+        bulkDelete(messages: Collection<string, Message> | Array<Message>): Collection<string, Message>;
+        createCollector(filter: {}, options?: {}): MessageCollector;
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: {}): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
@@ -177,6 +177,16 @@ declare module "discord.js" {
         sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
         startTyping(count?: number): void;
         stopTyping(force?: boolean): void;
+    }
+    export class MessageCollector extends EventEmitter {
+        constructor(channel: Channel, filter: {}, options?: {});
+        collected: Collection<string, Message>;
+        filter: {};
+        channel: Channel;
+        options: {};
+        stop(reason?: string): void;
+        on(event: "end", listener: (collection: Collection<string, Message>, reason: string) => void): this;
+        on(event: "message", listener: (message: Message, collector: MessageCollector) => void): this;
     }
     interface Game {
         name: string;
