@@ -147,7 +147,7 @@ declare module "discord.js" {
     export class GuildChannel extends Channel {
         guild: Guild;
         name: string;
-        permissionOverwrites: Collection<string, {}>;
+        permissionOverwrites: Collection<string, PermissionOverwrites>;
         position: number;
         createInvite(options?: {}): Promise<Invite>;
         equals(channel: GuildChannel): boolean;
@@ -182,6 +182,12 @@ declare module "discord.js" {
         name: string;
         url?: string;
         type?: number;
+    }
+    export class PermissionOverwrites {
+        channel: GuildChannel;
+        id: string;
+        type: string;
+        delete(): Promise<PermissionOverwrites>;
     }
     export class Guild {
         afkChannelID: string;
@@ -386,7 +392,7 @@ declare module "discord.js" {
         MANAGE_WEBHOOKS: boolean;
     }
     export class EvaluatedPermissions {
-        member: {};
+        member: GuildMember;
         raw: number;
         hasPermission(permission: {}, explicit?: boolean): boolean;
         hasPermissions(permission: Array<{}>, explicit?: boolean): boolean;
@@ -401,7 +407,7 @@ declare module "discord.js" {
         hoist: boolean;
         id: string;
         managed: boolean;
-        members: Collection<string, {}>;
+        members: Collection<string, GuildMember>;
         mentionable: boolean;
         name: string;
         permissions: number;
