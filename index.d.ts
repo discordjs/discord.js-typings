@@ -22,7 +22,7 @@ declare module "discord.js" {
     export class Client extends EventEmitter {
         constructor(options?: ClientOptions);
         email: string;
-        emojis: Collection<string, {}>;
+        emojis: Collection<string, Emoji>;
         guilds: Collection<string, Guild>;
         channels: Collection<string, Channel>;
         options: ClientOptions;
@@ -74,6 +74,18 @@ declare module "discord.js" {
         on(event: "userUpdate", listener: (oldClientUser: ClientUser, newClientUser: ClientUser) => void): this;
         on(event: "voiceStateUpdate", listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
         on(event: "warn", listener: (the: string) => void): this;
+    }
+    export class Emoji {
+        client: Client;
+        creationDate: Date;
+        guild: Guild;
+        id: string;
+        managed: boolean;
+        name: string;
+        requiresColons: boolean;
+        roles: Collection<string, Role>;
+        url: string;
+        toString(): string;
     }
     export class ClientUser extends User {
         email: string;
@@ -179,7 +191,7 @@ declare module "discord.js" {
         creationDate: Date;
         defaultChannel: GuildChannel;
         embedEnabled: boolean;
-        emojis: Collection<string, {}>;
+        emojis: Collection<string, Emoji>;
         features: Array<{}>;
         channels: Collection<string, GuildChannel>;
         icon: string;
