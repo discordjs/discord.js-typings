@@ -90,7 +90,7 @@ declare module "discord.js" {
     export class ClientUser extends User {
         email: string;
         verified: boolean;
-        setAvatar(avatar: {}): Promise<ClientUser>;
+        setAvatar(avatar: Base64Resolvable): Promise<ClientUser>;
         setEmail(email: string): Promise<ClientUser>;
         setPassword(password: string): Promise<ClientUser>;
         setStatus(status?: string, game?: string | Game, url?: string): Promise<ClientUser>;
@@ -109,16 +109,16 @@ declare module "discord.js" {
         recipient: User;
         typing: boolean;
         typingCount: number;
-        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, Message>>;
+        awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
         bulkDelete(messages: Collection<string, Message> | Array<Message>): Collection<string, Message>;
-        createCollector(filter: {}, options?: {}): MessageCollector;
+        createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
         fetchMessage(messageID: string): Promise<Message>;
-        fetchMessages(options?: {}): Promise<Collection<string, Message>>;
+        fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
-        sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
-        sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
-        sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
+        sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Array<Message>>;
+        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: MessageOptions): Promise<Message>;
+        sendMessage(content: string, options?: MessageOptions): Promise<Message | Array<Message>>;
+        sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Array<Message>>;
         startTyping(count?: number): void;
         stopTyping(force?: boolean): void;
         toString(): string;
@@ -130,16 +130,16 @@ declare module "discord.js" {
         owner: User;
         typing: boolean;
         typingCount: number;
-        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, Message>>;
+        awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
         bulkDelete(messages: Collection<string, Message> | Array<Message>): Collection<string, Message>;
-        createCollector(filter: {}, options?: {}): MessageCollector;
+        createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
         fetchMessage(messageID: string): Promise<Message>;
-        fetchMessages(options?: {}): Promise<Collection<string, Message>>;
+        fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
-        sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
-        sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
-        sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
+        sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Array<Message>>;
+        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: MessageOptions): Promise<Message>;
+        sendMessage(content: string, options?: MessageOptions): Promise<Message | Array<Message>>;
+        sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Array<Message>>;
         startTyping(count?: number): void;
         stopTyping(force?: boolean): void;
         toString(): string;
@@ -149,10 +149,10 @@ declare module "discord.js" {
         name: string;
         permissionOverwrites: Collection<string, PermissionOverwrites>;
         position: number;
-        createInvite(options?: {}): Promise<Invite>;
+        createInvite(options?: InviteOptions): Promise<Invite>;
         equals(channel: GuildChannel): boolean;
         overwritePermissions(userOrRole: Role | User): Promise<void>;
-        permissionsFor(member: {}): EvaluatedPermissions;
+        permissionsFor(member: GuildMemberResolvable): EvaluatedPermissions;
         setName(name: string): Promise<GuildChannel>;
         setPosition(position: number): Promise<GuildChannel>;
         setTopic(topic: string): Promise<GuildChannel>;
@@ -165,25 +165,25 @@ declare module "discord.js" {
         topic: string;
         typing: boolean;
         typingCount: number;
-        awaitMessages(filter: {}, options?: {}): Promise<Collection<string, Message>>;
+        awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
         bulkDelete(messages: Collection<string, Message> | Array<Message>): Collection<string, Message>;
-        createCollector(filter: {}, options?: {}): MessageCollector;
+        createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
         fetchMessage(messageID: string): Promise<Message>;
-        fetchMessages(options?: {}): Promise<Collection<string, Message>>;
+        fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
-        sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
-        sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
-        sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
+        sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Array<Message>>;
+        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: MessageOptions): Promise<Message>;
+        sendMessage(content: string, options?: MessageOptions): Promise<Message | Array<Message>>;
+        sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Array<Message>>;
         startTyping(count?: number): void;
         stopTyping(force?: boolean): void;
     }
     export class MessageCollector extends EventEmitter {
-        constructor(channel: Channel, filter: {}, options?: {});
+        constructor(channel: Channel, filter: CollectorFilterFunction, options?: CollectorOptions);
         collected: Collection<string, Message>;
-        filter: {};
+        filter: CollectorFilterFunction;
         channel: Channel;
-        options: {};
+        options: CollectorOptions;
         stop(reason?: string): void;
         on(event: "end", listener: (collection: Collection<string, Message>, reason: string) => void): this;
         on(event: "message", listener: (message: Message, collector: MessageCollector) => void): this;
@@ -233,22 +233,22 @@ declare module "discord.js" {
         equals(guild: Guild): boolean;
         fetchBans(): Promise<Collection<string, User>>;
         fetchInvites(): Promise<Collection<string, Invite>>;
-        fetchMember(user: {}): Promise<GuildMember>;
+        fetchMember(user: UserResovable): Promise<GuildMember>;
         fetchMembers(query?: string): Promise<Guild>;
         leave(): Promise<Guild>;
-        member(user: {}): GuildMember;
+        member(user: UserResovable): GuildMember;
         pruneMembers(days: number, dry?: boolean): Promise<number>;
-        setAFKChannel(afkChannel: {}): Promise<Guild>;
+        setAFKChannel(afkChannel: ChannelResovalble): Promise<Guild>;
         setAFKTimeout(afkTimeout: number): Promise<Guild>;
-        setIcon(icon: {}): Promise<Guild>;
+        setIcon(icon: Base64Resolvable): Promise<Guild>;
         setName(name: string): Promise<Guild>;
-        setOwner(owner: {}): Promise<Guild>;
-        setRegion(region: {}): Promise<Guild>;
-        setSplash(splash: {}): Promise<Guild>;
+        setOwner(owner: GuildMemberResolvable): Promise<Guild>;
+        setRegion(region: string): Promise<Guild>;
+        setSplash(splash: Base64Resolvable): Promise<Guild>;
         setVerificationLevel(level: number): Promise<Guild>;
         sync(): void;
         toString(): string;
-        unban(user: {}): Promise<User>;
+        unban(user: UserResovable): Promise<User>;
     }
     export class GuildMember {
         bannable: boolean;
@@ -277,21 +277,21 @@ declare module "discord.js" {
         ban(deleteDays?: number): Promise<GuildMember>;
         deleteDM(): Promise<DMChannel>;
         edit(data: {}): Promise<GuildMember>;
-        hasPermission(permission: {}, explicit?: boolean): boolean;
-        hasPermissions(permission: Array<{}>, explicit?: boolean): boolean;
+        hasPermission(permission: PermissionResovable, explicit?: boolean): boolean;
+        hasPermissions(permission: Array<Permissions>, explicit?: boolean): boolean;
         kick(): Promise<GuildMember>;
-        permissionsIn(channel: {}): EvaluatedPermissions;
+        permissionsIn(channel: ChannelResovalble): EvaluatedPermissions;
         removeRole(role: Role | string): Promise<GuildMember>;
         removeRoles(roles: Collection<string, Role> | Array<Role> | Array<string>): Promise<GuildMember>;
-        sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
-        sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
-        sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
+        sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Array<Message>>;
+        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: MessageOptions): Promise<Message>;
+        sendMessage(content: string, options?: MessageOptions): Promise<Message | Array<Message>>;
+        sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Array<Message>>;
         setDeaf(deaf: boolean): Promise<GuildMember>;
         setMute(mute: boolean): Promise<GuildMember>;
         setNickname(nickname: string): Promise<GuildMember>;
         setRoles(roles: Collection<string, Role> | Array<Role> | Array<string>): Promise<GuildMember>;
-        setVoiceChannel(voiceChannel: {}): Promise<GuildMember>;
+        setVoiceChannel(voiceChannel: ChannelResovalble): Promise<GuildMember>;
         toString(): string;
     }
     export class User {
@@ -307,10 +307,10 @@ declare module "discord.js" {
         username: string;
         deleteDM(): Promise<DMChannel>;
         equals(user: User): boolean;
-        sendCode(lang: string, content: {}, options?: {}): Promise<Message | Array<Message>>;
-        sendFile(attachment: {}, fileName?: string, content?: {}, options?: {}): Promise<Message>;
-        sendMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
-        sendTTSMessage(content: string, options?: {}): Promise<Message | Array<Message>>;
+        sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Array<Message>>;
+        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: MessageOptions): Promise<Message>;
+        sendMessage(content: string, options?: MessageOptions): Promise<Message | Array<Message>>;
+        sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Array<Message>>;
         toString(): string;
     }
     export class PartialGuildChannel {
@@ -354,12 +354,12 @@ declare module "discord.js" {
         timestamp: Date;
         tts: boolean;
         delete(timeout?: number): Promise<Message>;
-        edit(content: {}): Promise<Message>;
-        editCode(lang: string, content: {}): Promise<Message>;
+        edit(content: StringResovable): Promise<Message>;
+        editCode(lang: string, content: StringResovable): Promise<Message>;
         equals(message: Message, rawData: Object): boolean;
-        isMentioned(data: GuildChannel | User| Role | string): boolean;
+        isMentioned(data: GuildChannel | User | Role | string): boolean;
         pin(): Promise<Message>;
-        reply(content: {}, options: {}): Promise<Message | Array<Message>>;
+        reply(content: StringResovable, options?: MessageOptions): Promise<Message | Array<Message>>;
         toString(): string;
         unpin(): Promise<Message>;
     }
@@ -420,7 +420,7 @@ declare module "discord.js" {
     export class VoiceChannel extends GuildChannel {
         bitrate: number;
         connection: VoiceConnection;
-        members: Collection<string, {}>;
+        members: Collection<string, GuildMember>;
         userLimit: number;
         join(): Promise<VoiceConnection>;
         leave(): null;
@@ -493,8 +493,8 @@ declare module "discord.js" {
     export class EvaluatedPermissions {
         member: GuildMember;
         raw: number;
-        hasPermission(permission: {}, explicit?: boolean): boolean;
-        hasPermissions(permission: Array<{}>, explicit?: boolean): boolean;
+        hasPermission(permission: PermissionResovable, explicit?: boolean): boolean;
+        hasPermissions(permission: Array<PermissionResovable>, explicit?: boolean): boolean;
         serialize(): Permissions;
     }
     export class Role {
@@ -514,8 +514,8 @@ declare module "discord.js" {
         delete(): Promise<Role>;
         edit(data: {}): Promise<Role>;
         equals(role: Role): boolean;
-        hasPermission(permission: {}, explicit?: boolean): boolean;
-        hasPermissions(permissions: Array<{}>, explicit?: boolean): boolean;
+        hasPermission(permission: PermissionResovable, explicit?: boolean): boolean;
+        hasPermissions(permissions: Array<PermissionResovable>, explicit?: boolean): boolean;
         serialize(): Permissions;
         setColor(color: string | number): Promise<Role>;
         setHoist(hoist: boolean): Promise<Role>;
@@ -530,13 +530,13 @@ declare module "discord.js" {
         player: {};
         ready: boolean;
         createReceiver(): VoiceReceiver;
-        playConvertedStream(stream: ReadableStream, options?: {}): StreamDispatcher;
-        playFile(file: string, options?: {}): StreamDispatcher;
-        playStream(stream: ReadableStream, options?: {}): StreamDispatcher;
+        playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
+        playFile(file: string, options?: StreamOptions): StreamDispatcher;
+        playStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
         on(event: "disconnected", listener: (error: Error) => void): this;
         on(event: "error", listener: (error: Error) => void): this;
         on(event: "ready", listener: () => void): this;
-        on(event: "speaking", listener: (user: {}, speaking: boolean) => void): this;
+        on(event: "speaking", listener: (user: User, speaking: boolean) => void): this;
     }
     class VoiceReceiver extends EventEmitter {
         connection: VoiceConnection;
@@ -569,4 +569,21 @@ declare module "discord.js" {
         reduce(fn: Function, startVal?: any): any;
         some(fn: Function, thisArg?: Object): boolean;
     }
+    type CollectorOptions = { time?: number; max?: number };
+    type AwaitMessagesOptions = { time?: number; max?: number; errors?: Array<string>; };
+    type Base64Resolvable = Buffer | string;
+    type CollectorFilterFunction = (message: Message, collector: MessageCollector) => boolean;
+    type FileResovable = Buffer | string;
+    type GuildMemberResolvable = GuildMember | User;
+    type GuildResovable = Guild;
+    type ChannelLogsQueryOptions = { limit?: number; before?: string; after?: string; around?: string };
+    type ChannelResovalble = Channel | Guild | Message | string;
+    type InviteOptions = { temporary?: boolean; maxAge?: number; maxUsers?: number; };
+    type MessageOptions = { tts?: boolean; nonce?: string; disable_everyone?: boolean; split: boolean | SplitOptions; };
+    type PermissionOverwritesOptions = Permissions;
+    type PermissionResovable = string | Array<string> | Array<number>;
+    type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
+    type StreamOptions = { seek?: number; volume?: number; passes?: number; };
+    type StringResovable = Array<any> | string | any;
+    type UserResovable = User | string | Message | Guild | GuildMember;
 }
