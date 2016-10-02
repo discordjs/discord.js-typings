@@ -579,7 +579,7 @@ declare module "discord.js" {
     type ChannelLogsQueryOptions = { limit?: number; before?: string; after?: string; around?: string };
     type ChannelResovalble = Channel | Guild | Message | string;
     type InviteOptions = { temporary?: boolean; maxAge?: number; maxUsers?: number; };
-    type MessageOptions = { tts?: boolean; nonce?: string; disable_everyone?: boolean; split: boolean | SplitOptions; };
+    type MessageOptions = { tts?: boolean; nonce?: string; disable_everyone?: boolean; split?: boolean | SplitOptions; };
     type PermissionOverwritesOptions = Permissions;
     type PermissionResovable = string | Array<string> | Array<number>;
     type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
