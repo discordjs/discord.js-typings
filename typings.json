@@ -1,6 +1,6 @@
 {
   "name": "discord.js",
-  "main": "index.d.ts",
+  "main": "discord.d.ts",
   "homepage": "https://github.com/hydrabolt/discord.js",
   "version": "9.3.0",
   "globalDependencies": {
