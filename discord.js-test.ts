@@ -3,7 +3,7 @@
 import { Client } from "discord.js";
 
 const client = new Client({
-    disable_everyone: false
+    disableEveryone: false
 });
 
 client.on("message", (message) => {
@@ -12,4 +12,4 @@ client.on("message", (message) => {
     }
 });
 
-client.login("dsfsd754.4fds4f68d4f6sd46f4s.7878easfdsgdfFDSIJIO"); // Yes this is just for testing
+client.login("dsfsd754.4fds4f68d4f6sd46f4s.7878easfdsgdfFDSIJIO");

@@ -33,19 +33,19 @@ declare module "discord.js" {
         on(event: "debug", listener: (the: string) => void): this;
         on(event: "disconnect", listener: () => void): this;
         on(event: "error", listener: (error: Error) => void): this;
-        on(event: "guildBanAdd", listener: (guild: Guild, user: User) => void): this;
-        on(event: "guildBanRemove", listener: (guild: Guild, user: User) => void): this;
+        on(event: "guildBanAdd", listener: (user: User) => void): this;
+        on(event: "guildBanRemove", listener: (user: User) => void): this;
         on(event: "guildCreate", listener: (guild: Guild) => void): this;
         on(event: "guildDelete", listener: (guild: Guild) => void): this;
-        on(event: "guildMemberAdd", listener: (guild: Guild, member: GuildMember) => void): this;
-        on(event: "guildMemberAvailable", listener: (guild: Guild, member: GuildMember) => void): this;
-        on(event: "guildMemberRemove", listener: (guild: Guild, member: GuildMember) => void): this;
-        on(event: "guildMembersChunk", listener: (guild: Guild, members: GuildMember[]) => void): this;
+        on(event: "guildMemberAdd", listener: (member: GuildMember) => void): this;
+        on(event: "guildMemberAvailable", listener: (member: GuildMember) => void): this;
+        on(event: "guildMemberRemove", listener: (member: GuildMember) => void): this;
+        on(event: "guildMembersChunk", listener: (members: GuildMember[]) => void): this;
         on(event: "guildMemberSpeaking", listener: (member: GuildMember, speaking: boolean) => void): this;
-        on(event: "guildMemberUpdate", listener: (guild: Guild, oldMember: GuildMember, newMember: GuildMember) => void): this;
-        on(event: "guildRoleCreate", listener: (guild: Guild, role: Role) => void): this;
-        on(event: "guildRoleDelete", listener: (guild: Guild, role: Role) => void): this;
-        on(event: "guildRoleUpdate", listener: (guild: Guild, oldRole: Role, newRole: Role) => void): this;
+        on(event: "guildMemberUpdate", listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+        on(event: "RoleCreate", listener: (role: Role) => void): this;
+        on(event: "RoleDelete", listener: (role: Role) => void): this;
+        on(event: "RoleUpdate", listener: (oldRole: Role, newRole: Role) => void): this;
         on(event: "guildUnavailable", listener: (guild: Guild) => void): this;
         on(event: "guildUpdate", listener: (oldGuild: Guild, newGuild: Guild) => void): this;
         on(event: "channelCreate", listener: (channel: Channel) => void): this;
@@ -64,6 +64,29 @@ declare module "discord.js" {
         on(event: "userUpdate", listener: (oldClientUser: ClientUser, newClientUser: ClientUser) => void): this;
         on(event: "voiceStateUpdate", listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
         on(event: "warn", listener: (the: string) => void): this;
+    }
+    export class Webhook {
+        avatar: string;
+        client: Client;
+        guildID: string;
+        channelID: string;
+        id: string;
+        name: string;
+        token: string;
+        delete(): Promise<void>;
+        edit(name: string, avatar: FileResovable): Promise<Webhook>;
+        sendCode(lang: string, content: StringResovable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: WebhookMessageOptions): Promise<Message>;
+        sendMessage(content: StringResovable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+        sendSlackMessage(body: Object): Promise<void>;
+        sendTTSMessage(content: StringResovable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+    }
+    class SecretKey {
+        key: Uint8Array;
+    }
+    export class WebhookClient extends Webhook {
+        contructor(id: string, token: string, options?: ClientOptions);
+        options: ClientOptions;
     }
     export class Emoji {
         client: Client;
@@ -198,7 +221,7 @@ declare module "discord.js" {
         defaultChannel: GuildChannel;
         embedEnabled: boolean;
         emojis: Collection<string, Emoji>;
-        features: {}[];
+        features: Object[];
         channels: Collection<string, GuildChannel>;
         icon: string;
         iconURL: string;
@@ -418,15 +441,22 @@ declare module "discord.js" {
     }
     export class Shard {
         id: string;
-        manager: ShardManager;
+        manager: ShardingManager;
         process: ChildProcess;
         eval(script: string): Promise<any>;
         fetchClientValue(prop: string): Promise<any>;
         send(message: any): Promise<Shard>;
     }
-    export class ShardManager extends EventEmitter {
-        constructor(file: string, totalShards?: number, respawn?: boolean);
+    export class ShardingManager extends EventEmitter {
+        constructor(file: string, options?: {
+            totalShards?: number;
+            respawn?: boolean;
+            shardArgs?: string[];
+            token?: string;
+        });
         file: string;
+        respawn: boolean;
+        shardArgs: string[];
         shards: Collection<number, Shard>;
         totalShards: number;
         broadcast(message: any): Promise<Shard[]>;
@@ -435,6 +465,29 @@ declare module "discord.js" {
         fetchClientValues(prop: string): Promise<any[]>;
         spawn(amount?: number, delay?: number): Promise<Collection<number, Shard>>;
         on(event: "launch", listener: (shard: Shard) => void): this;
+    }
+    export class ShardClientUtil {
+        contructor(client: Client);
+        id: number;
+        count: number;
+        broadcastEval(script: string): Promise<any[]>;
+        fetchClientValues(prop: string): Promise<any[]>;
+        send(message: any): Promise<void>;
+        singleton(client: Client): ShardClientUtil;
+    }
+    export class UserConnection {
+        id: string;
+        integrations: Object[];
+        name: string;
+        revoked: boolean;
+        type: string;
+        user: User;
+    }
+    export class UserProfile {
+        client: Client;
+        connections: Collection<string, UserConnection>;
+        mutualGuilds: Collection<string, Guild>;
+        user: User;
     }
     export class StreamDispatcher extends EventEmitter {
         passes: number;
@@ -520,10 +573,11 @@ declare module "discord.js" {
         player: {}; // reduntant but gonna stay here until the lib author/contribs decide on this property.
         ready: boolean;
         createReceiver(): VoiceReceiver;
+        disconnect();
         playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
         playFile(file: string, options?: StreamOptions): StreamDispatcher;
         playStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
-        on(event: "disconnected", listener: (error: Error) => void): this;
+        on(event: "disconnect", listener: (error: Error) => void): this;
         on(event: "error", listener: (error: Error) => void): this;
         on(event: "ready", listener: () => void): this;
         on(event: "speaking", listener: (user: User, speaking: boolean) => void): this;
@@ -569,7 +623,7 @@ declare module "discord.js" {
     type ChannelLogsQueryOptions = { limit?: number; before?: string; after?: string; around?: string };
     type ChannelResovalble = Channel | Guild | Message | string;
     type InviteOptions = { temporary?: boolean; maxAge?: number; maxUsers?: number; };
-    type MessageOptions = { tts?: boolean; nonce?: string; disable_everyone?: boolean; split?: boolean | SplitOptions; };
+    type MessageOptions = { tts?: boolean; nonce?: string; disableEveryone?: boolean; split?: boolean | SplitOptions; };
     type PermissionOverwritesOptions = Permissions;
     type PermissionResovable = string | string[] | number[];
     type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
@@ -578,15 +632,23 @@ declare module "discord.js" {
     type UserResovable = User | string | Message | Guild | GuildMember;
     type WebSocketOptions = { large_threshold?: number; compress?: boolean; };
     type ClientOptions = {
-        api_request_method?: string;
-        shard_id?: number;
-        shard_count?: number;
-        max_message_cache?: number;
-        message_cache_lifetime?: number;
-        message_sweep_interval?: number;
-        fetch_all_members?: boolean;
-        disable_everyone?: boolean;
-        rest_ws_bridge_timeout?: number;
+        apiRequestMethod?: string;
+        shardId?: number;
+        shardCount?: number;
+        maxMessageCache?: number;
+        messageCacheLifetime?: number;
+        messageSweepInterval?: number;
+        fetchAllMembers?: boolean;
+        disableEveryone?: boolean;
+        restWsBridgeTimeout?: number;
         ws?: WebSocketOptions;
+    };
+    type WebhookMessageOptions = {
+        tts?: boolean;
+        disableEveryone?: boolean;
+    };
+    type WebhookOptions = {
+        large_threshold?: number;
+        compress?: boolean;
     };
 }
