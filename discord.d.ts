@@ -103,11 +103,23 @@ declare module "discord.js" {
     export class ClientUser extends User {
         email: string;
         verified: boolean;
+        blocked: Collection<string, User>;
+        friends: Collection<string, User>;
+        addFriend(user: UserResovable): Promise<User>;
+        removeFriend(user: UserResovable): Promise<User>;
         setAvatar(avatar: Base64Resolvable): Promise<ClientUser>;
         setEmail(email: string): Promise<ClientUser>;
         setPassword(password: string): Promise<ClientUser>;
-        setStatus(status?: string, game?: string | Game, url?: string): Promise<ClientUser>;
+        setStatus(status?: string): Promise<ClientUser>;
+        setGame(game: string, streamingURL?: string): Promise<ClientUser>;
+        setPresence(data: Object): Promise<ClientUser>;
         setUsername(username: string): Promise<ClientUser>;
+        createGuild(name: string, region: string, icon?: FileResovable): Promise<Guild>;
+    }
+    export class Presence {
+        game: Game;
+        status: string;
+        equals(other: Presence): boolean;
     }
     export class Channel {
         client: Client;
@@ -201,10 +213,12 @@ declare module "discord.js" {
         on(event: "end", listener: (collection: Collection<string, Message>, reason: string) => void): this;
         on(event: "message", listener: (message: Message, collector: MessageCollector) => void): this;
     }
-    interface Game {
+    export class Game {
         name: string;
-        url?: string;
-        type?: number;
+        streaming: boolean;
+        url: string;
+        type: number;
+        equals(other: Game): boolean;
     }
     export class PermissionOverwrites {
         channel: GuildChannel;
@@ -314,10 +328,13 @@ declare module "discord.js" {
         client: Client;
         creationDate: Date;
         discriminator: string;
-        game: Game;
+        presence: Presence;
         id: string;
         status: string;
         username: string;
+        block(): Promise<User>;
+        unblock(): Promise<User>;
+        fetchProfile(): Promise<UserProfile>;
         deleteDM(): Promise<DMChannel>;
         equals(user: User): boolean;
         sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Message[]>;
@@ -570,7 +587,7 @@ declare module "discord.js" {
     class VoiceConnection extends EventEmitter {
         endpoint: string;
         channel: VoiceChannel;
-        player: {}; // reduntant but gonna stay here until the lib author/contribs decide on this property.
+        player: {}; // reduntant but it's gonna stay for a bit until the lib author/contributors decide on making actual use on this property.
         ready: boolean;
         createReceiver(): VoiceReceiver;
         disconnect();
