@@ -1,6 +1,6 @@
 // Type definitions for discord.js 9.3.0
 // Project: https://github.com/hydrabolt/discord.js
-// Definitions by: acdenisSK <acdenisSK@outlook.com> (https://github.com/acdenisSK)
+// Definitions by: acdenisSK <acdenissk69@gmail.com> (https://github.com/acdenisSK)
 // License: MIT
 
 declare module "discord.js" {
