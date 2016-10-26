@@ -74,12 +74,12 @@ declare module "discord.js" {
         name: string;
         token: string;
         delete(): Promise<void>;
-        edit(name: string, avatar: FileResovable): Promise<Webhook>;
-        sendCode(lang: string, content: StringResovable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
-        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: WebhookMessageOptions): Promise<Message>;
-        sendMessage(content: StringResovable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+        edit(name: string, avatar: FileResolvable): Promise<Webhook>;
+        sendCode(lang: string, content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message>;
+        sendMessage(content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
         sendSlackMessage(body: Object): Promise<void>;
-        sendTTSMessage(content: StringResovable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+        sendTTSMessage(content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
     }
     class SecretKey {
         key: Uint8Array;
@@ -105,8 +105,8 @@ declare module "discord.js" {
         verified: boolean;
         blocked: Collection<string, User>;
         friends: Collection<string, User>;
-        addFriend(user: UserResovable): Promise<User>;
-        removeFriend(user: UserResovable): Promise<User>;
+        addFriend(user: UserResolvable): Promise<User>;
+        removeFriend(user: UserResolvable): Promise<User>;
         setAvatar(avatar: Base64Resolvable): Promise<ClientUser>;
         setEmail(email: string): Promise<ClientUser>;
         setPassword(password: string): Promise<ClientUser>;
@@ -114,7 +114,7 @@ declare module "discord.js" {
         setGame(game: string, streamingURL?: string): Promise<ClientUser>;
         setPresence(data: Object): Promise<ClientUser>;
         setUsername(username: string): Promise<ClientUser>;
-        createGuild(name: string, region: string, icon?: FileResovable): Promise<Guild>;
+        createGuild(name: string, region: string, icon?: FileResolvable): Promise<Guild>;
     }
     export class Presence {
         game: Game;
@@ -140,8 +140,8 @@ declare module "discord.js" {
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
-        sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Message[]>;
-        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: MessageOptions): Promise<Message>;
+        sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         startTyping(count?: number): void;
@@ -161,8 +161,8 @@ declare module "discord.js" {
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
-        sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Message[]>;
-        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: MessageOptions): Promise<Message>;
+        sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         startTyping(count?: number): void;
@@ -196,8 +196,8 @@ declare module "discord.js" {
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
-        sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Message[]>;
-        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: MessageOptions): Promise<Message>;
+        sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         startTyping(count?: number): void;
@@ -260,10 +260,10 @@ declare module "discord.js" {
         equals(guild: Guild): boolean;
         fetchBans(): Promise<Collection<string, User>>;
         fetchInvites(): Promise<Collection<string, Invite>>;
-        fetchMember(user: UserResovable): Promise<GuildMember>;
+        fetchMember(user: UserResolvable): Promise<GuildMember>;
         fetchMembers(query?: string): Promise<Guild>;
         leave(): Promise<Guild>;
-        member(user: UserResovable): GuildMember;
+        member(user: UserResolvable): GuildMember;
         pruneMembers(days: number, dry?: boolean): Promise<number>;
         setAFKChannel(afkChannel: ChannelResovalble): Promise<Guild>;
         setAFKTimeout(afkTimeout: number): Promise<Guild>;
@@ -275,7 +275,7 @@ declare module "discord.js" {
         setVerificationLevel(level: number): Promise<Guild>;
         sync(): void;
         toString(): string;
-        unban(user: UserResovable): Promise<User>;
+        unban(user: UserResolvable): Promise<User>;
     }
     export class GuildMember {
         bannable: boolean;
@@ -304,14 +304,14 @@ declare module "discord.js" {
         ban(deleteDays?: number): Promise<GuildMember>;
         deleteDM(): Promise<DMChannel>;
         edit(data: {}): Promise<GuildMember>;
-        hasPermission(permission: PermissionResovable, explicit?: boolean): boolean;
+        hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
         hasPermissions(permission: Permissions[], explicit?: boolean): boolean;
         kick(): Promise<GuildMember>;
         permissionsIn(channel: ChannelResovalble): EvaluatedPermissions;
         removeRole(role: Role | string): Promise<GuildMember>;
         removeRoles(roles: Collection<string, Role> | Role[] | string[]): Promise<GuildMember>;
-        sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Message[]>;
-        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: MessageOptions): Promise<Message>;
+        sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         setDeaf(deaf: boolean): Promise<GuildMember>;
@@ -337,8 +337,8 @@ declare module "discord.js" {
         fetchProfile(): Promise<UserProfile>;
         deleteDM(): Promise<DMChannel>;
         equals(user: User): boolean;
-        sendCode(lang: string, content: StringResovable, options?: MessageOptions): Promise<Message | Message[]>;
-        sendFile(attachment: FileResovable, fileName?: string, content?: StringResovable, options?: MessageOptions): Promise<Message>;
+        sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         toString(): string;
@@ -384,12 +384,12 @@ declare module "discord.js" {
         timestamp: Date;
         tts: boolean;
         delete(timeout?: number): Promise<Message>;
-        edit(content: StringResovable): Promise<Message>;
-        editCode(lang: string, content: StringResovable): Promise<Message>;
+        edit(content: StringResolvable): Promise<Message>;
+        editCode(lang: string, content: StringResolvable): Promise<Message>;
         equals(message: Message, rawData: Object): boolean;
         isMentioned(data: GuildChannel | User | Role | string): boolean;
         pin(): Promise<Message>;
-        reply(content: StringResovable, options?: MessageOptions): Promise<Message | Message[]>;
+        reply(content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         toString(): string;
         unpin(): Promise<Message>;
     }
@@ -553,8 +553,8 @@ declare module "discord.js" {
     export class EvaluatedPermissions {
         member: GuildMember;
         raw: number;
-        hasPermission(permission: PermissionResovable, explicit?: boolean): boolean;
-        hasPermissions(permission: PermissionResovable[], explicit?: boolean): boolean;
+        hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
+        hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
         serialize(): Permissions;
     }
     export class Role {
@@ -574,8 +574,8 @@ declare module "discord.js" {
         delete(): Promise<Role>;
         edit(data: {}): Promise<Role>;
         equals(role: Role): boolean;
-        hasPermission(permission: PermissionResovable, explicit?: boolean): boolean;
-        hasPermissions(permissions: PermissionResovable[], explicit?: boolean): boolean;
+        hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
+        hasPermissions(permissions: PermissionResolvable[], explicit?: boolean): boolean;
         serialize(): Permissions;
         setColor(color: string | number): Promise<Role>;
         setHoist(hoist: boolean): Promise<Role>;
@@ -634,9 +634,9 @@ declare module "discord.js" {
     type AwaitMessagesOptions = { time?: number; max?: number; errors?: string[]; };
     type Base64Resolvable = Buffer | string;
     type CollectorFilterFunction = (message: Message, collector: MessageCollector) => boolean;
-    type FileResovable = Buffer | string;
+    type FileResolvable = Buffer | string;
     type GuildMemberResolvable = GuildMember | User;
-    type GuildResovable = Guild;
+    type GuildResolvable = Guild;
     type ChannelLogsQueryOptions = { limit?: number; before?: string; after?: string; around?: string };
     type ChannelResovalble = Channel | Guild | Message | string;
     type InviteOptions = { temporary?: boolean; maxAge?: number; maxUsers?: number; };
@@ -645,8 +645,8 @@ declare module "discord.js" {
     type PermissionResolvable = string | string[] | number[];
     type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
     type StreamOptions = { seek?: number; volume?: number; passes?: number; };
-    type StringResovable = any[] | string | any;
-    type UserResovable = User | string | Message | Guild | GuildMember;
+    type StringResolvable = any[] | string | any;
+    type UserResolvable = User | string | Message | Guild | GuildMember;
     type WebSocketOptions = { large_threshold?: number; compress?: boolean; };
     type ClientOptions = {
         apiRequestMethod?: string;
