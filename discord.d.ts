@@ -642,7 +642,7 @@ declare module "discord.js" {
     type InviteOptions = { temporary?: boolean; maxAge?: number; maxUsers?: number; };
     type MessageOptions = { tts?: boolean; nonce?: string; disableEveryone?: boolean; split?: boolean | SplitOptions; };
     type PermissionOverwritesOptions = Permissions;
-    type PermissionResovable = string | string[] | number[];
+    type PermissionResolvable = string | string[] | number[];
     type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
     type StreamOptions = { seek?: number; volume?: number; passes?: number; };
     type StringResovable = any[] | string | any;
