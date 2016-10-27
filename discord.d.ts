@@ -359,16 +359,19 @@ declare module "discord.js" {
     export class Message {
         attachments: Collection<string, MessageAttachment>;
         author: User;
+        channel: TextChannel | DMChannel | GroupDMChannel;
         cleanContent: string;
         client: Client;
         content: string;
+        createdAt: Date;
+        createdTimestamp: number;
         deletable: boolean;
         editable: boolean;
-        editedTimestamp: Date;
+        editedAt: Date;
+        editedTimestamp: number;
         edits: Message[];
         embeds: MessageEmbed[];
         guild: Guild;
-        channel: TextChannel | DMChannel | GroupDMChannel;
         id: string;
         member: GuildMember;
         mentions: {
@@ -381,8 +384,8 @@ declare module "discord.js" {
         pinnable: boolean;
         pinned: boolean;
         system: boolean;
-        timestamp: Date;
         tts: boolean;
+        type: string;
         delete(timeout?: number): Promise<Message>;
         edit(content: StringResolvable): Promise<Message>;
         editCode(lang: string, content: StringResolvable): Promise<Message>;
