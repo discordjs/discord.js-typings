@@ -127,7 +127,7 @@ declare module "discord.js" {
     }
     export class Channel {
         client: Client;
-        creationDate: Date;
+        createdAt: Date; createdTimestamp: number;
         id: string;
         type: string;
         delete(): Promise<Channel>;
@@ -235,7 +235,8 @@ declare module "discord.js" {
         afkTimeout: number;
         available: boolean;
         client: Client;
-        creationDate: Date;
+        createdAt: Date;
+        createdTimestamp: number;
         defaultChannel: GuildChannel;
         embedEnabled: boolean;
         emojis: Collection<string, Emoji>;
@@ -330,7 +331,8 @@ declare module "discord.js" {
         avatarURL: string;
         bot: boolean;
         client: Client;
-        creationDate: Date;
+        createdAt: Date;
+        createdTimestamp: number;
         discriminator: string;
         presence: Presence;
         id: string;
@@ -452,7 +454,7 @@ declare module "discord.js" {
         client: Client;
         code: string;
         createdAt: Date;
-        creationDate: Date;
+        createdAt: Date; createdTimestamp: number;
         guild: Guild | PartialGuild;
         channel: GuildChannel | PartialGuildChannel;
         inviter: User;
@@ -576,7 +578,7 @@ declare module "discord.js" {
     export class Role {
         client: Client;
         color: number;
-        creationDate: Date;
+        createdAt: Date; createdTimestamp: number;
         guild: Guild;
         hexColor: string;
         hoist: boolean;
