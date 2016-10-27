@@ -16,7 +16,8 @@ declare module "discord.js" {
         channels: Collection<string, Channel>;
         options: ClientOptions;
         password: string;
-        readyTime: Date;
+        readyAt: Date;
+        readyTimestamp: number;
         status: number;
         token: string;
         uptime: number;
@@ -454,7 +455,7 @@ declare module "discord.js" {
         client: Client;
         code: string;
         createdAt: Date;
-        createdAt: Date; createdTimestamp: number;
+        createdTimestamp: number;
         guild: Guild | PartialGuild;
         channel: GuildChannel | PartialGuildChannel;
         inviter: User;
