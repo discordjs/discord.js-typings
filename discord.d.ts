@@ -356,6 +356,15 @@ declare module "discord.js" {
         name: string;
         splash: string;
     }
+    class PendingVoiceConnection {
+        data: Object;
+        deathTimer: NodeJS.Timer;
+        channel: VoiceChannel;
+        voiceManager: ClientVoiceManager;
+        setSessionID(sessionID: string);
+        setTokenAndEndpoint(token: string, endpoint: string);
+        upgrade(): VoiceConnection;
+    }
     export class Message {
         attachments: Collection<string, MessageAttachment>;
         author: User;
@@ -587,11 +596,25 @@ declare module "discord.js" {
         setPosition(position: number): Promise<Role>;
         toString(): string;
     }
+    export class ClientVoiceManager {
+        client: Client;
+        connections: Collection<string, VoiceConnection>;
+        pending: Collection<string, VoiceConnection>;
+        joinChannel(channel: VoiceChannel): Promise<VoiceConnection>;
+        sendVoiceStateUpdate(channel: VoiceChannel, options?: Object);
+    }
+    class AudioPlayer extends EventEmitter {
+        dispatcher: StreamDispatcher;
+        voiceConnection: VoiceConnection;
+    }
     class VoiceConnection extends EventEmitter {
-        endpoint: string;
+        authentication: Object;
         channel: VoiceChannel;
-        player: {}; // reduntant but it's gonna stay for a bit until the lib author/contributors decide on making actual use on this property.
-        ready: boolean;
+        player: AudioPlayer;
+        receivers: Array<VoiceReceiver>;
+        sockets: Object;
+        ssrcMap: Map<number, boolean>;
+        voiceManager: ClientVoiceManager;
         createReceiver(): VoiceReceiver;
         disconnect();
         playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
