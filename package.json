@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "tslint": "^3.15.1",
+    "tslint-config-typings": "^0.2.4"
+  },
+  "scripts": {
+    "lint": "tslint discord.d.ts discord.js-test.ts"
+  }
+}
