@@ -93,7 +93,8 @@ declare module "discord.js" {
     }
     export class Emoji {
         client: Client;
-        creationDate: Date;
+        createdAt: Date;
+        createdTimestamp: number;
         guild: Guild;
         id: string;
         managed: boolean;
