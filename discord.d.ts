@@ -8,6 +8,7 @@ declare module "discord.js" {
     import { Readable as ReadableStream } from "stream";
     import { ChildProcess } from "child_process";
 
+    export const version: string;
     export class Client extends EventEmitter {
         constructor(options?: ClientOptions);
         email: string;
@@ -128,7 +129,8 @@ declare module "discord.js" {
     }
     export class Channel {
         client: Client;
-        createdAt: Date; createdTimestamp: number;
+        createdAt: Date;
+        createdTimestamp: number;
         id: string;
         type: string;
         delete(): Promise<Channel>;
