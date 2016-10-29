@@ -89,6 +89,14 @@ declare module "discord.js" {
     class SecretKey {
         key: Uint8Array;
     }
+    export class RequestHandler { // docs going nowhere again, yay
+        constructor(restManager: {});
+        globalLimit: boolean;
+        queue: Array<{}>;
+        restManager: {};
+        handle();
+        push(request: {});
+    }
     export class WebhookClient extends Webhook {
         contructor(id: string, token: string, options?: ClientOptions);
         options: ClientOptions;
