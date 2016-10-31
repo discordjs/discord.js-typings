@@ -25,10 +25,14 @@ declare module "discord.js" {
         user: ClientUser;
         users: Collection<string, User>;
         voiceConnections: Collection<string, VoiceConnection>;
+        clearInterval(timeout: NodeJS.Timer): void;
+        clearTimeout(timeout: NodeJS.Timer): void;
         destroy(): Promise<void>;
         fetchInvite(code: string): Promise<Invite>;
         fetchUser(id: string): Promise<User>;
         login(tokenOrEmail: string, password?: string): Promise<string>;
+        setInterval(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
+        setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
         sweepMessages(lifetime?: number): number;
         syncGuilds(guilds?: Guild[]): void;
         on(event: string, listener: Function): this;
