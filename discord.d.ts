@@ -273,7 +273,7 @@ declare module "discord.js" {
         verificationLevel: number;
         voiceConnection: VoiceConnection;
         ban(user: GuildMember, deleteDays?: number): Promise<GuildMember | User | string>;
-        createChannel(name: string, type: string): Promise<TextChannel | VoiceChannel>;
+        createChannel(name: string, type: 'text' | 'voice'): Promise<TextChannel | VoiceChannel>;
         createRole(data?: {}): Promise<Role>;
         delete(): Promise<Guild>;
         edit(data: {}): Promise<Guild>;
