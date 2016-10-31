@@ -191,7 +191,7 @@ declare module "discord.js" {
         position: number;
         createInvite(options?: InviteOptions): Promise<Invite>;
         equals(channel: GuildChannel): boolean;
-        overwritePermissions(userOrRole: Role | User): Promise<void>;
+        overwritePermissions(userOrRole: Role | User, options: PermissionOverwriteOptions): Promise<void>;
         permissionsFor(member: GuildMemberResolvable): EvaluatedPermissions;
         setName(name: string): Promise<GuildChannel>;
         setPosition(position: number): Promise<GuildChannel>;
@@ -685,7 +685,7 @@ declare module "discord.js" {
     type ChannelResovalble = Channel | Guild | Message | string;
     type InviteOptions = { temporary?: boolean; maxAge?: number; maxUsers?: number; };
     type MessageOptions = { tts?: boolean; nonce?: string; disableEveryone?: boolean; split?: boolean | SplitOptions; };
-    type PermissionOverwritesOptions = Permissions;
+    type PermissionOverwriteOptions = Permissions;
     type PermissionResolvable = string | string[] | number[];
     type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
     type StreamOptions = { seek?: number; volume?: number; passes?: number; };
