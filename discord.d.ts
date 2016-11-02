@@ -154,7 +154,7 @@ declare module "discord.js" {
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-        bulkDelete(messages: Collection<string, Message> | Message[]): Collection<string, Message>;
+        bulkDelete(messages: Collection<string, Message> | Message[] | number): Collection<string, Message>;
         createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
@@ -175,7 +175,7 @@ declare module "discord.js" {
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-        bulkDelete(messages: Collection<string, Message> | Message[]): Collection<string, Message>;
+        bulkDelete(messages: Collection<string, Message> | Message[] | number): Collection<string, Message>;
         createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
@@ -210,7 +210,7 @@ declare module "discord.js" {
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-        bulkDelete(messages: Collection<string, Message> | Message[]): Collection<string, Message>;
+        bulkDelete(messages: Collection<string, Message> | Message[] | number): Collection<string, Message>;
         createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
