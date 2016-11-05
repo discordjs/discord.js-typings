@@ -687,7 +687,7 @@ declare module "discord.js" {
     type GuildResolvable = Guild;
     type ChannelLogsQueryOptions = { limit?: number; before?: string; after?: string; around?: string };
     type ChannelResovalble = Channel | Guild | Message | string;
-    type InviteOptions = { temporary?: boolean; maxAge?: number; maxUsers?: number; };
+    type InviteOptions = { temporary?: boolean; maxAge?: number; maxUses?: number; };
     type MessageOptions = { tts?: boolean; nonce?: string; disableEveryone?: boolean; split?: boolean | SplitOptions; };
     type PermissionOverwriteOptions = Permissions;
     type PermissionResolvable = string | string[] | number[];
