@@ -663,10 +663,10 @@ declare module "discord.js" {
         deleteAll(): Promise<void[]>;
         every(fn: Function, thisArg?: Object): boolean;
         exists(prop: string, value: any): boolean;
-        filter(fn: Function, thisArg?: Object): Collection<any, any>;
-        find(propOrFn: string | Function, value?: any): any;
-        findAll(prop: string, value: any): any[];
-        findKey(propOrFn: string | Function, value?: any): any;
+        filter(fn: Function, thisArg?: Object): Collection<key, value>;
+        find(propOrFn: string | Function, value?: any): value;
+        findAll(prop: string, value: any): value[];
+        findKey(propOrFn: string | Function, value?: any): key;
         first(): value;
         firstKey(): key;
         keyArray(): key[];
