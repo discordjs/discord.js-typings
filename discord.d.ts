@@ -118,6 +118,13 @@ declare module "discord.js" {
         url: string;
         toString(): string;
     }
+    export class ReactionEmoji {
+        id: string;
+        identifier: string;
+        name: string;
+        reaction: MessageReaction;
+        toString(): string;
+    }
     export class ClientUser extends User {
         email: string;
         verified: boolean;
@@ -413,9 +420,11 @@ declare module "discord.js" {
         nonce: string;
         pinnable: boolean;
         pinned: boolean;
+        reactions: Collection<string, MessageReaction>;
         system: boolean;
         tts: boolean;
         type: string;
+        addReaction(emoji: string): MessageReaction; // Not really documented but still worth using/making typings for it.
         delete(timeout?: number): Promise<Message>;
         edit(content: StringResolvable): Promise<Message>;
         editCode(lang: string, content: StringResolvable): Promise<Message>;
@@ -464,6 +473,15 @@ declare module "discord.js" {
         proxyURL: string;
         url: string;
         width: number;
+    }
+    export class MessageReaction {
+        count: number;
+        emoji: Emoji | ReactionEmoji;
+        me: boolean;
+        message: Message;
+        users: Collection<string, User>;
+        fetchUsers(limit?: number): Promise<Collection<string, User>>;
+        remove(user?: UserResolvable): Promise<MessageReaction>;
     }
     export class Invite {
         client: Client;
