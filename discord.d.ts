@@ -682,6 +682,7 @@ declare module "discord.js" {
         every(fn: Function, thisArg?: Object): boolean;
         exists(prop: string, value: any): boolean;
         filter(fn: Function, thisArg?: Object): Collection<key, value>;
+        filterArray(fn: Function, thisArg?: Object): value[];
         find(propOrFn: string | Function, value?: any): value;
         findAll(prop: string, value: any): value[];
         findKey(propOrFn: string | Function, value?: any): key;
