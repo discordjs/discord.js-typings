@@ -393,6 +393,22 @@ declare module "discord.js" {
         setTokenAndEndpoint(token: string, endpoint: string);
         upgrade(): VoiceConnection;
     }
+    export class OAuth2Application {
+        client: Client;
+        createdAt: Date;
+        createdTimestamp: number;
+        description: string;
+        icon: string;
+        iconURL: string;
+        id: string;
+        name: string;
+        rpcOrigins: Array<string>;
+        toString(): string;
+    }
+    export class ClientOAuth2Application extends OAuth2Application {
+        flags: number;
+        owner: User;
+    }
     export class Message {
         attachments: Collection<string, MessageAttachment>;
         author: User;
