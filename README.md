@@ -3,6 +3,18 @@
 These typings should work as the library updates with new things.
 Of course these ones try to mimick the documentation and source code as much as possible.
 
+## Usage
+
+To always pull the latest version:
+```
+typings install github:acdenisSK/discord.js-typings/discord.d.ts --save --global
+```
+
+To pin to a specific version (ie to avoid something changing unexpectedly), include a commit, tag, or branch name:
+```
+typings install github:acdenisSK/discord.js-typings/discord.d.ts#ac429e798d11e9c33ad1cfccb868a56dddb83f0b --save --global
+```
+
 ## FAQ:
 
 1. Was this machine generated? No
