@@ -281,7 +281,7 @@ declare module "discord.js" {
         voiceConnection: VoiceConnection;
         ban(user: GuildMember, deleteDays?: number): Promise<GuildMember | User | string>;
         createChannel(name: string, type: "text" | "voice"): Promise<TextChannel | VoiceChannel>;
-        createRole(data?: {}): Promise<Role>;
+        createRole(data?: RoleData): Promise<Role>;
         delete(): Promise<Guild>;
         edit(data: {}): Promise<Guild>;
         equals(guild: Guild): boolean;
@@ -639,7 +639,7 @@ declare module "discord.js" {
         permissions: number;
         position: number;
         delete(): Promise<Role>;
-        edit(data: {}): Promise<Role>;
+        edit(data: RoleData): Promise<Role>;
         equals(role: Role): boolean;
         hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
         hasPermissions(permissions: PermissionResolvable[], explicit?: boolean): boolean;
@@ -750,5 +750,13 @@ declare module "discord.js" {
     type WebhookOptions = {
         large_threshold?: number;
         compress?: boolean;
+    };
+    type RoleData = {
+        name?: string;
+        color?: number | string;
+        hoist?: boolean;
+        position?: number;
+        permissions?: Array<string>;
+        mentionable?: boolean;
     };
 }
