@@ -96,7 +96,7 @@ declare module "discord.js" {
     export class RequestHandler { // docs going nowhere again, yay
         constructor(restManager: {});
         globalLimit: boolean;
-        queue: Array<{}>;
+        queue: {}[];
         restManager: {};
         handle();
         push(request: {});
@@ -402,7 +402,7 @@ declare module "discord.js" {
         iconURL: string;
         id: string;
         name: string;
-        rpcOrigins: Array<string>;
+        rpcOrigins: string[];
         toString(): string;
     }
     export class ClientOAuth2Application extends OAuth2Application {
@@ -666,7 +666,7 @@ declare module "discord.js" {
         authentication: Object;
         channel: VoiceChannel;
         player: AudioPlayer;
-        receivers: Array<VoiceReceiver>;
+        receivers: VoiceReceiver[];
         sockets: Object;
         ssrcMap: Map<number, boolean>;
         voiceManager: ClientVoiceManager;
@@ -756,7 +756,7 @@ declare module "discord.js" {
         color?: number | string;
         hoist?: boolean;
         position?: number;
-        permissions?: Array<string>;
+        permissions?: string[];
         mentionable?: boolean;
     };
 }
