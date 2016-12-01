@@ -102,7 +102,7 @@ declare module "discord.js" {
         push(request: {});
     }
     export class WebhookClient extends Webhook {
-        contructor(id: string, token: string, options?: ClientOptions);
+        constructor(id: string, token: string, options?: ClientOptions);
         options: ClientOptions;
     }
     export class Emoji {
@@ -551,7 +551,7 @@ declare module "discord.js" {
         on(event: "launch", listener: (shard: Shard) => void): this;
     }
     export class ShardClientUtil {
-        contructor(client: Client);
+        constructor(client: Client);
         id: number;
         count: number;
         broadcastEval(script: string): Promise<any[]>;
