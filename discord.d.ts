@@ -93,7 +93,7 @@ declare module "discord.js" {
     class SecretKey {
         key: Uint8Array;
     }
-    export class RequestHandler { // docs going nowhere again, yay
+    class RequestHandler { // docs going nowhere again, yay
         constructor(restManager: {});
         globalLimit: boolean;
         queue: {}[];
