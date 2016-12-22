@@ -686,7 +686,7 @@ declare module "discord.js" {
         dispatcher: StreamDispatcher;
         voiceConnection: VoiceConnection;
     }
-    class VoiceConnection extends EventEmitter {
+    export class VoiceConnection extends EventEmitter {
         authentication: Object;
         channel: VoiceChannel;
         player: AudioPlayer;
@@ -704,7 +704,7 @@ declare module "discord.js" {
         on(event: "ready", listener: () => void): this;
         on(event: "speaking", listener: (user: User, speaking: boolean) => void): this;
     }
-    class VoiceReceiver extends EventEmitter {
+    export class VoiceReceiver extends EventEmitter {
         connection: VoiceConnection;
         destroyed: boolean;
         createOpusStream(user: User): ReadableStream;
