@@ -699,31 +699,31 @@ declare module "discord.js" {
         on(event: "start", listener: () => void): this;
     }
     interface Permissions {
-        CREATE_INSTANT_INVITE: boolean;
-        KICK_MEMBERS: boolean;
-        BAN_MEMBERS: boolean;
-        ADMINISTRATOR: boolean;
-        MANAGE_CHANNELS: boolean;
-        MANAGE_GUILD: boolean;
-        READ_MESSAGES: boolean;
-        SEND_MESSAGES: boolean;
-        SEND_TTS_MESSAGES: boolean;
-        MANAGE_MESSAGES: boolean;
-        EMBED_LINKS: boolean;
-        ATTACH_FILES: boolean;
-        READ_MESSAGE_HISTORY: boolean;
-        MENTION_EVERYONE: boolean;
-        USE_EXTERNAL_EMOJIS: boolean;
-        CONNECT: boolean;
-        SPEAK: boolean;
-        MUTE_MEMBERS: boolean;
-        DEAFEN_MEMBERS: boolean;
-        MOVE_MEMBERS: boolean;
-        USE_VAD: boolean;
-        CHANGE_NICKNAME: boolean;
-        MANAGE_NICKNAMES: boolean;
-        MANAGE_ROLES: boolean;
-        MANAGE_WEBHOOKS: boolean;
+        CREATE_INSTANT_INVITE?: boolean;
+        KICK_MEMBERS?: boolean;
+        BAN_MEMBERS?: boolean;
+        ADMINISTRATOR?: boolean;
+        MANAGE_CHANNELS?: boolean;
+        MANAGE_GUILD?: boolean;
+        READ_MESSAGES?: boolean;
+        SEND_MESSAGES?: boolean;
+        SEND_TTS_MESSAGES?: boolean;
+        MANAGE_MESSAGES?: boolean;
+        EMBED_LINKS?: boolean;
+        ATTACH_FILES?: boolean;
+        READ_MESSAGE_HISTORY?: boolean;
+        MENTION_EVERYONE?: boolean;
+        USE_EXTERNAL_EMOJIS?: boolean;
+        CONNECT?: boolean;
+        SPEAK?: boolean;
+        MUTE_MEMBERS?: boolean;
+        DEAFEN_MEMBERS?: boolean;
+        MOVE_MEMBERS?: boolean;
+        USE_VAD?: boolean;
+        CHANGE_NICKNAME?: boolean;
+        MANAGE_NICKNAMES?: boolean;
+        MANAGE_ROLES?: boolean;
+        MANAGE_WEBHOOKS?: boolean;
     }
     export class EvaluatedPermissions {
         member: GuildMember;
