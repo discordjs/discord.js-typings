@@ -18,7 +18,7 @@ declare module "discord.js" {
         options: ClientOptions;
         ping: number;
         pings: number[];
-        presences: Collection<string, Presence>
+        presences: Collection<string, Presence>;
         readyAt: Date;
         readyTimestamp: number;
         shard: ShardClientUtil;
@@ -800,25 +800,25 @@ declare module "discord.js" {
         on(event: "pcm", listener: (user: User, buffer: Buffer) => void): this;
         on(event: "warn", listener: (message: string) => void): this;
     }
-    export class Collection<key, value> extends Map<key, value> {
-        array(): value[];
+    export class Collection<K, V> extends Map<K, V> {
+        array(): V[];
         concat(...collections: Collection<any, any>[]): Collection<any, any>;
-        deleteAll(): Promise<void[]>;
+        deleteAll(): Promise<V>[];
         every(fn: Function, thisArg?: Object): boolean;
-        exists(prop: string, value: any): boolean;
-        filter(fn: Function, thisArg?: Object): Collection<key, value>;
-        filterArray(fn: Function, thisArg?: Object): value[];
-        find(propOrFn: string | Function, value?: any): value;
-        findAll(prop: string, value: any): value[];
-        findKey(propOrFn: string | Function, value?: any): key;
-        first(): value;
-        firstKey(): key;
-        keyArray(): key[];
-        last(): value;
-        lastKey(): key;
+        exists(prop: keyof V, value: any): boolean;
+        filter(fn: Function, thisArg?: Object): Collection<K, V>;
+        filterArray(fn: Function, thisArg?: Object): V[];
+        find(propOrFn: keyof V | Function, value?: any): V;
+        findAll(prop: keyof V, value: any): V[];
+        findKey(propOrFn: keyof V | Function, value?: any): K;
+        first(): V;
+        firstKey(): K;
+        keyArray(): K[];
+        last(): V;
+        lastKey(): K;
         map(fn: Function, thisArg?: Object): any[];
-        random(): value;
-        randomKey(): key;
+        random(): V;
+        randomKey(): K;
         reduce(fn: Function, startVal?: any): any;
         some(fn: Function, thisArg?: Object): boolean;
     }
