@@ -93,9 +93,9 @@ declare module "discord.js" {
         name: string;
         token: string;
         delete(): Promise<void>;
-        edit(name: string, avatar: FileResolvable): Promise<Webhook>;
+        edit(name: string, avatar: BufferResolvable): Promise<Webhook>;
         sendCode(lang: string, content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
-        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message>;
+        sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message>;
         sendMessage(content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
         sendSlackMessage(body: Object): Promise<void>;
         sendTTSMessage(content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
@@ -142,7 +142,7 @@ declare module "discord.js" {
         friends: Collection<string, User>;
         verified: boolean;
         addFriend(user?: UserResolvable): Promise<User>;
-        createGuild(name: string, region: string, icon?: FileResolvable): Promise<Guild>;
+        createGuild(name: string, region: string, icon?: BufferResolvable | Base64Resolvable): Promise<Guild>;
         fetchMentions(options?: { limit?: number; roles?: boolean, everyone?: boolean; guild?: Guild | string }): Promise<Message[]>;
         removeFriend(user?: UserResolvable): Promise<User>;
         setAFK(afk: boolean): Promise<ClientUser>;
@@ -183,7 +183,7 @@ declare module "discord.js" {
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
         sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
-        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
+        sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         startTyping(count?: number): void;
@@ -209,7 +209,7 @@ declare module "discord.js" {
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
         sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
-        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
+        sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         startTyping(count?: number): void;
@@ -250,7 +250,7 @@ declare module "discord.js" {
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
         sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
-        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
+        sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         startTyping(count?: number): void;
@@ -378,7 +378,7 @@ declare module "discord.js" {
         removeRole(role: Role | string): Promise<GuildMember>;
         removeRoles(roles: Collection<string, Role> | Role[] | string[]): Promise<GuildMember>;
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
+        sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         setDeaf(deaf: boolean): Promise<GuildMember>;
@@ -414,7 +414,7 @@ declare module "discord.js" {
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
         sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
-        sendFile(attachment: FileResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
+        sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         setNote(note: string): Promise<User>;
@@ -822,11 +822,12 @@ declare module "discord.js" {
         reduce(fn: Function, startVal?: any): any;
         some(fn: Function, thisArg?: Object): boolean;
     }
+    type Base64String = string;
+    type Base64Resolvable = Buffer | Base64String;
+    type BufferResolvable = Buffer | string;
     type CollectorOptions = { time?: number; max?: number };
     type AwaitMessagesOptions = { time?: number; max?: number; errors?: string[]; };
-    type Base64Resolvable = Buffer | string;
     type CollectorFilterFunction = (message: Message, collector: MessageCollector) => boolean;
-    type FileResolvable = Buffer | string;
     type GuildMemberResolvable = GuildMember | User;
     type GuildResolvable = Guild;
     type GuildEditData = {
