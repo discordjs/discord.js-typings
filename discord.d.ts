@@ -259,9 +259,10 @@ declare module "discord.js" {
     }
     export class MessageCollector extends EventEmitter {
         constructor(channel: Channel, filter: CollectorFilterFunction, options?: CollectorOptions);
+        channel: Channel;
         collected: Collection<string, Message>;
         filter: CollectorFilterFunction;
-        channel: Channel;
+        next: Promise<Message>;
         options: CollectorOptions;
         stop(reason?: string): void;
         on(event: "end", listener: (collection: Collection<string, Message>, reason: string) => void): this;
