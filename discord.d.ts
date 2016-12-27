@@ -165,7 +165,7 @@ declare module "discord.js" {
         createdAt: Date;
         createdTimestamp: number;
         id: string;
-        type: string;
+        type: "dm" | "group" | "text" | "voice";
         delete(): Promise<Channel>;
     }
     export class DMChannel extends Channel {
@@ -175,7 +175,7 @@ declare module "discord.js" {
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-        bulkDelete(messages: Collection<string, Message> | Message[] | number): Collection<string, Message>;
+        bulkDelete(messages: Collection<string, Message> | Message[] | number): Promise<Collection<string, Message>>;
         createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
@@ -201,8 +201,9 @@ declare module "discord.js" {
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-        bulkDelete(messages: Collection<string, Message> | Message[] | number): Collection<string, Message>;
+        bulkDelete(messages: Collection<string, Message> | Message[] | number): Promise<Collection<string, Message>>;
         createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
+        equals(channel: GroupDMChannel): boolean;
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
@@ -225,7 +226,7 @@ declare module "discord.js" {
         createInvite(options?: InviteOptions): Promise<Invite>;
         edit(data: ChannelData): Promise<GuildChannel>;
         equals(channel: GuildChannel): boolean;
-        overwritePermissions(userOrRole: Role | User, options: PermissionOverwriteOptions): Promise<void>;
+        overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions): Promise<void>;
         permissionsFor(member: GuildMemberResolvable): EvaluatedPermissions;
         setName(name: string): Promise<GuildChannel>;
         setPosition(position: number): Promise<GuildChannel>;
@@ -240,13 +241,13 @@ declare module "discord.js" {
         typing: boolean;
         typingCount: number;
         awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-        bulkDelete(messages: Collection<string, Message> | Message[] | number): Collection<string, Message>;
+        bulkDelete(messages: Collection<string, Message> | Message[] | number): Promise<Collection<string, Message>>;
         createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
-        createWebhook(name: string, avatar: Base64Resolvable): Promise<Webhook>;
+        createWebhook(name: string, avatar: BufferResolvable): Promise<Webhook>;
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
-        fetchWebhooks(): Promise<Webhook[]>;
+        fetchWebhooks(): Promise<Collection<string, Webhook>>;
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
         sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
@@ -827,7 +828,7 @@ declare module "discord.js" {
     type BufferResolvable = Buffer | string;
     type CollectorOptions = { time?: number; max?: number };
     type AwaitMessagesOptions = { time?: number; max?: number; errors?: string[]; };
-    type CollectorFilterFunction = (message: Message, collector: MessageCollector) => boolean;
+    type CollectorFilterFunction = (message?: Message, collector?: MessageCollector) => boolean;
     type GuildMemberResolvable = GuildMember | User;
     type GuildResolvable = Guild;
     type GuildEditData = {
@@ -846,6 +847,7 @@ declare module "discord.js" {
     type MessageOptions = { tts?: boolean; nonce?: string; disableEveryone?: boolean; split?: boolean | SplitOptions; };
     type PermissionOverwriteOptions = Permissions;
     type PermissionResolvable = string | string[] | number[];
+    type RoleResolvable = Role | string;
     type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
     type StreamOptions = { seek?: number; volume?: number; passes?: number; };
     type StringResolvable = any[] | string | any;
