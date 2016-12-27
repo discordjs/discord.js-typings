@@ -127,6 +127,7 @@ declare module "discord.js" {
         requiresColons: boolean;
         roles: Collection<string, Role>;
         url: string;
+        equals(other: Emoji | Object): boolean;
         toString(): string;
     }
     export class ReactionEmoji {
