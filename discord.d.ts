@@ -766,7 +766,7 @@ declare module "discord.js" {
         setHoist(hoist: boolean): Promise<Role>;
         setMentionable(mentionable: boolean): Promise<Role>;
         setName(name: string): Promise<Role>;
-        setPermissions(permissions: string[]): Promise<Role>;
+        setPermissions(permissions: PermissionResolvable[]): Promise<Role>;
         setPosition(position: number): Promise<Role>;
         toString(): string;
     }
@@ -792,16 +792,18 @@ declare module "discord.js" {
         playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
         playFile(file: string, options?: StreamOptions): StreamDispatcher;
         playStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
+        on(event: "debug", listener: (message: string) => void): this;
         on(event: "disconnect", listener: (error: Error) => void): this;
         on(event: "error", listener: (error: Error) => void): this;
         on(event: "ready", listener: () => void): this;
         on(event: "speaking", listener: (user: User, speaking: boolean) => void): this;
+        on(event: "warn", listener: (warning: string | Error) => void): this;
     }
     export class VoiceReceiver extends EventEmitter {
-        connection: VoiceConnection;
         destroyed: boolean;
-        createOpusStream(user: User): ReadableStream;
-        createPCMStream(user: User): ReadableStream;
+        voiceConnection: VoiceConnection;
+        createOpusStream(user: UserResolvable): ReadableStream;
+        createPCMStream(user: UserResolvable): ReadableStream;
         destroy(): void;
         recreate(): void;
         on(event: "opus", listener: (user: User, buffer: Buffer) => void): this;
