@@ -141,6 +141,7 @@ declare module "discord.js" {
         blocked: Collection<string, User>;
         email: string;
         friends: Collection<string, User>;
+        notes: Collection<string, string>;        
         verified: boolean;
         addFriend(user?: UserResolvable): Promise<User>;
         createGuild(name: string, region: string, icon?: BufferResolvable | Base64Resolvable): Promise<Guild>;
@@ -314,8 +315,8 @@ declare module "discord.js" {
         verificationLevel: number;
         voiceConnection: VoiceConnection;
         ban(user: GuildMember, deleteDays?: number): Promise<GuildMember | User | string>;
-        createChannel(name: string, type: "text" | "voice"): Promise<TextChannel | VoiceChannel>;
-        createEmoji(attachment: Base64Resolvable, name: string): Promise<Emoji>;
+        createChannel(name: string, type: "text" | "voice", overwrites?: PermissionOverwrites[]): Promise<TextChannel | VoiceChannel>;
+        createEmoji(attachment: BufferResolvable, name: string): Promise<Emoji>;
         createRole(data?: RoleData): Promise<Role>;
         delete(): Promise<Guild>;
         deleteEmoji(emoji: Emoji | string): Promise<void>;
@@ -381,6 +382,8 @@ declare module "discord.js" {
         removeRole(role: Role | string): Promise<GuildMember>;
         removeRoles(roles: Collection<string, Role> | Role[] | string[]): Promise<GuildMember>;
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+        sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
+        sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
         sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
@@ -405,7 +408,6 @@ declare module "discord.js" {
         id: string;
         lastMessageID: string;
         note: string;
-        notes: Collection<string, string>;
         presence: Presence;
         username: string;
         addFriend(): Promise<User>;
@@ -888,7 +890,7 @@ declare module "discord.js" {
         image?: { url: string; proxy_url?: string; height?: number; width?: number; };
         video?: { url: string; height: number; width: number; };
         footer?: { text?: string; icon_url?: string; };
-    }
+    };
     type RoleData = {
         name?: string;
         color?: number | string;
