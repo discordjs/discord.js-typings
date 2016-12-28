@@ -530,11 +530,28 @@ declare module "discord.js" {
         type: string;
         url: string;
     }
+    export class MessageEmbedAuthor {
+        embed: MessageEmbed;
+        iconURL: string;
+        name: string;
+        url: string;
+    }
     export class MessageEmbedField {
         embed: MessageEmbed;
         inline: boolean;
         name: string;
         value: string;
+    }
+    export class MessageEmbedFooter {
+        embed: MessageEmbed;
+        iconURL: string;
+        proxyIconURL: string;
+        text: string;
+    }
+    export class MessageEmbedProvider {
+        embed: MessageEmbed;
+        name: string;
+        url: string;
     }
     export class MessageEmbedThumbnail {
         embed: MessageEmbed;
@@ -542,22 +559,6 @@ declare module "discord.js" {
         proxyURL: string;
         url: string;
         width: number;
-    }
-    export class MessageEmbedProvider {
-        embed: MessageEmbed;
-        name: string;
-        url: string;
-    }
-    export class MessageEmbedAuthor {
-        embed: MessageEmbed;
-        name: string;
-        url: string;
-    }
-    export class MessageEmbedFooter {
-        embed: MessageEmbed;
-        iconURL: string;
-        proxyIconURL: string;
-        text: string;
     }
     export class RichEmbed {
         constructor(data?: RichEmbedOptions);
