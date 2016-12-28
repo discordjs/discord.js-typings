@@ -889,7 +889,32 @@ declare module "discord.js" {
     };
     type MessageEditOptions = { embed: RichEmbedOptions; };
     type PermissionOverwriteOptions = Permissions;
-    type PermissionResolvable = string | string[] | number[];
+    type PermissionResolvable = PermissionString | PermissionString[] | number[];
+    type PermissionString = "CREATE_INSTANT_INVITE"
+        | "KICK_MEMBERS"
+        | "BAN_MEMBERS"
+        | "ADMINISTRATOR"
+        | "MANAGE_CHANNELS"
+        | "MANAGE_GUILD"
+        | "ADD_REACTIONS"
+        | "READ_MESSAGES"
+        | "SEND_MESSAGES"
+        | "SEND_TTS_MESSAGES"
+        | "MANAGE_MESSAGES"
+        | "EMBED_LINKS"
+        | "ATTACH_FILES"
+        | "READ_MESSAGE_HISTORY"
+        | "MENTION_EVERYONE"
+        | "EXTERNAL_EMOJIS"
+        | "CONNECT"
+        | "SPEAK"
+        | "MUTE_MEMBERS"
+        | "DEAFEN_MEMBERS"
+        | "MOVE_MEMBERS"
+        | "USE_VAD"
+        | "CHANGE_NICKNAME"
+        | "MANAGE_NICKNAMES"
+        | "MANAGE_ROLES_OR_PERMISSIONS";
     type RoleResolvable = Role | string;
     type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
     type StreamOptions = { seek?: number; volume?: number; passes?: number; };
@@ -936,7 +961,7 @@ declare module "discord.js" {
         | "TYPING_START"
         | "VOICE_SERVER_UPDATE"
         | "RELATIONSHIP_ADD"
-        | "RELATIONSHIP_REMOVE"
+        | "RELATIONSHIP_REMOVE";
     type RichEmbedOptions = {
         title?: string;
         description?: string;
