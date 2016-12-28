@@ -2,7 +2,12 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es6",
-        "declaration": true,
-        "noImplicitAny": false
-    }
+        "noImplicitAny": false,
+        "strictNullChecks": true,
+        "noEmit": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "files": [
+        "index.d.ts"
+    ]
 }
