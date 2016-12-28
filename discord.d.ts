@@ -832,11 +832,40 @@ declare module "discord.js" {
         reduce(fn: Function, startVal?: any): any;
         some(fn: Function, thisArg?: Object): boolean;
     }
+    type AwaitMessagesOptions = { time?: number; max?: number; errors?: string[]; };
     type Base64String = string;
     type Base64Resolvable = Buffer | Base64String;
     type BufferResolvable = Buffer | string;
+    type ChannelData = {
+        name?: string;
+        position?: number;
+        topic?: string;
+        bitrate?: number;
+        userLimit?: number;
+    };
+    type ChannelLogsQueryOptions = {
+        limit?: number
+        before?: string
+        after?: string
+        around?: string
+    };
+    type ChannelResovalble = Channel | Guild | Message | string;
+    type ClientOptions = {
+        apiRequestMethod?: string;
+        shardId?: number;
+        shardCount?: number;
+        maxMessageCache?: number;
+        messageCacheLifetime?: number;
+        messageSweepInterval?: number;
+        fetchAllMembers?: boolean;
+        disableEveryone?: boolean;
+        sync?: boolean;
+        restWsBridgeTimeout?: number;
+        restTimeOffset?: number;
+        disabledEvents: WSEventType[];
+        ws?: WebSocketOptions;
+    };
     type CollectorOptions = { time?: number; max?: number };
-    type AwaitMessagesOptions = { time?: number; max?: number; errors?: string[]; };
     type CollectorFilterFunction = (message?: Message, collector?: MessageCollector) => boolean;
     type GuildMemberResolvable = GuildMember | User;
     type GuildResolvable = Guild;
@@ -850,8 +879,6 @@ declare module "discord.js" {
         owner?: GuildMemberResolvable;
         splash?: Base64Resolvable;
     };
-    type ChannelLogsQueryOptions = { limit?: number; before?: string; after?: string; around?: string };
-    type ChannelResovalble = Channel | Guild | Message | string;
     type InviteOptions = { temporary?: boolean; maxAge?: number; maxUses?: number; };
     type MessageOptions = {
         tts?: boolean;
@@ -869,18 +896,6 @@ declare module "discord.js" {
     type StringResolvable = any[] | string | any;
     type UserResolvable = User | string | Message | Guild | GuildMember;
     type WebSocketOptions = { large_threshold?: number; compress?: boolean; };
-    type ClientOptions = {
-        apiRequestMethod?: string;
-        shardId?: number;
-        shardCount?: number;
-        maxMessageCache?: number;
-        messageCacheLifetime?: number;
-        messageSweepInterval?: number;
-        fetchAllMembers?: boolean;
-        disableEveryone?: boolean;
-        restWsBridgeTimeout?: number;
-        ws?: WebSocketOptions;
-    };
     type WebhookMessageOptions = {
         tts?: boolean;
         disableEveryone?: boolean;
@@ -889,6 +904,39 @@ declare module "discord.js" {
         large_threshold?: number;
         compress?: boolean;
     };
+    type WSEventType = "READY"
+        | "GUILD_SYNC"
+        | "GUILD_CREATE"
+        | "GUILD_DELETE"
+        | "GUILD_UPDATE"
+        | "GUILD_MEMBER_ADD"
+        | "GUILD_MEMBER_REMOVE"
+        | "GUILD_MEMBER_UPDATE"
+        | "GUILD_MEMBERS_CHUNK"
+        | "GUILD_ROLE_CREATE"
+        | "GUILD_ROLE_DELETE"
+        | "GUILD_ROLE_UPDATE"
+        | "GUILD_BAN_ADD"
+        | "GUILD_BAN_REMOVE"
+        | "CHANNEL_CREATE"
+        | "CHANNEL_DELETE"
+        | "CHANNEL_UPDATE"
+        | "CHANNEL_PINS_UPDATE"
+        | "MESSAGE_CREATE"
+        | "MESSAGE_DELETE"
+        | "MESSAGE_UPDATE"
+        | "MESSAGE_DELETE_BULK"
+        | "MESSAGE_REACTION_ADD"
+        | "MESSAGE_REACTION_REMOVE"
+        | "MESSAGE_REACTION_REMOVE_ALL"
+        | "USER_UPDATE"
+        | "USER_NOTE_UPDATE"
+        | "PRESENCE_UPDATE"
+        | "VOICE_STATE_UPDATE"
+        | "TYPING_START"
+        | "VOICE_SERVER_UPDATE"
+        | "RELATIONSHIP_ADD"
+        | "RELATIONSHIP_REMOVE"
     type RichEmbedOptions = {
         title?: string;
         description?: string;
@@ -909,12 +957,5 @@ declare module "discord.js" {
         position?: number;
         permissions?: string[];
         mentionable?: boolean;
-    };
-    type ChannelData = {
-        name?: string;
-        position?: number;
-        topic?: string;
-        bitrate?: number;
-        userLimit?: number;
     };
 }
