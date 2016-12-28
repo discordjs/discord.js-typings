@@ -141,7 +141,7 @@ declare module "discord.js" {
         blocked: Collection<string, User>;
         email: string;
         friends: Collection<string, User>;
-        notes: Collection<string, string>;        
+        notes: Collection<string, string>;
         verified: boolean;
         addFriend(user?: UserResolvable): Promise<User>;
         createGuild(name: string, region: string, icon?: BufferResolvable | Base64Resolvable): Promise<Guild>;
@@ -629,11 +629,12 @@ declare module "discord.js" {
         speakable: boolean;
         userLimit: number;
         join(): Promise<VoiceConnection>;
-        leave(): null;
+        leave(): void;
         setBitrate(bitrate: number): Promise<VoiceChannel>;
         setUserLimit(userLimit: number): Promise<VoiceChannel>;
     }
     export class Shard {
+        constructor(manager: ShardingManager, id: number, args?: string[]);
         env: Object;
         id: string;
         manager: ShardingManager;
@@ -653,6 +654,7 @@ declare module "discord.js" {
         respawn: boolean;
         shardArgs: string[];
         shards: Collection<number, Shard>;
+        token: string;
         totalShards: number;
         broadcast(message: any): Promise<Shard[]>;
         broadcastEval(script: string): Promise<any[]>;
