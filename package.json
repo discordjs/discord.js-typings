@@ -5,7 +5,7 @@
     "typescript": "^2.0.6"
   },
   "scripts": {
-    "lint": "tslint discord.d.ts discord.js-test.ts"
+    "lint": "tslint index.d.ts discord.js-test.ts"
   },
   "dependencies": {
     "@types/node": "^6.0.46"
