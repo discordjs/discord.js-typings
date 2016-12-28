@@ -880,7 +880,7 @@ declare module "discord.js" {
         ATTACH_FILES?: boolean;
         READ_MESSAGE_HISTORY?: boolean;
         MENTION_EVERYONE?: boolean;
-        USE_EXTERNAL_EMOJIS?: boolean;
+        EXTERNAL_EMOJIS?: boolean;
         CONNECT?: boolean;
         SPEAK?: boolean;
         MUTE_MEMBERS?: boolean;
@@ -889,8 +889,9 @@ declare module "discord.js" {
         USE_VAD?: boolean;
         CHANGE_NICKNAME?: boolean;
         MANAGE_NICKNAMES?: boolean;
-        MANAGE_ROLES?: boolean;
+        MANAGE_ROLES_OR_PERMISSIONS?: boolean;
         MANAGE_WEBHOOKS?: boolean;
+        MANAGE_EMOJIS?: boolean;
     }
     type PermissionString = "CREATE_INSTANT_INVITE"
         | "KICK_MEMBERS"
@@ -916,7 +917,9 @@ declare module "discord.js" {
         | "USE_VAD"
         | "CHANGE_NICKNAME"
         | "MANAGE_NICKNAMES"
-        | "MANAGE_ROLES_OR_PERMISSIONS";
+        | "MANAGE_ROLES_OR_PERMISSIONS"
+        | "MANAGE_WEBHOOKS"
+        | "MANAGE_EMOJIS";
     type RichEmbedOptions = {
         title?: string;
         description?: string;
