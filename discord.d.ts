@@ -832,7 +832,7 @@ declare module "discord.js" {
         reduce(fn: Function, startVal?: any): any;
         some(fn: Function, thisArg?: Object): boolean;
     }
-    type AwaitMessagesOptions = { time?: number; max?: number; errors?: string[]; };
+    interface AwaitMessagesOptions extends CollectorOptions { errors?: string[]; }
     type Base64String = string;
     type Base64Resolvable = Buffer | Base64String;
     type BufferResolvable = Buffer | string;
@@ -865,8 +865,8 @@ declare module "discord.js" {
         disabledEvents: WSEventType[];
         ws?: WebSocketOptions;
     };
-    type CollectorOptions = { time?: number; max?: number };
     type CollectorFilterFunction = (message?: Message, collector?: MessageCollector) => boolean;
+    interface CollectorOptions { time?: number; max?: number }
     type GuildMemberResolvable = GuildMember | User;
     type GuildResolvable = Guild;
     type GuildEditData = {
