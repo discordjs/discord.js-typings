@@ -705,33 +705,6 @@ declare module "discord.js" {
         on(event: "speaking", listener: (value: boolean) => void): this;
         on(event: "start", listener: () => void): this;
     }
-    interface Permissions {
-        CREATE_INSTANT_INVITE?: boolean;
-        KICK_MEMBERS?: boolean;
-        BAN_MEMBERS?: boolean;
-        ADMINISTRATOR?: boolean;
-        MANAGE_CHANNELS?: boolean;
-        MANAGE_GUILD?: boolean;
-        READ_MESSAGES?: boolean;
-        SEND_MESSAGES?: boolean;
-        SEND_TTS_MESSAGES?: boolean;
-        MANAGE_MESSAGES?: boolean;
-        EMBED_LINKS?: boolean;
-        ATTACH_FILES?: boolean;
-        READ_MESSAGE_HISTORY?: boolean;
-        MENTION_EVERYONE?: boolean;
-        USE_EXTERNAL_EMOJIS?: boolean;
-        CONNECT?: boolean;
-        SPEAK?: boolean;
-        MUTE_MEMBERS?: boolean;
-        DEAFEN_MEMBERS?: boolean;
-        MOVE_MEMBERS?: boolean;
-        USE_VAD?: boolean;
-        CHANGE_NICKNAME?: boolean;
-        MANAGE_NICKNAMES?: boolean;
-        MANAGE_ROLES?: boolean;
-        MANAGE_WEBHOOKS?: boolean;
-    }
     export class EvaluatedPermissions {
         member: GuildMember;
         raw: number;
@@ -866,9 +839,8 @@ declare module "discord.js" {
         ws?: WebSocketOptions;
     };
     type CollectorFilterFunction = (message?: Message, collector?: MessageCollector) => boolean;
-    interface CollectorOptions { time?: number; max?: number }
-    type GuildMemberResolvable = GuildMember | User;
-    type GuildResolvable = Guild;
+    interface CollectorOptions { time?: number; max?: number; maxMatches?: number; }
+    type EmojiIdentifierResolvable = string | Emoji | ReactionEmoji;
     type GuildEditData = {
         name?: string;
         region?: string;
@@ -879,7 +851,11 @@ declare module "discord.js" {
         owner?: GuildMemberResolvable;
         splash?: Base64Resolvable;
     };
+    type GuildMemberResolvable = GuildMember | User;
+    type GuildResolvable = Guild | string;
     type InviteOptions = { temporary?: boolean; maxAge?: number; maxUses?: number; };
+    type InviteResolvable = string;
+    type MessageEditOptions = { embed: RichEmbedOptions; };
     type MessageOptions = {
         tts?: boolean;
         nonce?: string;
@@ -887,9 +863,35 @@ declare module "discord.js" {
         disableEveryone?: boolean;
         split?: boolean | SplitOptions;
     };
-    type MessageEditOptions = { embed: RichEmbedOptions; };
     type PermissionOverwriteOptions = Permissions;
     type PermissionResolvable = PermissionString | PermissionString[] | number[];
+    interface Permissions {
+        CREATE_INSTANT_INVITE?: boolean;
+        KICK_MEMBERS?: boolean;
+        BAN_MEMBERS?: boolean;
+        ADMINISTRATOR?: boolean;
+        MANAGE_CHANNELS?: boolean;
+        MANAGE_GUILD?: boolean;
+        READ_MESSAGES?: boolean;
+        SEND_MESSAGES?: boolean;
+        SEND_TTS_MESSAGES?: boolean;
+        MANAGE_MESSAGES?: boolean;
+        EMBED_LINKS?: boolean;
+        ATTACH_FILES?: boolean;
+        READ_MESSAGE_HISTORY?: boolean;
+        MENTION_EVERYONE?: boolean;
+        USE_EXTERNAL_EMOJIS?: boolean;
+        CONNECT?: boolean;
+        SPEAK?: boolean;
+        MUTE_MEMBERS?: boolean;
+        DEAFEN_MEMBERS?: boolean;
+        MOVE_MEMBERS?: boolean;
+        USE_VAD?: boolean;
+        CHANGE_NICKNAME?: boolean;
+        MANAGE_NICKNAMES?: boolean;
+        MANAGE_ROLES?: boolean;
+        MANAGE_WEBHOOKS?: boolean;
+    }
     type PermissionString = "CREATE_INSTANT_INVITE"
         | "KICK_MEMBERS"
         | "BAN_MEMBERS"
@@ -915,20 +917,37 @@ declare module "discord.js" {
         | "CHANGE_NICKNAME"
         | "MANAGE_NICKNAMES"
         | "MANAGE_ROLES_OR_PERMISSIONS";
+    type RichEmbedOptions = {
+        title?: string;
+        description?: string;
+        url?: string;
+        timestamp?: Date;
+        color?: number | string;
+        fields?: { name: string; value: string; inline?: boolean; }[];
+        author?: { name: string; url?: string; icon_url?: string; };
+        thumbnail?: { url: string; height?: number; width?: number; };
+        image?: { url: string; proxy_url?: string; height?: number; width?: number; };
+        video?: { url: string; height: number; width: number; };
+        footer?: { text?: string; icon_url?: string; };
+    };
+    type RoleData = {
+        name?: string;
+        color?: number | string;
+        hoist?: boolean;
+        position?: number;
+        permissions?: PermissionString[];
+        mentionable?: boolean;
+    };
     type RoleResolvable = Role | string;
     type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
     type StreamOptions = { seek?: number; volume?: number; passes?: number; };
     type StringResolvable = any[] | string | any;
     type UserResolvable = User | string | Message | Guild | GuildMember;
-    type WebSocketOptions = { large_threshold?: number; compress?: boolean; };
     type WebhookMessageOptions = {
         tts?: boolean;
         disableEveryone?: boolean;
     };
-    type WebhookOptions = {
-        large_threshold?: number;
-        compress?: boolean;
-    };
+    type WebSocketOptions = { large_threshold?: number; compress?: boolean; };
     type WSEventType = "READY"
         | "GUILD_SYNC"
         | "GUILD_CREATE"
@@ -962,25 +981,4 @@ declare module "discord.js" {
         | "VOICE_SERVER_UPDATE"
         | "RELATIONSHIP_ADD"
         | "RELATIONSHIP_REMOVE";
-    type RichEmbedOptions = {
-        title?: string;
-        description?: string;
-        url?: string;
-        timestamp?: Date;
-        color?: number | string;
-        fields?: { name: string; value: string; inline?: boolean; }[];
-        author?: { name: string; url?: string; icon_url?: string; };
-        thumbnail?: { url: string; height?: number; width?: number; };
-        image?: { url: string; proxy_url?: string; height?: number; width?: number; };
-        video?: { url: string; height: number; width: number; };
-        footer?: { text?: string; icon_url?: string; };
-    };
-    type RoleData = {
-        name?: string;
-        color?: number | string;
-        hoist?: boolean;
-        position?: number;
-        permissions?: string[];
-        mentionable?: boolean;
-    };
 }
