@@ -411,7 +411,6 @@ declare module "discord.js" {
         presence: Presence;
         username: string;
         addFriend(): Promise<User>;
-        addFriend(...args): Promise<User>;
         block(): Promise<User>;
         deleteDM(): Promise<DMChannel>;
         equals(user: User): boolean;
@@ -444,9 +443,9 @@ declare module "discord.js" {
         splash: string;
     }
     class PendingVoiceConnection {
+        channel: VoiceChannel;
         data: Object;
         deathTimer: NodeJS.Timer;
-        channel: VoiceChannel;
         voiceManager: ClientVoiceManager;
         setSessionID(sessionID: string);
         setTokenAndEndpoint(token: string, endpoint: string);
@@ -502,7 +501,7 @@ declare module "discord.js" {
         webhookID: string;
         clearReactions(): Promise<Message>;
         delete(timeout?: number): Promise<Message>;
-        edit(content: StringResolvable): Promise<Message>;
+        edit(content: StringResolvable, options?: MessageEditOptions): Promise<Message>;
         editCode(lang: string, content: StringResolvable): Promise<Message>;
         equals(message: Message, rawData: Object): boolean;
         fetchWebhook(): Promise<Webhook>;
@@ -849,7 +848,14 @@ declare module "discord.js" {
     type ChannelLogsQueryOptions = { limit?: number; before?: string; after?: string; around?: string };
     type ChannelResovalble = Channel | Guild | Message | string;
     type InviteOptions = { temporary?: boolean; maxAge?: number; maxUses?: number; };
-    type MessageOptions = { tts?: boolean; nonce?: string; disableEveryone?: boolean; split?: boolean | SplitOptions; };
+    type MessageOptions = {
+        tts?: boolean;
+        nonce?: string;
+        embed?: RichEmbedOptions,
+        disableEveryone?: boolean;
+        split?: boolean | SplitOptions;
+    };
+    type MessageEditOptions = { embed: RichEmbedOptions; };
     type PermissionOverwriteOptions = Permissions;
     type PermissionResolvable = string | string[] | number[];
     type RoleResolvable = Role | string;
