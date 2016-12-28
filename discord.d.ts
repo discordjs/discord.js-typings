@@ -147,13 +147,13 @@ declare module "discord.js" {
         fetchMentions(options?: { limit?: number; roles?: boolean, everyone?: boolean; guild?: Guild | string }): Promise<Message[]>;
         removeFriend(user?: UserResolvable): Promise<User>;
         setAFK(afk: boolean): Promise<ClientUser>;
-        setAvatar(avatar: Base64Resolvable): Promise<ClientUser>;
-        setEmail(email: string): Promise<ClientUser>;
+        setAvatar(avatar: BufferResolvable | Base64Resolvable): Promise<ClientUser>;
+        setEmail(email: string, password: string): Promise<ClientUser>;
         setGame(game: string, streamingURL?: string): Promise<ClientUser>;
         setNote(note: string): Promise<User>;
         setPassword(newPassword: string, oldPassword: string): Promise<ClientUser>;
         setPresence(data: Object): Promise<ClientUser>;
-        setStatus(status?: string): Promise<ClientUser>;
+        setStatus(status: "online" | "idle" | "invisible" | "dnd"): Promise<ClientUser>;
         setUsername(username: string, password?: string): Promise<ClientUser>;
     }
     export class Presence {
@@ -405,6 +405,7 @@ declare module "discord.js" {
         id: string;
         lastMessageID: string;
         note: string;
+        notes: Collection<string, string>;
         presence: Presence;
         username: string;
         addFriend(): Promise<User>;
