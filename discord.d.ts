@@ -576,7 +576,7 @@ declare module "discord.js" {
         setAuthor(name: string, icon?: string, url?: string): this;
         setColor(color: string | number | number[]): this;
         setDescription(description: string): this;
-        setFooter(text: string, icon: string): this;
+        setFooter(text: string, icon?: string): this;
         setImage(url: string): this;
         setThumbnail(url: string): this;
         setTimestamp(timestamp?: Date): this;
