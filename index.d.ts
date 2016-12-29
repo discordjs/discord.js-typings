@@ -155,8 +155,8 @@ declare module "discord.js" {
         setGame(game: string, streamingURL?: string): Promise<ClientUser>;
         setNote(note: string): Promise<User>;
         setPassword(newPassword: string, oldPassword: string): Promise<ClientUser>;
-        setPresence(data: Object): Promise<ClientUser>;
-        setStatus(status: "online" | "idle" | "invisible" | "dnd"): Promise<ClientUser>;
+        setPresence(data: PresenceData): Promise<ClientUser>;
+        setStatus(status: PresenceStatus): Promise<ClientUser>;
         setUsername(username: string, password?: string): Promise<ClientUser>;
     }
     export class Presence {
@@ -922,6 +922,15 @@ declare module "discord.js" {
         | "MANAGE_ROLES_OR_PERMISSIONS"
         | "MANAGE_WEBHOOKS"
         | "MANAGE_EMOJIS";
+    type PresenceData = {
+        status?: PresenceStatus;
+        afk?: boolean;
+        game?: {
+            name?: string;
+            url?: string;
+        }
+    }
+    type PresenceStatus = "online" | "idle" | "invisible" | "dnd";
     type RichEmbedOptions = {
         title?: string;
         description?: string;
