@@ -1,4 +1,4 @@
-/// <reference path="discord.d.ts" />
+/// <reference path="index.d.ts" />
 
 import { Client } from "discord.js";
 
