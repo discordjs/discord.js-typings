@@ -3,7 +3,8 @@
 import { Client } from 'discord.js';
 
 const client = new Client({
-	disableEveryone: false
+	disableEveryone: false,
+	disabledEvents: ['GUILD_MEMBER_ADD']
 });
 
 client.on('message', (message) => {
