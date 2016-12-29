@@ -10,7 +10,7 @@
         ],
         "indent": [
             true,
-            "spaces"
+            "tabs"
         ],
         "no-duplicate-variable": true,
         "no-eval": true,
@@ -25,7 +25,7 @@
         ],
         "quotemark": [
             true,
-            "double"
+            "single"
         ],
         "semicolon": [
             true,
