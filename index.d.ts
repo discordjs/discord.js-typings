@@ -835,7 +835,7 @@ declare module "discord.js" {
         sync?: boolean;
         restWsBridgeTimeout?: number;
         restTimeOffset?: number;
-        disabledEvents: WSEventType[];
+        disabledEvents?: WSEventType[];
         ws?: WebSocketOptions;
     };
     type CollectorFilterFunction = (message?: Message, collector?: MessageCollector) => boolean;
