@@ -843,6 +843,7 @@ declare module "discord.js" {
     type CollectorFilterFunction = (message?: Message, collector?: MessageCollector) => boolean;
     interface CollectorOptions { time?: number; max?: number; maxMatches?: number; }
     type EmojiIdentifierResolvable = string | Emoji | ReactionEmoji;
+    type FileOptions = { attachment: BufferResolvable; name?: string; }
     type GuildEditData = {
         name?: string;
         region?: string;
@@ -863,6 +864,8 @@ declare module "discord.js" {
         nonce?: string;
         embed?: RichEmbedOptions,
         disableEveryone?: boolean;
+        file?: FileOptions | string;
+        code?: string;
         split?: boolean | SplitOptions;
     };
     type PermissionOverwriteOptions = Permissions;
