@@ -105,7 +105,7 @@ declare module "discord.js" {
     class SecretKey {
         key: Uint8Array;
     }
-    class RequestHandler { // docs going nowhere again, yay
+    class RequestHandler {
         constructor(restManager: {});
         globalLimit: boolean;
         queue: {}[];
@@ -184,12 +184,12 @@ declare module "discord.js" {
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
+        send(content?: StringResolvable, options?: MessageOptions): string;
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
         sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
         sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
-        sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         startTyping(count?: number): void;
         stopTyping(force?: boolean): void;
         toString(): string;
@@ -211,12 +211,12 @@ declare module "discord.js" {
         fetchMessage(messageID: string): Promise<Message>;
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
+        send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
         sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
         sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
-        sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         startTyping(count?: number): void;
         stopTyping(force?: boolean): void;
         toString(): string;
@@ -252,12 +252,12 @@ declare module "discord.js" {
         fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
         fetchPinnedMessages(): Promise<Collection<string, Message>>;
         fetchWebhooks(): Promise<Collection<string, Webhook>>;
+        send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
         sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
         sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
-        sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         startTyping(count?: number): void;
         stopTyping(force?: boolean): void;
     }
@@ -383,12 +383,12 @@ declare module "discord.js" {
         permissionsIn(channel: ChannelResovalble): EvaluatedPermissions;
         removeRole(role: Role | string): Promise<GuildMember>;
         removeRoles(roles: Collection<string, Role> | Role[] | string[]): Promise<GuildMember>;
+        send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
         sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
         sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
-        sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         setDeaf(deaf: boolean): Promise<GuildMember>;
         setMute(mute: boolean): Promise<GuildMember>;
         setNickname(nickname: string): Promise<GuildMember>;
@@ -418,12 +418,12 @@ declare module "discord.js" {
         equals(user: User): boolean;
         fetchProfile(): Promise<UserProfile>;
         removeFriend(): Promise<User>;
+        send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
         sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
         sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
         sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
-        sendTTSMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
         setNote(note: string): Promise<User>;
         toString(): string;
         typingDurationIn(channel: ChannelResovalble): number;
