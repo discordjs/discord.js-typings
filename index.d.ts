@@ -184,6 +184,7 @@ declare module 'discord.js' {
 		fetchMessage(messageID: string): Promise<Message>;
 		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
 		fetchPinnedMessages(): Promise<Collection<string, Message>>;
+		search(options?: MessageSearchOptions): Promise<Message[][]>;
 		send(content?: StringResolvable, options?: MessageOptions): string;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
@@ -211,6 +212,7 @@ declare module 'discord.js' {
 		fetchMessage(messageID: string): Promise<Message>;
 		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
 		fetchPinnedMessages(): Promise<Collection<string, Message>>;
+		search(options?: MessageSearchOptions): Promise<Message[][]>;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
@@ -252,6 +254,7 @@ declare module 'discord.js' {
 		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
 		fetchPinnedMessages(): Promise<Collection<string, Message>>;
 		fetchWebhooks(): Promise<Collection<string, Webhook>>;
+		search(options?: MessageSearchOptions): Promise<Message[][]>;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
@@ -867,6 +870,46 @@ declare module 'discord.js' {
 		file?: FileOptions | string;
 		code?: string;
 		split?: boolean | SplitOptions;
+	};
+	type MessageSearchOptions = {
+		content?: string;
+		maxID?: string;
+		minID?: string;
+		has?: 'link'
+			| 'embed'
+			| 'file'
+			| 'video'
+			| 'image'
+			| 'sound'
+			| '-link'
+			| '-embed'
+			| '-file'
+			| '-video'
+			| '-image'
+			| '-sound';
+		channel?: ChannelResovalble;
+		author?: UserResolvable;
+		authorType?: 'user'
+			| 'bot'
+			| 'webhook'
+			| '-user'
+			| '-bot'
+			| '-webhook';
+		sortBy?: 'relevant' | 'recent';
+		sortOrder?: 'asc' | 'desc';
+		contextSize?: number;
+		limit?: number;
+		offset?: number;
+		mentions?: UserResolvable;
+		mentionsEveryone?: boolean;
+		linkHostname?: string;
+		embedProvider?: string;
+		embedType?: 'image' | 'video' | 'url' | 'rich';
+		attachmentFilename?: string;
+		attachmentExtension?: string;
+		before?: Date;
+		after?: Date;
+		during?: Date;
 	};
 	type PermissionOverwriteOptions = Permissions;
 	type PermissionResolvable = PermissionString | PermissionString[] | number[];
