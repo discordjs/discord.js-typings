@@ -185,7 +185,7 @@ declare module 'discord.js' {
 		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
 		fetchPinnedMessages(): Promise<Collection<string, Message>>;
 		search(options?: MessageSearchOptions): Promise<Message[][]>;
-		send(content?: StringResolvable, options?: MessageOptions): string;
+		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
 		sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
