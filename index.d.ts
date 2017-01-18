@@ -297,7 +297,7 @@ declare module 'discord.js' {
 		client: Client;
 		createdAt: Date;
 		createdTimestamp: number;
-		defaultChannel: GuildChannel;
+		defaultChannel: TextChannel;
 		embedEnabled: boolean;
 		emojis: Collection<string, Emoji>;
 		features: Object[];
