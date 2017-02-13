@@ -98,10 +98,12 @@ declare module 'discord.js' {
 		token: string;
 		delete(): Promise<void>;
 		edit(name: string, avatar: BufferResolvable): Promise<Webhook>;
-		send(content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		send(content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		send(options?: WebhookMessageOptions): Promise<Message | Message[]>;
 		sendCode(lang: string, content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message>;
-		sendMessage(content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		sendMessage(content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		sendMessage(options?: WebhookMessageOptions): Promise<Message | Message[]>;
 		sendSlackMessage(body: any): Promise<void>;
 	}
 	class SecretKey {
@@ -164,8 +166,8 @@ declare module 'discord.js' {
 	}
 	export class Presence {
 		game: Game;
-		status: string;
-		equals(other: Presence): boolean;
+		status: 'online' | 'offline' | 'idle' | 'dnd';
+		equals(presence: Presence): boolean;
 	}
 	export class Channel {
 		client: Client;
@@ -182,18 +184,20 @@ declare module 'discord.js' {
 		typing: boolean;
 		typingCount: number;
 		awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-		bulkDelete(messages: Collection<string, Message> | Message[] | number): Promise<Collection<string, Message>>;
+		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
 		createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
 		fetchMessage(messageID: string): Promise<Message>;
 		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
 		fetchPinnedMessages(): Promise<Collection<string, Message>>;
 		search(options?: MessageSearchOptions): Promise<Message[][]>;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+		send(options?: MessageOptions): Promise<Message | Message[]>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
-		sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
-		sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
-		sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<Message>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<Message>;
+		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
+		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
+		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
 		startTyping(count?: number): void;
 		stopTyping(force?: boolean): void;
 		toString(): string;
@@ -209,7 +213,7 @@ declare module 'discord.js' {
 		typing: boolean;
 		typingCount: number;
 		awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-		bulkDelete(messages: Collection<string, Message> | Message[] | number): Promise<Collection<string, Message>>;
+		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
 		createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
 		equals(channel: GroupDMChannel): boolean;
 		fetchMessage(messageID: string): Promise<Message>;
@@ -217,11 +221,13 @@ declare module 'discord.js' {
 		fetchPinnedMessages(): Promise<Collection<string, Message>>;
 		search(options?: MessageSearchOptions): Promise<Message[][]>;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+		send(options?: MessageOptions): Promise<Message | Message[]>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
-		sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
-		sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
-		sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<Message>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<Message>;
+		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
+		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
+		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
 		startTyping(count?: number): void;
 		stopTyping(force?: boolean): void;
 		toString(): string;
@@ -250,7 +256,7 @@ declare module 'discord.js' {
 		typing: boolean;
 		typingCount: number;
 		awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-		bulkDelete(messages: Collection<string, Message> | Message[] | number): Promise<Collection<string, Message>>;
+		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
 		createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
 		createWebhook(name: string, avatar: BufferResolvable): Promise<Webhook>;
 		fetchMessage(messageID: string): Promise<Message>;
@@ -259,11 +265,13 @@ declare module 'discord.js' {
 		fetchWebhooks(): Promise<Collection<string, Webhook>>;
 		search(options?: MessageSearchOptions): Promise<Message[][]>;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+		send(options?: MessageOptions): Promise<Message | Message[]>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
-		sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
-		sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
-		sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<Message>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<Message>;
+		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
+		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
+		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
 		startTyping(count?: number): void;
 		stopTyping(force?: boolean): void;
 	}
