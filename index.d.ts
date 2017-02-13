@@ -233,11 +233,12 @@ declare module 'discord.js' {
 		toString(): string;
 	}
 	export class GuildChannel extends Channel {
+		deletable: boolean;
 		guild: Guild;
 		name: string;
 		permissionOverwrites: Collection<string, PermissionOverwrites>;
 		position: number;
-		clone(name?: string, withPermissions?: boolean): Promise<GuildChannel>;
+		clone(name?: string, withPermissions?: boolean, withTopic?: boolean): Promise<GuildChannel>;
 		createInvite(options?: InviteOptions): Promise<Invite>;
 		edit(data: ChannelData): Promise<GuildChannel>;
 		equals(channel: GuildChannel): boolean;
@@ -357,7 +358,7 @@ declare module 'discord.js' {
 		setRegion(region: string): Promise<Guild>;
 		setRolePosition(role: string | Role, position: number, relative?: boolean): Promise<Guild>;
 		setSplash(splash: Base64Resolvable): Promise<Guild>;
-		setVerificationLevel(level: number): Promise<Guild>;
+		setVerificationLevel(verificationLevel: number): Promise<Guild>;
 		sync(): void;
 		toString(): string;
 		unban(user: UserResolvable): Promise<User>;
@@ -373,6 +374,7 @@ declare module 'discord.js' {
 		joinedAt: Date;
 		joinedTimestamp: number;
 		kickable: boolean;
+		lastMessage: Message;
 		lastMessageID: string;
 		mute: boolean;
 		nickname: string;
@@ -391,8 +393,9 @@ declare module 'discord.js' {
 		addRole(role: Role | string): Promise<GuildMember>;
 		addRoles(roles: Collection<string, Role> | Role[] | string[]): Promise<GuildMember>;
 		ban(deleteDays?: number): Promise<GuildMember>;
+		createDM(): Promise<DMChannel>;
 		deleteDM(): Promise<DMChannel>;
-		edit(data: {}): Promise<GuildMember>;
+		edit(data: any): Promise<GuildMember>;
 		hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
 		hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
 		kick(): Promise<GuildMember>;
@@ -401,11 +404,13 @@ declare module 'discord.js' {
 		removeRole(role: Role | string): Promise<GuildMember>;
 		removeRoles(roles: Collection<string, Role> | Role[] | string[]): Promise<GuildMember>;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+		send(options?: MessageOptions): Promise<Message | Message[]>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		sendEmbed(embed: RichEmbed, content?: string, options?: MessageOptions): Promise<Message>;
 		sendEmbed(embed: RichEmbed, options?: MessageOptions): Promise<Message>;
-		sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
-		sendMessage(content: string, options?: MessageOptions): Promise<Message | Message[]>;
+		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
+		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
+		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
 		setDeaf(deaf: boolean): Promise<GuildMember>;
 		setMute(mute: boolean): Promise<GuildMember>;
 		setNickname(nickname: string): Promise<GuildMember>;
