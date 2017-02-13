@@ -34,10 +34,11 @@ declare module 'discord.js' {
 		clearTimeout(timeout: NodeJS.Timer): void;
 		destroy(): Promise<void>;
 		fetchApplication(): Promise<ClientOAuth2Application>;
-		fetchInvite(code: string): Promise<Invite>;
-		fetchUser(id: string): Promise<User>;
+		fetchInvite(invite: string): Promise<Invite>;
+		fetchUser(id: string, cache?: boolean): Promise<User>;
+		fetchVoiceRegions(): Collection<string, VoiceRegion>;
 		fetchWebhook(id: string, token?: string): Promise<Webhook>;
-		generateInvite(permissions: PermissionResolvable[] | number): Promise<string>;
+		generateInvite(permissions?: PermissionResolvable[] | number): Promise<string>;
 		login(token: string): Promise<string>;
 		setInterval(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 		setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
@@ -49,7 +50,7 @@ declare module 'discord.js' {
 		on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
 		on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
 		on(event: 'debug', listener: (info: string) => void): this;
-		on(event: 'disconnect', listener: () => void): this;
+		on(event: 'disconnect', listener: (event: any) => void): this;
 		on(event: 'emojiCreate', listener: (emoji: Emoji) => void): this;
 		on(event: 'emojiCreate', listener: (emoji: Emoji) => void): this;
 		on(event: 'emojiUpdate', listener: (oldEmoji: Emoji, newEmoji: Emoji) => void): this;
@@ -61,7 +62,7 @@ declare module 'discord.js' {
 		on(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
 		on(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
 		on(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
-		on(event: 'guildMembersChunk', listener: (members: GuildMember[]) => void): this;
+		on(event: 'guildMembersChunk', listener: (members: Collection<string, GuildMember>, guild: Guild) => void): this;
 		on(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: boolean) => void): this;
 		on(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
 		on(event: 'guildUnavailable', listener: (guild: Guild) => void): this;
@@ -787,6 +788,15 @@ declare module 'discord.js' {
 		on(event: 'opus', listener: (user: User, buffer: Buffer) => void): this;
 		on(event: 'pcm', listener: (user: User, buffer: Buffer) => void): this;
 		on(event: 'warn', listener: (message: string) => void): this;
+	}
+	export class VoiceRegion {
+		custom: boolean;
+		deprecated: boolean;
+		id: string;
+		name: string;
+		optimal: boolean;
+		sampleHostname: string;
+		vip: boolean;
 	}
 	export class Collection<K, V> extends Map<K, V> {
 		array(): V[];
