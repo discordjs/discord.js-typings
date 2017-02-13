@@ -94,14 +94,15 @@ declare module 'discord.js' {
 		guildID: string;
 		id: string;
 		name: string;
+		owner: User | any;
 		token: string;
 		delete(): Promise<void>;
 		edit(name: string, avatar: BufferResolvable): Promise<Webhook>;
+		send(content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
 		sendCode(lang: string, content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		sendFile(attachment: BufferResolvable, fileName?: string, content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message>;
+		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message>;
 		sendMessage(content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		sendSlackMessage(body: Object): Promise<void>;
-		sendTTSMessage(content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		sendSlackMessage(body: any): Promise<void>;
 	}
 	class SecretKey {
 		key: Uint8Array;
