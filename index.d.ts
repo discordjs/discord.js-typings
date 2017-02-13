@@ -472,7 +472,7 @@ declare module 'discord.js' {
 	}
 	class PendingVoiceConnection {
 		channel: VoiceChannel;
-		data: Object;
+		data: any;
 		deathTimer: NodeJS.Timer;
 		voiceManager: ClientVoiceManager;
 		setSessionID(sessionID: string): void;
@@ -511,6 +511,7 @@ declare module 'discord.js' {
 		edits: Message[];
 		embeds: MessageEmbed[];
 		guild: Guild;
+		hit: boolean;
 		id: string;
 		member: GuildMember;
 		mentions: {
@@ -531,13 +532,14 @@ declare module 'discord.js' {
 		delete(timeout?: number): Promise<Message>;
 		edit(content: StringResolvable, options?: MessageEditOptions): Promise<Message>;
 		editCode(lang: string, content: StringResolvable): Promise<Message>;
-		equals(message: Message, rawData: Object): boolean;
+		equals(message: Message, rawData: any): boolean;
 		fetchWebhook(): Promise<Webhook>;
 		isMemberMentioned(member: GuildMember | User): boolean;
 		isMentioned(data: GuildChannel | User | Role | string): boolean;
 		pin(): Promise<Message>;
 		react(emoji: string | Emoji | ReactionEmoji): Promise<MessageReaction>;
-		reply(content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+		reply(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+		reply(options?: MessageOptions): Promise<Message | Message[]>;
 		toString(): string;
 		unpin(): Promise<Message>;
 	}
@@ -908,11 +910,12 @@ declare module 'discord.js' {
 	type MessageOptions = {
 		tts?: boolean;
 		nonce?: string;
-		embed?: RichEmbedOptions,
+		embed?: RichEmbed | RichEmbedOptions,
 		disableEveryone?: boolean;
 		file?: FileOptions | string;
 		code?: string;
 		split?: boolean | SplitOptions;
+		reply?: UserResolvable;
 	};
 	type MessageSearchOptions = {
 		content?: string;
