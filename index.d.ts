@@ -744,9 +744,11 @@ declare module 'discord.js' {
 		raw: number;
 		hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
 		hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
+		missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
 		serialize(): Permissions;
 	}
 	export class Role {
+		calculatedPosition: number;
 		client: Client;
 		color: number;
 		createdAt: Date;
@@ -774,7 +776,7 @@ declare module 'discord.js' {
 		setMentionable(mentionable: boolean): Promise<Role>;
 		setName(name: string): Promise<Role>;
 		setPermissions(permissions: PermissionResolvable[]): Promise<Role>;
-		setPosition(position: number): Promise<Role>;
+		setPosition(position: number, relative?: boolean): Promise<Role>;
 		toString(): string;
 	}
 	export class ClientVoiceManager {
@@ -782,7 +784,7 @@ declare module 'discord.js' {
 		connections: Collection<string, VoiceConnection>;
 		pending: Collection<string, VoiceConnection>;
 		joinChannel(channel: VoiceChannel): Promise<VoiceConnection>;
-		sendVoiceStateUpdate(channel: VoiceChannel, options?: Object): void;
+		sendVoiceStateUpdate(channel: VoiceChannel, options?: any): void;
 	}
 	class AudioPlayer extends EventEmitter {
 		dispatcher: StreamDispatcher;
@@ -830,23 +832,26 @@ declare module 'discord.js' {
 		array(): V[];
 		concat(...collections: Collection<any, any>[]): Collection<any, any>;
 		deleteAll(): Promise<V>[];
-		every(fn: Function, thisArg?: Object): boolean;
+		equals(collection: Collection<any, any>): boolean;
+		every(fn: Function, thisArg?: any): boolean;
 		exists(prop: keyof V, value: any): boolean;
-		filter(fn: Function, thisArg?: Object): Collection<K, V>;
-		filterArray(fn: Function, thisArg?: Object): V[];
-		find(propOrFn: keyof V | Function, value?: any): V;
+		filter(fn: Function, thisArg?: any): Collection<K, V>;
+		filterArray(fn: Function, thisArg?: any): V[];
+		find(prop: keyof V, value: any): V;
+		find(fn: Function): V;
 		findAll(prop: keyof V, value: any): V[];
-		findKey(propOrFn: keyof V | Function, value?: any): K;
+		findKey(prop: keyof V, value: any): K;
+		findKey(fn: Function): K;
 		first(): V;
 		firstKey(): K;
 		keyArray(): K[];
 		last(): V;
 		lastKey(): K;
-		map(fn: Function, thisArg?: Object): any[];
+		map(fn: Function, thisArg?: any): any[];
 		random(): V;
 		randomKey(): K;
 		reduce(fn: Function, startVal?: any): any;
-		some(fn: Function, thisArg?: Object): boolean;
+		some(fn: Function, thisArg?: any): boolean;
 	}
 	type AddGuildMemberOptions = {
 		accessToken: String;
