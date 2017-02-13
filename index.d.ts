@@ -36,7 +36,7 @@ declare module 'discord.js' {
 		fetchApplication(): Promise<ClientOAuth2Application>;
 		fetchInvite(invite: string): Promise<Invite>;
 		fetchUser(id: string, cache?: boolean): Promise<User>;
-		fetchVoiceRegions(): Collection<string, VoiceRegion>;
+		fetchVoiceRegions(): Promise<Collection<string, VoiceRegion>>;
 		fetchWebhook(id: string, token?: string): Promise<Webhook>;
 		generateInvite(permissions?: PermissionResolvable[] | number): Promise<string>;
 		login(token: string): Promise<string>;
@@ -291,7 +291,7 @@ declare module 'discord.js' {
 		streaming: boolean;
 		type: number;
 		url: string;
-		equals(other: Game): boolean;
+		equals(game: Game): boolean;
 	}
 	export class PermissionOverwrites {
 		channel: GuildChannel;
@@ -311,7 +311,7 @@ declare module 'discord.js' {
 		defaultChannel: TextChannel;
 		embedEnabled: boolean;
 		emojis: Collection<string, Emoji>;
-		features: Object[];
+		features: any[];
 		icon: string;
 		iconURL: string;
 		id: string;
@@ -330,9 +330,10 @@ declare module 'discord.js' {
 		splashURL: string;
 		verificationLevel: number;
 		voiceConnection: VoiceConnection;
+		addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		ban(user: GuildMember, deleteDays?: number): Promise<GuildMember | User | string>;
 		createChannel(name: string, type: 'text' | 'voice', overwrites?: PermissionOverwrites[]): Promise<TextChannel | VoiceChannel>;
-		createEmoji(attachment: BufferResolvable, name: string): Promise<Emoji>;
+		createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, roles?: Collection<string, Role> | Role[]): Promise<Emoji>;
 		createRole(data?: RoleData): Promise<Role>;
 		delete(): Promise<Guild>;
 		deleteEmoji(emoji: Emoji | string): Promise<void>;
@@ -340,19 +341,21 @@ declare module 'discord.js' {
 		equals(guild: Guild): boolean;
 		fetchBans(): Promise<Collection<string, User>>;
 		fetchInvites(): Promise<Collection<string, Invite>>;
-		fetchMember(user: UserResolvable): Promise<GuildMember>;
-		fetchMembers(query?: string): Promise<Guild>;
-		fetchWebhooks(): Collection<string, Webhook>;
+		fetchMember(user: UserResolvable, cache?: boolean): Promise<GuildMember>;
+		fetchMembers(query?: string, limit?: number): Promise<Guild>;
+		fetchVoiceRegions(): Promise<Collection<string, VoiceRegion>>;
+		fetchWebhooks(): Promise<Collection<string, Webhook>>;
 		leave(): Promise<Guild>;
 		member(user: UserResolvable): GuildMember;
 		pruneMembers(days: number, dry?: boolean): Promise<number>;
+		search(options?: MessageSearchOptions): Promise<Message[][]>;
 		setAFKChannel(afkChannel: ChannelResovalble): Promise<Guild>;
 		setAFKTimeout(afkTimeout: number): Promise<Guild>;
 		setIcon(icon: Base64Resolvable): Promise<Guild>;
 		setName(name: string): Promise<Guild>;
 		setOwner(owner: GuildMemberResolvable): Promise<Guild>;
 		setRegion(region: string): Promise<Guild>;
-		setRolePosition(role: string | Role, position: number): Promise<Guild>;
+		setRolePosition(role: string | Role, position: number, relative?: boolean): Promise<Guild>;
 		setSplash(splash: Base64Resolvable): Promise<Guild>;
 		setVerificationLevel(level: number): Promise<Guild>;
 		sync(): void;
@@ -829,6 +832,13 @@ declare module 'discord.js' {
 		randomKey(): K;
 		reduce(fn: Function, startVal?: any): any;
 		some(fn: Function, thisArg?: Object): boolean;
+	}
+	type AddGuildMemberOptions = {
+		accessToken: String;
+		nick?: string;
+		roles?: Collection<string, Role> | Role[] | string[];
+		mute?: boolean;
+		deaf?: boolean;
 	}
 	interface AwaitMessagesOptions extends CollectorOptions { errors?: string[]; }
 	type Base64String = string;
