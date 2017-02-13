@@ -602,15 +602,16 @@ declare module 'discord.js' {
 		timestamp?: Date;
 		title?: string;
 		url?: string;
-		addField(name: string, value: StringResolvable, inline?: boolean): this;
-		setAuthor(name: string, icon?: string, url?: string): this;
-		setColor(color: string | number | number[]): this;
-		setDescription(description: string): this;
-		setFooter(text: string, icon?: string): this;
+		addBlankField(inline?: boolean): this;
+		addField(name: StringResolvable, value: StringResolvable, inline?: boolean): this;
+		setAuthor(name: StringResolvable, icon?: string, url?: string): this;
+		setColor(color: ColorResolvable): this;
+		setDescription(description: StringResolvable): this;
+		setFooter(text: StringResolvable, icon?: string): this;
 		setImage(url: string): this;
 		setThumbnail(url: string): this;
 		setTimestamp(timestamp?: Date): this;
-		setTitle(title: string): this;
+		setTitle(title: StringResolvable): this;
 		setURL(url: string): this;
 	}
 	export class MessageAttachment {
@@ -886,6 +887,31 @@ declare module 'discord.js' {
 	};
 	type CollectorFilterFunction = (message?: Message, collector?: MessageCollector) => boolean;
 	interface CollectorOptions { time?: number; max?: number; maxMatches?: number; }
+	type ColorResolvable = ('DEFAULT'
+		| 'AQUA'
+		| 'GREEN'
+		| 'BLUE'
+		| 'PURPLE'
+		| 'GOLD'
+		| 'ORANGE'
+		| 'RED'
+		| 'GREY'
+		| 'DARKER_GREY'
+		| 'NAVY'
+		| 'DARK_AQUA'
+		| 'DARK_GREEN'
+		| 'DARK_BLUE'
+		| 'DARK_PURPLE'
+		| 'DARK_GOLD'
+		| 'DARK_ORANGE'
+		| 'DARK_RED'
+		| 'DARK_GREY'
+		| 'LIGHT_GREY'
+		| 'DARK_NAVY'
+		| 'RANDOM')
+		| [number, number, number]
+		| number
+		| string;
 	type EmojiIdentifierResolvable = string | Emoji | ReactionEmoji;
 	type EmojiEditData = {
 		name?: string;
