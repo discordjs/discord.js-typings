@@ -131,7 +131,8 @@ declare module 'discord.js' {
 		requiresColons: boolean;
 		roles: Collection<string, Role>;
 		url: string;
-		equals(other: Emoji | Object): boolean;
+		edit(data: EmojiEditData): Promise<Emoji>;
+		equals(other: Emoji | any): boolean;
 		toString(): string;
 	}
 	export class ReactionEmoji {
@@ -857,6 +858,10 @@ declare module 'discord.js' {
 	type CollectorFilterFunction = (message?: Message, collector?: MessageCollector) => boolean;
 	interface CollectorOptions { time?: number; max?: number; maxMatches?: number; }
 	type EmojiIdentifierResolvable = string | Emoji | ReactionEmoji;
+	type EmojiEditData = {
+		name?: string;
+		roles?: Collection<string, Role> | Array<string | Role>;
+	}
 	type FileOptions = { attachment: BufferResolvable; name?: string; }
 	type GuildEditData = {
 		name?: string;
