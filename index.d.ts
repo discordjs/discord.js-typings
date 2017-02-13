@@ -655,6 +655,7 @@ declare module 'discord.js' {
 	export class VoiceChannel extends GuildChannel {
 		bitrate: number;
 		connection: VoiceConnection;
+		full: boolean;
 		joinable: boolean;
 		members: Collection<string, GuildMember>;
 		speakable: boolean;
@@ -666,7 +667,7 @@ declare module 'discord.js' {
 	}
 	export class Shard {
 		constructor(manager: ShardingManager, id: number, args?: string[]);
-		env: Object;
+		env: any;
 		id: string;
 		manager: ShardingManager;
 		process: ChildProcess;
@@ -676,7 +677,7 @@ declare module 'discord.js' {
 	}
 	export class ShardingManager extends EventEmitter {
 		constructor(file: string, options?: {
-			totalShards?: number;
+			totalShards?: number | 'auto';
 			respawn?: boolean;
 			shardArgs?: string[];
 			token?: string;
@@ -693,11 +694,12 @@ declare module 'discord.js' {
 		fetchClientValues(prop: string): Promise<any[]>;
 		spawn(amount?: number, delay?: number): Promise<Collection<number, Shard>>;
 		on(event: 'launch', listener: (shard: Shard) => void): this;
+		on(event: 'message', listener: (shard: Shard, message: any) => void): this;
 	}
 	export class ShardClientUtil {
 		constructor(client: Client);
-		id: number;
 		count: number;
+		id: number;
 		broadcastEval(script: string): Promise<any[]>;
 		fetchClientValues(prop: string): Promise<any[]>;
 		send(message: any): Promise<void>;
@@ -705,7 +707,7 @@ declare module 'discord.js' {
 	}
 	export class UserConnection {
 		id: string;
-		integrations: Object[];
+		integrations: any[];
 		name: string;
 		revoked: boolean;
 		type: string;
@@ -716,6 +718,7 @@ declare module 'discord.js' {
 		connections: Collection<string, UserConnection>;
 		mutualGuilds: Collection<string, Guild>;
 		premium: boolean;
+		premiumSince: Date;
 		user: User;
 	}
 	export class StreamDispatcher extends EventEmitter {
