@@ -108,10 +108,10 @@ declare module 'discord.js' {
 	class RequestHandler {
 		constructor(restManager: {});
 		globalLimit: boolean;
-		queue: {}[];
-		restManager: {};
-		handle();
-		push(request: {});
+		queue: any[];
+		restManager: any;
+		handle(): void;
+		push(request: {}): void;
 	}
 	export class WebhookClient extends Webhook {
 		constructor(id: string, token: string, options?: ClientOptions);
@@ -452,8 +452,8 @@ declare module 'discord.js' {
 		data: Object;
 		deathTimer: NodeJS.Timer;
 		voiceManager: ClientVoiceManager;
-		setSessionID(sessionID: string);
-		setTokenAndEndpoint(token: string, endpoint: string);
+		setSessionID(sessionID: string): void;
+		setTokenAndEndpoint(token: string, endpoint: string): void;
 		upgrade(): VoiceConnection;
 	}
 	export class OAuth2Application {
@@ -753,7 +753,7 @@ declare module 'discord.js' {
 		connections: Collection<string, VoiceConnection>;
 		pending: Collection<string, VoiceConnection>;
 		joinChannel(channel: VoiceChannel): Promise<VoiceConnection>;
-		sendVoiceStateUpdate(channel: VoiceChannel, options?: Object);
+		sendVoiceStateUpdate(channel: VoiceChannel, options?: Object): void;
 	}
 	class AudioPlayer extends EventEmitter {
 		dispatcher: StreamDispatcher;
@@ -766,7 +766,7 @@ declare module 'discord.js' {
 		speaking: boolean;
 		voiceManager: ClientVoiceManager;
 		createReceiver(): VoiceReceiver;
-		disconnect();
+		disconnect(): void;
 		playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
 		playFile(file: string, options?: StreamOptions): StreamDispatcher;
 		playStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
