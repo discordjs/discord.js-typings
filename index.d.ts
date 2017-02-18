@@ -853,6 +853,15 @@ declare module 'discord.js' {
 		reduce(fn: Function, startVal?: any): any;
 		some(fn: Function, thisArg?: any): boolean;
 	}
+	export class SnowflakeUtil {
+		static deconstruct(snowflake: string): DeconstructedSnowflake;
+		static generate(): string;
+	}
+	export class Util {
+		static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string;
+		static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
+		static splitMessage(text: string, options?: SplitOptions): string | string[];
+	}
 	type AddGuildMemberOptions = {
 		accessToken: String;
 		nick?: string;
@@ -920,6 +929,13 @@ declare module 'discord.js' {
 		| [number, number, number]
 		| number
 		| string;
+	type DeconstructedSnowflake = {
+		date: Date;
+		workerID: number;
+		processID: number;
+		increment: number;
+		binary: string;
+	}
 	type EmojiIdentifierResolvable = string | Emoji | ReactionEmoji;
 	type EmojiEditData = {
 		name?: string;
@@ -991,8 +1007,6 @@ declare module 'discord.js' {
 		after?: Date;
 		during?: Date;
 	};
-	type PermissionOverwriteOptions = Permissions;
-	type PermissionResolvable = PermissionString | PermissionString[] | number[];
 	interface Permissions {
 		CREATE_INSTANT_INVITE?: boolean;
 		KICK_MEMBERS?: boolean;
@@ -1048,6 +1062,8 @@ declare module 'discord.js' {
 		| 'MANAGE_ROLES_OR_PERMISSIONS'
 		| 'MANAGE_WEBHOOKS'
 		| 'MANAGE_EMOJIS';
+	type PermissionOverwriteOptions = Permissions;
+	type PermissionResolvable = PermissionString | PermissionString[] | number[];
 	type PresenceData = {
 		status?: PresenceStatus;
 		afk?: boolean;
