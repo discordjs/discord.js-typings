@@ -88,7 +88,7 @@ declare module 'discord.js' {
 		on(event: 'warn', listener: (info: string) => void): this;
 	}
 	export class Webhook {
-		constructor(client: Client, dataOrID: string|Object, token: string);
+		constructor(client: Client, dataOrID: any, token: string);
 		avatar: string;
 		channelID: string;
 		client: Client;
@@ -124,7 +124,7 @@ declare module 'discord.js' {
 		options: ClientOptions;
 	}
 	export class Emoji {
-		constructor(guild: Guild, data: Object);
+		constructor(guild: Guild, data: any);
 		client: Client;
 		createdAt: Date;
 		createdTimestamp: number;
@@ -169,13 +169,13 @@ declare module 'discord.js' {
 		setUsername(username: string, password?: string): Promise<ClientUser>;
 	}
 	export class Presence {
-		constructor(data: Object);
+		constructor(data: any);
 		game: Game;
 		status: 'online' | 'offline' | 'idle' | 'dnd';
 		equals(presence: Presence): boolean;
 	}
 	export class Channel {
-		constructor(client: Client, data: Object);
+		constructor(client: Client, data: any);
 		client: Client;
 		createdAt: Date;
 		createdTimestamp: number;
@@ -184,7 +184,7 @@ declare module 'discord.js' {
 		delete(): Promise<Channel>;
 	}
 	export class DMChannel extends Channel {
-		constructor(client: Client, data: Object);
+		constructor(client: Client, data: any);
 		lastMessageID: string;
 		messages: Collection<string, Message>;
 		recipient: User;
@@ -210,7 +210,7 @@ declare module 'discord.js' {
 		toString(): string;
 	}
 	export class GroupDMChannel extends Channel {
-		constructor(client: Client, data: Object);
+		constructor(client: Client, data: any);
 		icon: string;
 		lastMessageID: string;
 		messages: Collection<string, Message>;
@@ -241,7 +241,7 @@ declare module 'discord.js' {
 		toString(): string;
 	}
 	export class GuildChannel extends Channel {
-		constructor(guild: Guild, data: Object);
+		constructor(guild: Guild, data: any);
 		deletable: boolean;
 		guild: Guild;
 		name: string;
@@ -259,7 +259,7 @@ declare module 'discord.js' {
 		toString(): string;
 	}
 	export class TextChannel extends GuildChannel {
-		constructor(guild: Guild, data: Object);
+		constructor(guild: Guild, data: any);
 		lastMessageID: string;
 		members: Collection<string, GuildMember>;
 		messages: Collection<string, Message>;
@@ -298,7 +298,7 @@ declare module 'discord.js' {
 		on(event: 'message', listener: (message: Message, collector: MessageCollector) => void): this;
 	}
 	export class Game {
-		constructor(data: Object);
+		constructor(data: any);
 		name: string;
 		streaming: boolean;
 		type: number;
@@ -306,14 +306,14 @@ declare module 'discord.js' {
 		equals(game: Game): boolean;
 	}
 	export class PermissionOverwrites {
-		constructor(guildChannel: GuildChannel, data: Object);
+		constructor(guildChannel: GuildChannel, data: any);
 		channel: GuildChannel;
 		id: string;
 		type: string;
 		delete(): Promise<PermissionOverwrites>;
 	}
 	export class Guild {
-		constructor(guild: Guild, data: Object);
+		constructor(guild: Guild, data: any);
 		afkChannelID: string;
 		afkTimeout: number;
 		applicationID: string;
@@ -377,7 +377,7 @@ declare module 'discord.js' {
 		unban(user: UserResolvable): Promise<User>;
 	}
 	export class GuildMember {
-		constructor(guild: Guild, data: Object);
+		constructor(guild: Guild, data: any);
 		bannable: boolean;
 		client: Client;
 		deaf: boolean;
@@ -433,7 +433,7 @@ declare module 'discord.js' {
 		toString(): string;
 	}
 	export class User {
-		constructor(client: Client, data: Object);
+		constructor(client: Client, data: any);
 		avatar: string;
 		avatarURL: string;
 		bot: boolean;
@@ -473,14 +473,14 @@ declare module 'discord.js' {
 		unblock(): Promise<User>;
 	}
 	export class PartialGuildChannel {
-		constructor(client: Client, data: Object);
+		constructor(client: Client, data: any);
 		client: Client;
 		id: string;
 		name: string;
 		type: string;
 	}
 	export class PartialGuild {
-		constructor(client: Client, data: Object);
+		constructor(client: Client, data: any);
 		client: Client;
 		icon: string;
 		id: string;
@@ -498,7 +498,7 @@ declare module 'discord.js' {
 		upgrade(): VoiceConnection;
 	}
 	export class OAuth2Application {
-		constructor(client: Client, data: Object);
+		constructor(client: Client, data: any);
 		client: Client;
 		createdAt: Date;
 		createdTimestamp: number;
@@ -516,7 +516,7 @@ declare module 'discord.js' {
 		owner: User;
 	}
 	export class Message {
-		constructor(channel: TextChannel|DMChannel|GroupDMChannel, data: Object, client: Client);
+		constructor(channel: TextChannel | DMChannel | GroupDMChannel, data: any, client: Client);
 		attachments: Collection<string, MessageAttachment>;
 		author: User;
 		channel: TextChannel | DMChannel | GroupDMChannel;
@@ -565,7 +565,7 @@ declare module 'discord.js' {
 		unpin(): Promise<Message>;
 	}
 	export class MessageEmbed {
-		constructor(message: Message, data: Object);
+		constructor(message: Message, data: any);
 		author: MessageEmbedAuthor;
 		client: Client;
 		color: number;
@@ -583,34 +583,34 @@ declare module 'discord.js' {
 		url: string;
 	}
 	export class MessageEmbedAuthor {
-		constructor(embed: MessageEmbed, data: Object);
+		constructor(embed: MessageEmbed, data: any);
 		embed: MessageEmbed;
 		iconURL: string;
 		name: string;
 		url: string;
 	}
 	export class MessageEmbedField {
-		constructor(embed: MessageEmbed, data: Object);
+		constructor(embed: MessageEmbed, data: any);
 		embed: MessageEmbed;
 		inline: boolean;
 		name: string;
 		value: string;
 	}
 	export class MessageEmbedFooter {
-		constructor(embed: MessageEmbed, data: Object);
+		constructor(embed: MessageEmbed, data: any);
 		embed: MessageEmbed;
 		iconURL: string;
 		proxyIconURL: string;
 		text: string;
 	}
 	export class MessageEmbedProvider {
-		constructor(embed: MessageEmbed, data: Object);
+		constructor(embed: MessageEmbed, data: any);
 		embed: MessageEmbed;
 		name: string;
 		url: string;
 	}
 	export class MessageEmbedThumbnail {
-		constructor(embed: MessageEmbed, data: Object);
+		constructor(embed: MessageEmbed, data: any);
 		embed: MessageEmbed;
 		height: number;
 		proxyURL: string;
@@ -642,7 +642,7 @@ declare module 'discord.js' {
 		setURL(url: string): this;
 	}
 	export class MessageAttachment {
-		constructor(message: Message, data: Object);
+		constructor(message: Message, data: any);
 		client: Client;
 		filename: string;
 		filesize: number;
@@ -654,7 +654,7 @@ declare module 'discord.js' {
 		width: number;
 	}
 	export class MessageReaction {
-		constructor(message: Message, emoji: Object, count: number, me: boolean);
+		constructor(message: Message, emoji: any, count: number, me: boolean);
 		count: number;
 		emoji: Emoji | ReactionEmoji;
 		me: boolean;
@@ -664,7 +664,7 @@ declare module 'discord.js' {
 		remove(user?: UserResolvable): Promise<MessageReaction>;
 	}
 	export class Invite {
-		constructor(client: Client, data: Object);
+		constructor(client: Client, data: any);
 		channel: GuildChannel | PartialGuildChannel;
 		client: Client;
 		code: string;
@@ -683,7 +683,7 @@ declare module 'discord.js' {
 		toString(): string;
 	}
 	export class VoiceChannel extends GuildChannel {
-		constructor(guild: Guild, data: Object);
+		constructor(guild: Guild, data: any);
 		bitrate: number;
 		connection: VoiceConnection;
 		full: boolean;
@@ -737,7 +737,7 @@ declare module 'discord.js' {
 		singleton(client: Client): ShardClientUtil;
 	}
 	export class UserConnection {
-		constructor(user: User, data: Object);
+		constructor(user: User, data: any);
 		id: string;
 		integrations: any[];
 		name: string;
@@ -746,7 +746,7 @@ declare module 'discord.js' {
 		user: User;
 	}
 	export class UserProfile {
-		constructor(user: User, data: Object);
+		constructor(user: User, data: any);
 		client: Client;
 		connections: Collection<string, UserConnection>;
 		mutualGuilds: Collection<string, Guild>;
@@ -755,7 +755,7 @@ declare module 'discord.js' {
 		user: User;
 	}
 	export class StreamDispatcher extends EventEmitter {
-		constructor(player: AudioPlayer, stream: NodeJS.ReadableStream, sd: Object, streamOptions: StreamOptions);
+		constructor(player: AudioPlayer, stream: NodeJS.ReadableStream, sd: any, streamOptions: StreamOptions);
 		passes: number;
 		paused: boolean;
 		time: number;
@@ -783,7 +783,7 @@ declare module 'discord.js' {
 		serialize(): Permissions;
 	}
 	export class Role {
-		constructor(guild: Guild, data: Object);
+		constructor(guild: Guild, data: any);
 		calculatedPosition: number;
 		client: Client;
 		color: number;
