@@ -313,7 +313,7 @@ declare module 'discord.js' {
 		delete(): Promise<PermissionOverwrites>;
 	}
 	export class Guild {
-		constructor(guild: Guild, data: any);
+		constructor(client: Client, data: any);
 		afkChannelID: string;
 		afkTimeout: number;
 		applicationID: string;
@@ -511,7 +511,6 @@ declare module 'discord.js' {
 		toString(): string;
 	}
 	export class ClientOAuth2Application extends OAuth2Application {
-
 		flags: number;
 		owner: User;
 	}
@@ -829,7 +828,7 @@ declare module 'discord.js' {
 		voiceConnection: VoiceConnection;
 	}
 	export class VoiceConnection extends EventEmitter {
-		constructor(pendingConnection: ClientVoiceManager);
+		constructor(pendingConnection: PendingVoiceConnection);
 		channel: VoiceChannel;
 		player: AudioPlayer;
 		receivers: VoiceReceiver[];
@@ -860,6 +859,7 @@ declare module 'discord.js' {
 		on(event: 'warn', listener: (message: string) => void): this;
 	}
 	export class VoiceRegion {
+		constructor(data: any);
 		custom: boolean;
 		deprecated: boolean;
 		id: string;
