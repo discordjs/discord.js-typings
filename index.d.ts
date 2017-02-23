@@ -183,33 +183,14 @@ declare module 'discord.js' {
 		type: 'dm' | 'group' | 'text' | 'voice';
 		delete(): Promise<Channel>;
 	}
-	export class DMChannel extends Channel {
+	export class DMChannel extends TextBasedChannel(Channel) {
 		constructor(client: Client, data: any);
 		lastMessageID: string;
 		messages: Collection<string, Message>;
 		recipient: User;
-		typing: boolean;
-		typingCount: number;
-		awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
-		createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
-		fetchMessage(messageID: string): Promise<Message>;
-		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
-		fetchPinnedMessages(): Promise<Collection<string, Message>>;
-		search(options?: MessageSearchOptions): Promise<Message[][]>;
-		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		send(options?: MessageOptions): Promise<Message | Message[]>;
-		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<Message>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<Message>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
-		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
-		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
-		startTyping(count?: number): void;
-		stopTyping(force?: boolean): void;
 		toString(): string;
 	}
-	export class GroupDMChannel extends Channel {
+	export class GroupDMChannel extends TextBasedChannel(Channel) {
 		constructor(client: Client, data: any);
 		icon: string;
 		lastMessageID: string;
@@ -218,26 +199,7 @@ declare module 'discord.js' {
 		owner: User;
 		ownerID: string;
 		recipients: Collection<string, User>;
-		typing: boolean;
-		typingCount: number;
-		awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
-		createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
 		equals(channel: GroupDMChannel): boolean;
-		fetchMessage(messageID: string): Promise<Message>;
-		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
-		fetchPinnedMessages(): Promise<Collection<string, Message>>;
-		search(options?: MessageSearchOptions): Promise<Message[][]>;
-		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		send(options?: MessageOptions): Promise<Message | Message[]>;
-		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<Message>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<Message>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
-		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
-		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
-		startTyping(count?: number): void;
-		stopTyping(force?: boolean): void;
 		toString(): string;
 	}
 	export class GuildChannel extends Channel {
@@ -258,33 +220,14 @@ declare module 'discord.js' {
 		setTopic(topic: string): Promise<GuildChannel>;
 		toString(): string;
 	}
-	export class TextChannel extends GuildChannel {
+	export class TextChannel extends TextBasedChannel(GuildChannel) {
 		constructor(guild: Guild, data: any);
 		lastMessageID: string;
 		members: Collection<string, GuildMember>;
 		messages: Collection<string, Message>;
 		topic: string;
-		typing: boolean;
-		typingCount: number;
-		awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
-		createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
 		createWebhook(name: string, avatar: BufferResolvable): Promise<Webhook>;
-		fetchMessage(messageID: string): Promise<Message>;
-		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
-		fetchPinnedMessages(): Promise<Collection<string, Message>>;
 		fetchWebhooks(): Promise<Collection<string, Webhook>>;
-		search(options?: MessageSearchOptions): Promise<Message[][]>;
-		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		send(options?: MessageOptions): Promise<Message | Message[]>;
-		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<Message>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<Message>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
-		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
-		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
-		startTyping(count?: number): void;
-		stopTyping(force?: boolean): void;
 	}
 	export class MessageCollector extends EventEmitter {
 		constructor(channel: Channel, filter: CollectorFilterFunction, options?: CollectorOptions);
@@ -376,7 +319,7 @@ declare module 'discord.js' {
 		toString(): string;
 		unban(user: UserResolvable): Promise<User>;
 	}
-	export class GuildMember {
+	export class GuildMember extends PartialTextBasedChannel() {
 		constructor(guild: Guild, data: any);
 		bannable: boolean;
 		client: Client;
@@ -417,14 +360,6 @@ declare module 'discord.js' {
 		permissionsIn(channel: ChannelResovalble): EvaluatedPermissions;
 		removeRole(role: Role | string): Promise<GuildMember>;
 		removeRoles(roles: Collection<string, Role> | Role[] | string[]): Promise<GuildMember>;
-		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		send(options?: MessageOptions): Promise<Message | Message[]>;
-		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<Message>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<Message>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
-		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
-		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
 		setDeaf(deaf: boolean): Promise<GuildMember>;
 		setMute(mute: boolean): Promise<GuildMember>;
 		setNickname(nickname: string): Promise<GuildMember>;
@@ -432,7 +367,7 @@ declare module 'discord.js' {
 		setVoiceChannel(voiceChannel: ChannelResovalble): Promise<GuildMember>;
 		toString(): string;
 	}
-	export class User {
+	export class User extends PartialTextBasedChannel() {
 		constructor(client: Client, data: any);
 		avatar: string;
 		avatarURL: string;
@@ -457,14 +392,6 @@ declare module 'discord.js' {
 		equals(user: User): boolean;
 		fetchProfile(): Promise<UserProfile>;
 		removeFriend(): Promise<User>;
-		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		send(options?: MessageOptions): Promise<Message | Message[]>;
-		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<Message>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<Message>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
-		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
-		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
 		setNote(note: string): Promise<User>;
 		toString(): string;
 		typingDurationIn(channel: ChannelResovalble): number;
@@ -902,6 +829,37 @@ declare module 'discord.js' {
 		static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
 		static splitMessage(text: string, options?: SplitOptions): string | string[];
 	}
+
+	// Model the TextBasedChannel mixin system, allowing application of these fields
+	// to the classes that use these methods without having to manually add them
+	// to each of those classes
+	type Constructable<T> = new (...args: any[]) => T;
+	type PartialTextBasedChannelFields = {
+		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+		send(options?: MessageOptions): Promise<Message | Message[]>;
+		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<Message>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<Message>;
+		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
+		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
+		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
+	};
+	type TextBasedChannelFields = {
+		typing: boolean;
+		typingCount: number;
+		awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
+		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
+		createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
+		fetchMessage(messageID: string): Promise<Message>;
+		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
+		fetchPinnedMessages(): Promise<Collection<string, Message>>;
+		search(options?: MessageSearchOptions): Promise<Message[][]>;
+		startTyping(count?: number): void;
+		stopTyping(force?: boolean): void;
+	} & PartialTextBasedChannelFields;
+	const PartialTextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & PartialTextBasedChannelFields>;
+	const TextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & TextBasedChannelFields>;
+
 	type AddGuildMemberOptions = {
 		accessToken: String;
 		nick?: string;
