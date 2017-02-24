@@ -298,6 +298,7 @@ declare module 'discord.js' {
 		sync(): void;
 		toString(): string;
 		unban(user: UserResolvable): Promise<User>;
+		updateChannelPositions(channelPostitions: ChannelPosition[]): Promise<Guild>;
 	}
 
 	export class GuildChannel extends Channel {
@@ -981,6 +982,11 @@ declare module 'discord.js' {
 		after?: string
 		around?: string
 	};
+
+	type ChannelPosition = {
+		id: string;
+		position: number;
+	}
 
 	type ChannelResovalble = Channel | Guild | Message | string;
 
