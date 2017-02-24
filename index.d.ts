@@ -11,6 +11,25 @@ declare module 'discord.js' {
 	import { ChildProcess } from 'child_process';
 
 	export const version: string;
+
+//#region Classes
+
+	class AudioPlayer extends EventEmitter {
+		constructor(voiceConnection: VoiceConnection);
+		dispatcher: StreamDispatcher;
+		voiceConnection: VoiceConnection;
+	}
+
+	export class Channel {
+		constructor(client: Client, data: object);
+		client: Client;
+		createdAt: Date;
+		createdTimestamp: number;
+		id: string;
+		type: 'dm' | 'group' | 'text' | 'voice';
+		delete(): Promise<Channel>;
+	}
+
 	export class Client extends EventEmitter {
 		constructor(options?: ClientOptions);
 		browser: boolean;
@@ -87,67 +106,12 @@ declare module 'discord.js' {
 		on(event: 'voiceStateUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
 		on(event: 'warn', listener: (info: string) => void): this;
 	}
-	export class Webhook {
-		constructor(client: Client, dataOrID: object | string, token: string);
-		avatar: string;
-		channelID: string;
-		client: Client;
-		guildID: string;
-		id: string;
-		name: string;
-		owner: User | object;
-		token: string;
-		delete(): Promise<void>;
-		edit(name: string, avatar: BufferResolvable): Promise<Webhook>;
-		send(content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		send(options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		sendCode(lang: string, content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message>;
-		sendMessage(content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		sendMessage(options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		sendSlackMessage(body: object): Promise<void>;
+
+	export class ClientOAuth2Application extends OAuth2Application {
+		flags: number;
+		owner: User;
 	}
-	class SecretKey {
-		constructor(key: Uint8Array);
-		key: Uint8Array;
-	}
-	class RequestHandler {
-		constructor(restManager: {});
-		globalLimit: boolean;
-		queue: object[];
-		restManager: object;
-		handle(): void;
-		push(request: {}): void;
-	}
-	export class WebhookClient extends Webhook {
-		constructor(id: string, token: string, options?: ClientOptions);
-		options: ClientOptions;
-	}
-	export class Emoji {
-		constructor(guild: Guild, data: object);
-		client: Client;
-		createdAt: Date;
-		createdTimestamp: number;
-		guild: Guild;
-		id: string;
-		identifier: string;
-		managed: boolean;
-		name: string;
-		requiresColons: boolean;
-		roles: Collection<string, Role>;
-		url: string;
-		edit(data: EmojiEditData): Promise<Emoji>;
-		equals(other: Emoji | object): boolean;
-		toString(): string;
-	}
-	export class ReactionEmoji {
-		constructor(reaction: MessageReaction, name: string, id: string);
-		id: string;
-		identifier: string;
-		name: string;
-		reaction: MessageReaction;
-		toString(): string;
-	}
+
 	export class ClientUser extends User {
 		blocked: Collection<string, User>;
 		email: string;
@@ -168,21 +132,42 @@ declare module 'discord.js' {
 		setStatus(status: PresenceStatus): Promise<ClientUser>;
 		setUsername(username: string, password?: string): Promise<ClientUser>;
 	}
-	export class Presence {
-		constructor(data: object);
-		game: Game;
-		status: 'online' | 'offline' | 'idle' | 'dnd';
-		equals(presence: Presence): boolean;
-	}
-	export class Channel {
-		constructor(client: Client, data: object);
+
+	class ClientVoiceManager {
+		constructor(client: Client);
 		client: Client;
-		createdAt: Date;
-		createdTimestamp: number;
-		id: string;
-		type: 'dm' | 'group' | 'text' | 'voice';
-		delete(): Promise<Channel>;
+		connections: Collection<string, VoiceConnection>;
+		pending: Collection<string, VoiceConnection>;
+		joinChannel(channel: VoiceChannel): Promise<VoiceConnection>;
+		sendVoiceStateUpdate(channel: VoiceChannel, options?: object): void;
 	}
+
+	export class Collection<K, V> extends Map<K, V> {
+		array(): V[];
+		concat(...collections: Collection<any, any>[]): Collection<any, any>;
+		deleteAll(): Promise<V>[];
+		equals(collection: Collection<any, any>): boolean;
+		every(fn: Function, thisArg?: any): boolean;
+		exists(prop: keyof V, value: any): boolean;
+		filter(fn: Function, thisArg?: any): Collection<K, V>;
+		filterArray(fn: Function, thisArg?: any): V[];
+		find(prop: keyof V, value: any): V;
+		find(fn: Function): V;
+		findAll(prop: keyof V, value: any): V[];
+		findKey(prop: keyof V, value: any): K;
+		findKey(fn: Function): K;
+		first(): V;
+		firstKey(): K;
+		keyArray(): K[];
+		last(): V;
+		lastKey(): K;
+		map(fn: Function, thisArg?: any): any[];
+		random(): V;
+		randomKey(): K;
+		reduce(fn: Function, startVal?: any): any;
+		some(fn: Function, thisArg?: any): boolean;
+	}
+
 	export class DMChannel extends TextBasedChannel(Channel) {
 		constructor(client: Client, data: object);
 		lastMessageID: string;
@@ -190,6 +175,44 @@ declare module 'discord.js' {
 		recipient: User;
 		toString(): string;
 	}
+
+	export class Emoji {
+		constructor(guild: Guild, data: object);
+		client: Client;
+		createdAt: Date;
+		createdTimestamp: number;
+		guild: Guild;
+		id: string;
+		identifier: string;
+		managed: boolean;
+		name: string;
+		requiresColons: boolean;
+		roles: Collection<string, Role>;
+		url: string;
+		edit(data: EmojiEditData): Promise<Emoji>;
+		equals(other: Emoji | object): boolean;
+		toString(): string;
+	}
+
+	export class EvaluatedPermissions {
+		constructor(member: GuildMember, raw: number);
+		member: GuildMember;
+		raw: number;
+		hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
+		hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
+		missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
+		serialize(): Permissions;
+	}
+
+	export class Game {
+		constructor(data: object);
+		name: string;
+		streaming: boolean;
+		type: number;
+		url: string;
+		equals(game: Game): boolean;
+	}
+
 	export class GroupDMChannel extends TextBasedChannel(Channel) {
 		constructor(client: Client, data: object);
 		icon: string;
@@ -202,59 +225,7 @@ declare module 'discord.js' {
 		equals(channel: GroupDMChannel): boolean;
 		toString(): string;
 	}
-	export class GuildChannel extends Channel {
-		constructor(guild: Guild, data: object);
-		deletable: boolean;
-		guild: Guild;
-		name: string;
-		permissionOverwrites: Collection<string, PermissionOverwrites>;
-		position: number;
-		clone(name?: string, withPermissions?: boolean, withTopic?: boolean): Promise<GuildChannel>;
-		createInvite(options?: InviteOptions): Promise<Invite>;
-		edit(data: ChannelData): Promise<GuildChannel>;
-		equals(channel: GuildChannel): boolean;
-		overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions): Promise<void>;
-		permissionsFor(member: GuildMemberResolvable): EvaluatedPermissions;
-		setName(name: string): Promise<GuildChannel>;
-		setPosition(position: number): Promise<GuildChannel>;
-		setTopic(topic: string): Promise<GuildChannel>;
-		toString(): string;
-	}
-	export class TextChannel extends TextBasedChannel(GuildChannel) {
-		constructor(guild: Guild, data: object);
-		lastMessageID: string;
-		members: Collection<string, GuildMember>;
-		messages: Collection<string, Message>;
-		topic: string;
-		createWebhook(name: string, avatar: BufferResolvable): Promise<Webhook>;
-		fetchWebhooks(): Promise<Collection<string, Webhook>>;
-	}
-	export class MessageCollector extends EventEmitter {
-		constructor(channel: Channel, filter: CollectorFilterFunction, options?: CollectorOptions);
-		channel: Channel;
-		collected: Collection<string, Message>;
-		filter: CollectorFilterFunction;
-		next: Promise<Message>;
-		options: CollectorOptions;
-		stop(reason?: string): void;
-		on(event: 'end', listener: (collection: Collection<string, Message>, reason: string) => void): this;
-		on(event: 'message', listener: (message: Message, collector: MessageCollector) => void): this;
-	}
-	export class Game {
-		constructor(data: object);
-		name: string;
-		streaming: boolean;
-		type: number;
-		url: string;
-		equals(game: Game): boolean;
-	}
-	export class PermissionOverwrites {
-		constructor(guildChannel: GuildChannel, data: object);
-		channel: GuildChannel;
-		id: string;
-		type: string;
-		delete(): Promise<PermissionOverwrites>;
-	}
+
 	export class Guild {
 		constructor(client: Client, data: object);
 		afkChannelID: string;
@@ -319,6 +290,26 @@ declare module 'discord.js' {
 		toString(): string;
 		unban(user: UserResolvable): Promise<User>;
 	}
+
+	export class GuildChannel extends Channel {
+		constructor(guild: Guild, data: object);
+		deletable: boolean;
+		guild: Guild;
+		name: string;
+		permissionOverwrites: Collection<string, PermissionOverwrites>;
+		position: number;
+		clone(name?: string, withPermissions?: boolean, withTopic?: boolean): Promise<GuildChannel>;
+		createInvite(options?: InviteOptions): Promise<Invite>;
+		edit(data: ChannelData): Promise<GuildChannel>;
+		equals(channel: GuildChannel): boolean;
+		overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions): Promise<void>;
+		permissionsFor(member: GuildMemberResolvable): EvaluatedPermissions;
+		setName(name: string): Promise<GuildChannel>;
+		setPosition(position: number): Promise<GuildChannel>;
+		setTopic(topic: string): Promise<GuildChannel>;
+		toString(): string;
+	}
+
 	export class GuildMember extends PartialTextBasedChannel() {
 		constructor(guild: Guild, data: object);
 		bannable: boolean;
@@ -367,80 +358,27 @@ declare module 'discord.js' {
 		setVoiceChannel(voiceChannel: ChannelResovalble): Promise<GuildMember>;
 		toString(): string;
 	}
-	export class User extends PartialTextBasedChannel() {
+
+	export class Invite {
 		constructor(client: Client, data: object);
-		avatar: string;
-		avatarURL: string;
-		bot: boolean;
+		channel: GuildChannel | PartialGuildChannel;
 		client: Client;
+		code: string;
 		createdAt: Date;
 		createdTimestamp: number;
-		defaultAvatarURL: string;
-		discriminator: string;
-		displayAvatarURL: string;
-		dmChannel: DMChannel;
-		id: string;
-		lastMessage: Message;
-		lastMessageID: string;
-		note: string;
-		presence: Presence;
-		username: string;
-		addFriend(): Promise<User>;
-		block(): Promise<User>;
-		createDM(): Promise<DMChannel>
-		deleteDM(): Promise<DMChannel>;
-		equals(user: User): boolean;
-		fetchProfile(): Promise<UserProfile>;
-		removeFriend(): Promise<User>;
-		setNote(note: string): Promise<User>;
-		toString(): string;
-		typingDurationIn(channel: ChannelResovalble): number;
-		typingIn(channel: ChannelResovalble): boolean;
-		typingSinceIn(channel: ChannelResovalble): Date;
-		unblock(): Promise<User>;
-	}
-	export class PartialGuildChannel {
-		constructor(client: Client, data: object);
-		client: Client;
-		id: string;
-		name: string;
-		type: string;
-	}
-	export class PartialGuild {
-		constructor(client: Client, data: object);
-		client: Client;
-		icon: string;
-		id: string;
-		name: string;
-		splash: string;
-	}
-	class PendingVoiceConnection {
-		constructor(voiceManager: ClientVoiceManager, channel: VoiceChannel);
-		channel: VoiceChannel;
-		data: object;
-		deathTimer: NodeJS.Timer;
-		voiceManager: ClientVoiceManager;
-		setSessionID(sessionID: string): void;
-		setTokenAndEndpoint(token: string, endpoint: string): void;
-		upgrade(): VoiceConnection;
-	}
-	export class OAuth2Application {
-		constructor(client: Client, data: object);
-		client: Client;
-		createdAt: Date;
-		createdTimestamp: number;
-		description: string;
-		icon: string;
-		iconURL: string;
-		id: string;
-		name: string;
-		rpcOrigins: string[];
+		expiresAt: Date;
+		expiresTimestamp: number;
+		guild: Guild | PartialGuild;
+		inviter: User;
+		maxAge: number;
+		maxUses: number;
+		temporary: boolean;
+		url: string;
+		uses: number;
+		delete(): Promise<Invite>;
 		toString(): string;
 	}
-	export class ClientOAuth2Application extends OAuth2Application {
-		flags: number;
-		owner: User;
-	}
+
 	export class Message {
 		constructor(channel: TextChannel | DMChannel | GroupDMChannel, data: object, client: Client);
 		attachments: Collection<string, MessageAttachment>;
@@ -490,6 +428,32 @@ declare module 'discord.js' {
 		toString(): string;
 		unpin(): Promise<Message>;
 	}
+
+	export class MessageAttachment {
+		constructor(message: Message, data: object);
+		client: Client;
+		filename: string;
+		filesize: number;
+		height: number;
+		id: string;
+		message: Message;
+		proxyURL: string;
+		url: string;
+		width: number;
+	}
+
+	export class MessageCollector extends EventEmitter {
+		constructor(channel: Channel, filter: CollectorFilterFunction, options?: CollectorOptions);
+		channel: Channel;
+		collected: Collection<string, Message>;
+		filter: CollectorFilterFunction;
+		next: Promise<Message>;
+		options: CollectorOptions;
+		stop(reason?: string): void;
+		on(event: 'end', listener: (collection: Collection<string, Message>, reason: string) => void): this;
+		on(event: 'message', listener: (message: Message, collector: MessageCollector) => void): this;
+	}
+
 	export class MessageEmbed {
 		constructor(message: Message, data: object);
 		author: MessageEmbedAuthor;
@@ -508,6 +472,7 @@ declare module 'discord.js' {
 		type: string;
 		url: string;
 	}
+
 	export class MessageEmbedAuthor {
 		constructor(embed: MessageEmbed, data: object);
 		embed: MessageEmbed;
@@ -515,6 +480,7 @@ declare module 'discord.js' {
 		name: string;
 		url: string;
 	}
+
 	export class MessageEmbedField {
 		constructor(embed: MessageEmbed, data: object);
 		embed: MessageEmbed;
@@ -522,6 +488,7 @@ declare module 'discord.js' {
 		name: string;
 		value: string;
 	}
+
 	export class MessageEmbedFooter {
 		constructor(embed: MessageEmbed, data: object);
 		embed: MessageEmbed;
@@ -529,12 +496,14 @@ declare module 'discord.js' {
 		proxyIconURL: string;
 		text: string;
 	}
+
 	export class MessageEmbedProvider {
 		constructor(embed: MessageEmbed, data: object);
 		embed: MessageEmbed;
 		name: string;
 		url: string;
 	}
+
 	export class MessageEmbedThumbnail {
 		constructor(embed: MessageEmbed, data: object);
 		embed: MessageEmbed;
@@ -543,6 +512,93 @@ declare module 'discord.js' {
 		url: string;
 		width: number;
 	}
+
+	export class MessageReaction {
+		constructor(message: Message, emoji: object, count: number, me: boolean);
+		count: number;
+		emoji: Emoji | ReactionEmoji;
+		me: boolean;
+		message: Message;
+		users: Collection<string, User>;
+		fetchUsers(limit?: number): Promise<Collection<string, User>>;
+		remove(user?: UserResolvable): Promise<MessageReaction>;
+	}
+
+	export class OAuth2Application {
+		constructor(client: Client, data: object);
+		client: Client;
+		createdAt: Date;
+		createdTimestamp: number;
+		description: string;
+		icon: string;
+		iconURL: string;
+		id: string;
+		name: string;
+		rpcOrigins: string[];
+		toString(): string;
+	}
+
+	export class PartialGuild {
+		constructor(client: Client, data: object);
+		client: Client;
+		icon: string;
+		id: string;
+		name: string;
+		splash: string;
+	}
+
+	export class PartialGuildChannel {
+		constructor(client: Client, data: object);
+		client: Client;
+		id: string;
+		name: string;
+		type: string;
+	}
+
+	class PendingVoiceConnection {
+		constructor(voiceManager: ClientVoiceManager, channel: VoiceChannel);
+		channel: VoiceChannel;
+		data: object;
+		deathTimer: NodeJS.Timer;
+		voiceManager: ClientVoiceManager;
+		setSessionID(sessionID: string): void;
+		setTokenAndEndpoint(token: string, endpoint: string): void;
+		upgrade(): VoiceConnection;
+	}
+
+	export class PermissionOverwrites {
+		constructor(guildChannel: GuildChannel, data: object);
+		channel: GuildChannel;
+		id: string;
+		type: string;
+		delete(): Promise<PermissionOverwrites>;
+	}
+
+	export class Presence {
+		constructor(data: object);
+		game: Game;
+		status: 'online' | 'offline' | 'idle' | 'dnd';
+		equals(presence: Presence): boolean;
+	}
+
+	export class ReactionEmoji {
+		constructor(reaction: MessageReaction, name: string, id: string);
+		id: string;
+		identifier: string;
+		name: string;
+		reaction: MessageReaction;
+		toString(): string;
+	}
+
+	class RequestHandler {
+		constructor(restManager: {});
+		globalLimit: boolean;
+		queue: object[];
+		restManager: object;
+		handle(): void;
+		push(request: {}): void;
+	}
+
 	export class RichEmbed {
 		constructor(data?: RichEmbedOptions);
 		author?: { name: string; url?: string; icon_url?: string; };
@@ -567,147 +623,7 @@ declare module 'discord.js' {
 		setTitle(title: StringResolvable): this;
 		setURL(url: string): this;
 	}
-	export class MessageAttachment {
-		constructor(message: Message, data: object);
-		client: Client;
-		filename: string;
-		filesize: number;
-		height: number;
-		id: string;
-		message: Message;
-		proxyURL: string;
-		url: string;
-		width: number;
-	}
-	export class MessageReaction {
-		constructor(message: Message, emoji: object, count: number, me: boolean);
-		count: number;
-		emoji: Emoji | ReactionEmoji;
-		me: boolean;
-		message: Message;
-		users: Collection<string, User>;
-		fetchUsers(limit?: number): Promise<Collection<string, User>>;
-		remove(user?: UserResolvable): Promise<MessageReaction>;
-	}
-	export class Invite {
-		constructor(client: Client, data: object);
-		channel: GuildChannel | PartialGuildChannel;
-		client: Client;
-		code: string;
-		createdAt: Date;
-		createdTimestamp: number;
-		expiresAt: Date;
-		expiresTimestamp: number;
-		guild: Guild | PartialGuild;
-		inviter: User;
-		maxAge: number;
-		maxUses: number;
-		temporary: boolean;
-		url: string;
-		uses: number;
-		delete(): Promise<Invite>;
-		toString(): string;
-	}
-	export class VoiceChannel extends GuildChannel {
-		constructor(guild: Guild, data: object);
-		bitrate: number;
-		connection: VoiceConnection;
-		full: boolean;
-		joinable: boolean;
-		members: Collection<string, GuildMember>;
-		speakable: boolean;
-		userLimit: number;
-		join(): Promise<VoiceConnection>;
-		leave(): void;
-		setBitrate(bitrate: number): Promise<VoiceChannel>;
-		setUserLimit(userLimit: number): Promise<VoiceChannel>;
-	}
-	export class Shard {
-		constructor(manager: ShardingManager, id: number, args?: string[]);
-		env: object;
-		id: string;
-		manager: ShardingManager;
-		process: ChildProcess;
-		eval(script: string): Promise<any>;
-		fetchClientValue(prop: string): Promise<any>;
-		send(message: any): Promise<Shard>;
-	}
-	export class ShardingManager extends EventEmitter {
-		constructor(file: string, options?: {
-			totalShards?: number | 'auto';
-			respawn?: boolean;
-			shardArgs?: string[];
-			token?: string;
-		});
-		file: string;
-		respawn: boolean;
-		shardArgs: string[];
-		shards: Collection<number, Shard>;
-		token: string;
-		totalShards: number;
-		broadcast(message: any): Promise<Shard[]>;
-		broadcastEval(script: string): Promise<any[]>;
-		createShard(id: number): Promise<Shard>;
-		fetchClientValues(prop: string): Promise<any[]>;
-		spawn(amount?: number, delay?: number): Promise<Collection<number, Shard>>;
-		on(event: 'launch', listener: (shard: Shard) => void): this;
-		on(event: 'message', listener: (shard: Shard, message: any) => void): this;
-	}
-	export class ShardClientUtil {
-		constructor(client: Client);
-		count: number;
-		id: number;
-		broadcastEval(script: string): Promise<any[]>;
-		fetchClientValues(prop: string): Promise<any[]>;
-		send(message: any): Promise<void>;
-		singleton(client: Client): ShardClientUtil;
-	}
-	export class UserConnection {
-		constructor(user: User, data: object);
-		id: string;
-		integrations: object[];
-		name: string;
-		revoked: boolean;
-		type: string;
-		user: User;
-	}
-	export class UserProfile {
-		constructor(user: User, data: object);
-		client: Client;
-		connections: Collection<string, UserConnection>;
-		mutualGuilds: Collection<string, Guild>;
-		premium: boolean;
-		premiumSince: Date;
-		user: User;
-	}
-	export class StreamDispatcher extends EventEmitter {
-		constructor(player: AudioPlayer, stream: NodeJS.ReadableStream, sd: object, streamOptions: StreamOptions);
-		passes: number;
-		paused: boolean;
-		time: number;
-		totalStreamTime: number;
-		volume: number;
-		end(): void;
-		pause(): void;
-		resume(): void;
-		setVolume(volume: number): void;
-		setVolumeDecibels(db: number): void;
-		setVolumeLogarithmic(value: number): void;
-		on(event: 'debug', listener: (information: string) => void): this;
-		on(event: 'end', listener: () => void): this;
-		on(event: 'error', listener: (err: Error) => void): this;
-		on(event: 'speaking', listener: (value: boolean) => void): this;
-		on(event: 'start', listener: () => void): this;
-	}
-	export class EvaluatedPermissions {
-		constructor(member: GuildMember, raw: number);
-		member: GuildMember;
-		raw: number;
-		hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
-		hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
-		missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
-		serialize(): Permissions;
-	}
+
 	export class Role {
 		constructor(guild: Guild, data: object);
 		calculatedPosition: number;
@@ -741,19 +657,164 @@ declare module 'discord.js' {
 		setPosition(position: number, relative?: boolean): Promise<Role>;
 		toString(): string;
 	}
-	export class ClientVoiceManager {
+
+	class SecretKey {
+		constructor(key: Uint8Array);
+		key: Uint8Array;
+	}
+
+	export class Shard {
+		constructor(manager: ShardingManager, id: number, args?: string[]);
+		env: object;
+		id: string;
+		manager: ShardingManager;
+		process: ChildProcess;
+		eval(script: string): Promise<any>;
+		fetchClientValue(prop: string): Promise<any>;
+		send(message: any): Promise<Shard>;
+	}
+
+	export class ShardClientUtil {
 		constructor(client: Client);
+		count: number;
+		id: number;
+		broadcastEval(script: string): Promise<any[]>;
+		fetchClientValues(prop: string): Promise<any[]>;
+		send(message: any): Promise<void>;
+		singleton(client: Client): ShardClientUtil;
+	}
+
+	export class ShardingManager extends EventEmitter {
+		constructor(file: string, options?: {
+			totalShards?: number | 'auto';
+			respawn?: boolean;
+			shardArgs?: string[];
+			token?: string;
+		});
+		file: string;
+		respawn: boolean;
+		shardArgs: string[];
+		shards: Collection<number, Shard>;
+		token: string;
+		totalShards: number;
+		broadcast(message: any): Promise<Shard[]>;
+		broadcastEval(script: string): Promise<any[]>;
+		createShard(id: number): Promise<Shard>;
+		fetchClientValues(prop: string): Promise<any[]>;
+		spawn(amount?: number, delay?: number): Promise<Collection<number, Shard>>;
+		on(event: 'launch', listener: (shard: Shard) => void): this;
+		on(event: 'message', listener: (shard: Shard, message: any) => void): this;
+	}
+
+	export class SnowflakeUtil {
+		static deconstruct(snowflake: string): DeconstructedSnowflake;
+		static generate(): string;
+	}
+
+	export class StreamDispatcher extends EventEmitter {
+		constructor(player: AudioPlayer, stream: NodeJS.ReadableStream, sd: object, streamOptions: StreamOptions);
+		passes: number;
+		paused: boolean;
+		time: number;
+		totalStreamTime: number;
+		volume: number;
+		end(): void;
+		pause(): void;
+		resume(): void;
+		setVolume(volume: number): void;
+		setVolumeDecibels(db: number): void;
+		setVolumeLogarithmic(value: number): void;
+		on(event: 'debug', listener: (information: string) => void): this;
+		on(event: 'end', listener: () => void): this;
+		on(event: 'error', listener: (err: Error) => void): this;
+		on(event: 'speaking', listener: (value: boolean) => void): this;
+		on(event: 'start', listener: () => void): this;
+	}
+
+	export class TextChannel extends TextBasedChannel(GuildChannel) {
+		constructor(guild: Guild, data: object);
+		lastMessageID: string;
+		members: Collection<string, GuildMember>;
+		messages: Collection<string, Message>;
+		topic: string;
+		createWebhook(name: string, avatar: BufferResolvable): Promise<Webhook>;
+		fetchWebhooks(): Promise<Collection<string, Webhook>>;
+	}
+
+	export class User extends PartialTextBasedChannel() {
+		constructor(client: Client, data: object);
+		avatar: string;
+		avatarURL: string;
+		bot: boolean;
 		client: Client;
-		connections: Collection<string, VoiceConnection>;
-		pending: Collection<string, VoiceConnection>;
-		joinChannel(channel: VoiceChannel): Promise<VoiceConnection>;
-		sendVoiceStateUpdate(channel: VoiceChannel, options?: object): void;
+		createdAt: Date;
+		createdTimestamp: number;
+		defaultAvatarURL: string;
+		discriminator: string;
+		displayAvatarURL: string;
+		dmChannel: DMChannel;
+		id: string;
+		lastMessage: Message;
+		lastMessageID: string;
+		note: string;
+		presence: Presence;
+		username: string;
+		addFriend(): Promise<User>;
+		block(): Promise<User>;
+		createDM(): Promise<DMChannel>
+		deleteDM(): Promise<DMChannel>;
+		equals(user: User): boolean;
+		fetchProfile(): Promise<UserProfile>;
+		removeFriend(): Promise<User>;
+		setNote(note: string): Promise<User>;
+		toString(): string;
+		typingDurationIn(channel: ChannelResovalble): number;
+		typingIn(channel: ChannelResovalble): boolean;
+		typingSinceIn(channel: ChannelResovalble): Date;
+		unblock(): Promise<User>;
 	}
-	class AudioPlayer extends EventEmitter {
-		constructor(voiceConnection: VoiceConnection);
-		dispatcher: StreamDispatcher;
-		voiceConnection: VoiceConnection;
+
+	export class UserConnection {
+		constructor(user: User, data: object);
+		id: string;
+		integrations: object[];
+		name: string;
+		revoked: boolean;
+		type: string;
+		user: User;
 	}
+
+	export class UserProfile {
+		constructor(user: User, data: object);
+		client: Client;
+		connections: Collection<string, UserConnection>;
+		mutualGuilds: Collection<string, Guild>;
+		premium: boolean;
+		premiumSince: Date;
+		user: User;
+	}
+
+	export class Util {
+		static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string;
+		static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
+		static splitMessage(text: string, options?: SplitOptions): string | string[];
+	}
+
+	export class VoiceChannel extends GuildChannel {
+		constructor(guild: Guild, data: object);
+		bitrate: number;
+		connection: VoiceConnection;
+		full: boolean;
+		joinable: boolean;
+		members: Collection<string, GuildMember>;
+		speakable: boolean;
+		userLimit: number;
+		join(): Promise<VoiceConnection>;
+		leave(): void;
+		setBitrate(bitrate: number): Promise<VoiceChannel>;
+		setUserLimit(userLimit: number): Promise<VoiceChannel>;
+	}
+
 	export class VoiceConnection extends EventEmitter {
 		constructor(pendingConnection: PendingVoiceConnection);
 		channel: VoiceChannel;
@@ -773,6 +834,7 @@ declare module 'discord.js' {
 		on(event: 'speaking', listener: (user: User, speaking: boolean) => void): this;
 		on(event: 'warn', listener: (warning: string | Error) => void): this;
 	}
+
 	export class VoiceReceiver extends EventEmitter {
 		constructor(connection: VoiceConnection);
 		destroyed: boolean;
@@ -785,6 +847,7 @@ declare module 'discord.js' {
 		on(event: 'pcm', listener: (user: User, buffer: Buffer) => void): this;
 		on(event: 'warn', listener: (message: string) => void): this;
 	}
+
 	export class VoiceRegion {
 		constructor(data: object);
 		custom: boolean;
@@ -795,40 +858,36 @@ declare module 'discord.js' {
 		sampleHostname: string;
 		vip: boolean;
 	}
-	export class Collection<K, V> extends Map<K, V> {
-		array(): V[];
-		concat(...collections: Collection<any, any>[]): Collection<any, any>;
-		deleteAll(): Promise<V>[];
-		equals(collection: Collection<any, any>): boolean;
-		every(fn: Function, thisArg?: any): boolean;
-		exists(prop: keyof V, value: any): boolean;
-		filter(fn: Function, thisArg?: any): Collection<K, V>;
-		filterArray(fn: Function, thisArg?: any): V[];
-		find(prop: keyof V, value: any): V;
-		find(fn: Function): V;
-		findAll(prop: keyof V, value: any): V[];
-		findKey(prop: keyof V, value: any): K;
-		findKey(fn: Function): K;
-		first(): V;
-		firstKey(): K;
-		keyArray(): K[];
-		last(): V;
-		lastKey(): K;
-		map(fn: Function, thisArg?: any): any[];
-		random(): V;
-		randomKey(): K;
-		reduce(fn: Function, startVal?: any): any;
-		some(fn: Function, thisArg?: any): boolean;
+
+	export class Webhook {
+		constructor(client: Client, dataOrID: object | string, token: string);
+		avatar: string;
+		channelID: string;
+		client: Client;
+		guildID: string;
+		id: string;
+		name: string;
+		owner: User | object;
+		token: string;
+		delete(): Promise<void>;
+		edit(name: string, avatar: BufferResolvable): Promise<Webhook>;
+		send(content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		send(options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		sendCode(lang: string, content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message>;
+		sendMessage(content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		sendMessage(options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		sendSlackMessage(body: object): Promise<void>;
 	}
-	export class SnowflakeUtil {
-		static deconstruct(snowflake: string): DeconstructedSnowflake;
-		static generate(): string;
+
+	export class WebhookClient extends Webhook {
+		constructor(id: string, token: string, options?: ClientOptions);
+		options: ClientOptions;
 	}
-	export class Util {
-		static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string;
-		static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
-		static splitMessage(text: string, options?: SplitOptions): string | string[];
-	}
+
+//#endregion
+
+//#region Mixins
 
 	// Model the TextBasedChannel mixin system, allowing application of these fields
 	// to the classes that use these methods without having to manually add them
@@ -860,6 +919,10 @@ declare module 'discord.js' {
 	const PartialTextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & PartialTextBasedChannelFields>;
 	const TextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & TextBasedChannelFields>;
 
+//#endregion
+
+//#region Typedefs
+
 	type AddGuildMemberOptions = {
 		accessToken: String;
 		nick?: string;
@@ -867,10 +930,12 @@ declare module 'discord.js' {
 		mute?: boolean;
 		deaf?: boolean;
 	}
+
 	interface AwaitMessagesOptions extends CollectorOptions { errors?: string[]; }
 	type Base64String = string;
 	type Base64Resolvable = Buffer | Base64String;
 	type BufferResolvable = Buffer | string;
+
 	type ChannelData = {
 		name?: string;
 		position?: number;
@@ -878,13 +943,16 @@ declare module 'discord.js' {
 		bitrate?: number;
 		userLimit?: number;
 	};
+
 	type ChannelLogsQueryOptions = {
 		limit?: number
 		before?: string
 		after?: string
 		around?: string
 	};
+
 	type ChannelResovalble = Channel | Guild | Message | string;
+
 	type ClientOptions = {
 		apiRequestMethod?: string;
 		shardId?: number;
@@ -900,8 +968,10 @@ declare module 'discord.js' {
 		disabledEvents?: WSEventType[];
 		ws?: WebSocketOptions;
 	};
+
 	type CollectorFilterFunction = (message?: Message, collector?: MessageCollector) => boolean;
 	interface CollectorOptions { time?: number; max?: number; maxMatches?: number; }
+
 	type ColorResolvable = ('DEFAULT'
 		| 'AQUA'
 		| 'GREEN'
@@ -927,6 +997,7 @@ declare module 'discord.js' {
 		| [number, number, number]
 		| number
 		| string;
+
 	type DeconstructedSnowflake = {
 		date: Date;
 		workerID: number;
@@ -934,12 +1005,16 @@ declare module 'discord.js' {
 		increment: number;
 		binary: string;
 	}
+
 	type EmojiIdentifierResolvable = string | Emoji | ReactionEmoji;
+
 	type EmojiEditData = {
 		name?: string;
 		roles?: Collection<string, Role> | Array<string | Role>;
 	}
+
 	type FileOptions = { attachment: BufferResolvable; name?: string; }
+
 	type GuildEditData = {
 		name?: string;
 		region?: string;
@@ -950,11 +1025,13 @@ declare module 'discord.js' {
 		owner?: GuildMemberResolvable;
 		splash?: Base64Resolvable;
 	};
+
 	type GuildMemberResolvable = GuildMember | User;
 	type GuildResolvable = Guild | string;
 	type InviteOptions = { temporary?: boolean; maxAge?: number; maxUses?: number; };
 	type InviteResolvable = string;
 	type MessageEditOptions = { embed: RichEmbedOptions; };
+
 	type MessageOptions = {
 		tts?: boolean;
 		nonce?: string;
@@ -965,6 +1042,7 @@ declare module 'discord.js' {
 		split?: boolean | SplitOptions;
 		reply?: UserResolvable;
 	};
+
 	type MessageSearchOptions = {
 		content?: string;
 		maxID?: string;
@@ -1005,6 +1083,7 @@ declare module 'discord.js' {
 		after?: Date;
 		during?: Date;
 	};
+
 	interface Permissions {
 		CREATE_INSTANT_INVITE?: boolean;
 		KICK_MEMBERS?: boolean;
@@ -1033,6 +1112,7 @@ declare module 'discord.js' {
 		MANAGE_WEBHOOKS?: boolean;
 		MANAGE_EMOJIS?: boolean;
 	}
+
 	type PermissionString = 'CREATE_INSTANT_INVITE'
 		| 'KICK_MEMBERS'
 		| 'BAN_MEMBERS'
@@ -1060,8 +1140,10 @@ declare module 'discord.js' {
 		| 'MANAGE_ROLES_OR_PERMISSIONS'
 		| 'MANAGE_WEBHOOKS'
 		| 'MANAGE_EMOJIS';
+
 	type PermissionOverwriteOptions = Permissions;
 	type PermissionResolvable = PermissionString | PermissionString[] | number[];
+
 	type PresenceData = {
 		status?: PresenceStatus;
 		afk?: boolean;
@@ -1070,7 +1152,9 @@ declare module 'discord.js' {
 			url?: string;
 		}
 	}
+
 	type PresenceStatus = 'online' | 'idle' | 'invisible' | 'dnd';
+
 	type RichEmbedOptions = {
 		title?: string;
 		description?: string;
@@ -1084,6 +1168,7 @@ declare module 'discord.js' {
 		video?: { url: string; height: number; width: number; };
 		footer?: { text?: string; icon_url?: string; };
 	};
+
 	type RoleData = {
 		name?: string;
 		color?: number | string;
@@ -1092,16 +1177,20 @@ declare module 'discord.js' {
 		permissions?: PermissionString[];
 		mentionable?: boolean;
 	};
+
 	type RoleResolvable = Role | string;
 	type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
 	type StreamOptions = { seek?: number; volume?: number; passes?: number; };
 	type StringResolvable = string[] | string | any;
 	type UserResolvable = User | string | Message | Guild | GuildMember;
+
 	type WebhookMessageOptions = {
 		tts?: boolean;
 		disableEveryone?: boolean;
 	};
+
 	type WebSocketOptions = { large_threshold?: number; compress?: boolean; };
+
 	type WSEventType = 'READY'
 		| 'GUILD_SYNC'
 		| 'GUILD_CREATE'
@@ -1135,4 +1224,6 @@ declare module 'discord.js' {
 		| 'VOICE_SERVER_UPDATE'
 		| 'RELATIONSHIP_ADD'
 		| 'RELATIONSHIP_REMOVE';
+
+//#endregion
 }
