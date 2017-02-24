@@ -810,8 +810,7 @@ declare module 'discord.js' {
 		static splitMessage(text: string, options?: SplitOptions): string | string[];
 	}
 
-	export class VoiceBroadcast extends EventEmitter
-	{
+	export class VoiceBroadcast extends EventEmitter {
 		constructor(client: Client);
 		currentTranscoder: object;
 		dispatchers: StreamDispatcher[];
@@ -986,7 +985,7 @@ declare module 'discord.js' {
 	type ChannelPosition = {
 		id: string;
 		position: number;
-	}
+	};
 
 	type ChannelResovalble = Channel | Guild | Message | string;
 
