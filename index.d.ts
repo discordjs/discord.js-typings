@@ -16,7 +16,8 @@ declare module 'discord.js' {
 
 	class AudioPlayer extends EventEmitter {
 		constructor(voiceConnection: VoiceConnection);
-		dispatcher: StreamDispatcher;
+		opusEncoder: object;
+		prism: object;
 		voiceConnection: VoiceConnection;
 	}
 
@@ -32,6 +33,7 @@ declare module 'discord.js' {
 
 	export class Client extends EventEmitter {
 		constructor(options?: ClientOptions);
+		broadcasts: VoiceBroadcast[];
 		browser: boolean;
 		channels: Collection<string, Channel>;
 		emojis: Collection<string, Emoji>;
@@ -42,17 +44,18 @@ declare module 'discord.js' {
 		presences: Collection<string, Presence>;
 		readyAt: Date;
 		readyTimestamp: number;
-		shard: ShardClientUtil;
+		shard?: ShardClientUtil;
 		status: number;
 		token: string;
 		uptime: number;
 		user: ClientUser;
 		users: Collection<string, User>;
 		voiceConnections: Collection<string, VoiceConnection>;
-		clearInterval(timeout: NodeJS.Timer): void;
+		clearInterval(interval: NodeJS.Timer): void;
 		clearTimeout(timeout: NodeJS.Timer): void;
+		createVoiceBroadcast(): VoiceBroadcast;
 		destroy(): Promise<void>;
-		fetchApplication(): Promise<ClientOAuth2Application>;
+		fetchApplication(id?: string): Promise<ClientOAuth2Application>;
 		fetchInvite(invite: string): Promise<Invite>;
 		fetchUser(id: string, cache?: boolean): Promise<User>;
 		fetchVoiceRegions(): Promise<Collection<string, VoiceRegion>>;
@@ -116,9 +119,15 @@ declare module 'discord.js' {
 		blocked: Collection<string, User>;
 		email: string;
 		friends: Collection<string, User>;
-		notes: Collection<string, string>;
+		mfaEnabled?: boolean;
+		mobile?: boolean;
+		notes?: Collection<string, string>;
+		premium?: boolean;
+		settings?: object;
 		verified: boolean;
+		acceptInvite(invite: Invite | string): Promise<Guild>
 		addFriend(user?: UserResolvable): Promise<User>;
+		createGroupDM(recipients: GroupDMRecipientOptions[]): Promise<GroupDMChannel>;
 		createGuild(name: string, region: string, icon?: BufferResolvable | Base64Resolvable): Promise<Guild>;
 		fetchMentions(options?: { limit?: number; roles?: boolean, everyone?: boolean; guild?: Guild | string }): Promise<Message[]>;
 		removeFriend(user?: UserResolvable): Promise<User>;
@@ -756,7 +765,7 @@ declare module 'discord.js' {
 		id: string;
 		lastMessage: Message;
 		lastMessageID: string;
-		note: string;
+		note?: string;
 		presence: Presence;
 		username: string;
 		addFriend(): Promise<User>;
@@ -798,6 +807,28 @@ declare module 'discord.js' {
 		static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string;
 		static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
 		static splitMessage(text: string, options?: SplitOptions): string | string[];
+	}
+
+	export class VoiceBroadcast extends EventEmitter
+	{
+		constructor(client: Client);
+		currentTranscoder: object;
+		dispatchers: StreamDispatcher[];
+		prism: object;
+		destroy(): void;
+		end(): void;
+		pause(): void;
+		playArbitraryInput(input: string, options?: StreamOptions): VoiceBroadcast;
+		playConvertedStream(stream: ReadableStream, options?: StreamOptions): VoiceBroadcast;
+		playFile(file: string, options?: StreamOptions): StreamDispatcher;
+		playOpusStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
+		playStream(stream: ReadableStream, options?: StreamOptions): VoiceBroadcast;
+		resume(): void;
+		on(event: string, listener: Function): this;
+		on(event: 'error', listener: (error: Error) => void): this;
+		on(event: 'subscribe', listener: (dispatcher: StreamDispatcher) => void): this;
+		on(event: 'unsubscribe', listener: (dispatcher: StreamDispatcher) => void): this;
+		on(event: 'warn', listener: (warning: string | Error) => void): this;
 	}
 
 	export class VoiceChannel extends GuildChannel {
@@ -1014,6 +1045,12 @@ declare module 'discord.js' {
 	}
 
 	type FileOptions = { attachment: BufferResolvable; name?: string; }
+
+	type GroupDMRecipientOptions = {
+		user?: UserResolvable;
+		accessToken?: string;
+		nick?: string;
+	}
 
 	type GuildEditData = {
 		name?: string;
