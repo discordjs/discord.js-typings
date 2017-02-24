@@ -923,7 +923,11 @@ declare module 'discord.js' {
 	// Model the TextBasedChannel mixin system, allowing application of these fields
 	// to the classes that use these methods without having to manually add them
 	// to each of those classes
+
 	type Constructable<T> = new (...args: any[]) => T;
+	const PartialTextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & PartialTextBasedChannelFields>;
+	const TextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & TextBasedChannelFields>;
+
 	type PartialTextBasedChannelFields = {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		send(options?: MessageOptions): Promise<Message | Message[]>;
@@ -934,6 +938,7 @@ declare module 'discord.js' {
 		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
 		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
 	};
+
 	type TextBasedChannelFields = {
 		typing: boolean;
 		typingCount: number;
@@ -947,8 +952,6 @@ declare module 'discord.js' {
 		startTyping(count?: number): void;
 		stopTyping(force?: boolean): void;
 	} & PartialTextBasedChannelFields;
-	const PartialTextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & PartialTextBasedChannelFields>;
-	const TextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & TextBasedChannelFields>;
 
 //#endregion
 
