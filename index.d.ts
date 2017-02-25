@@ -926,6 +926,11 @@ declare module 'discord.js' {
 	export class WebhookClient extends Webhook {
 		constructor(id: string, token: string, options?: ClientOptions);
 		options: ClientOptions;
+		clearInterval(interval: NodeJS.Timer): void;
+		clearTimeout(timeout: NodeJS.Timer): void;
+		destroy(): void;
+		setInterval(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
+		setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 	}
 
 //#endregion
