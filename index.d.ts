@@ -536,15 +536,23 @@ declare module 'discord.js' {
 
 	export class OAuth2Application {
 		constructor(client: Client, data: object);
+		bot: object;
+		botPublic: boolean;
+		botRequireCodeGrant: boolean;
 		client: Client;
 		createdAt: Date;
 		createdTimestamp: number;
 		description: string;
+		flags: number;
 		icon: string;
 		iconURL: string;
 		id: string;
 		name: string;
+		redirectURIs: string[];
+		rpcApplicationState: boolean;
 		rpcOrigins: string[];
+		secret: string;
+		reset(): OAuth2Application;
 		toString(): string;
 	}
 
