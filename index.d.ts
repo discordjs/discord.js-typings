@@ -619,7 +619,7 @@ declare module 'discord.js' {
 		title?: string;
 		url?: string;
 		addBlankField(inline?: boolean): this;
-		addField(name: StringResolvable, value: StringResolvable, inline?: boolean): this;
+		addField(name: StringResolvable, value: StringResolvable, inline?: boolean): this;attachFile(file: string | FileOptions): this;
 		setAuthor(name: StringResolvable, icon?: string, url?: string): this;
 		setColor(color: ColorResolvable): this;
 		setDescription(description: StringResolvable): this;
@@ -719,8 +719,10 @@ declare module 'discord.js' {
 	}
 
 	export class StreamDispatcher extends EventEmitter {
-		constructor(player: AudioPlayer, stream: NodeJS.ReadableStream, sd: object, streamOptions: StreamOptions);
+		constructor(player: AudioPlayer, stream: NodeJS.ReadableStream, streamOptions: StreamOptions);
+		destroyed: boolean;
 		passes: number;
+		player: AudioPlayer;
 		paused: boolean;
 		time: number;
 		totalStreamTime: number;
@@ -844,21 +846,34 @@ declare module 'discord.js' {
 	}
 
 	export class VoiceConnection extends EventEmitter {
-		constructor(pendingConnection: PendingVoiceConnection);
+		constructor(voiceManager: ClientVoiceManager, channel: VoiceChannel);
 		channel: VoiceChannel;
+		client: Client;
 		player: AudioPlayer;
+		prism: object;
 		receivers: VoiceReceiver[];
 		speaking: boolean;
+		status: number;
 		voiceManager: ClientVoiceManager;
 		createReceiver(): VoiceReceiver;
 		disconnect(): void;
+		playArbitraryInput(input: string, options?: StreamOptions): StreamDispatcher;
+		playBroadcast(broadcast: VoiceBroadcast): StreamDispatcher;
 		playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
 		playFile(file: string, options?: StreamOptions): StreamDispatcher;
+		playOpusStream(steam: ReadableStream, options?: StreamOptions): StreamDispatcher;
 		playStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
+		sendVoiceStateUpdate(options: object): void;
+		setSessionID(sessionID: string): void;
+		setTokenAndEndpoint(token: string, endpoint: string): void;
+		on(event: 'authenticated', listener: () => void): this;
 		on(event: 'debug', listener: (message: string) => void): this;
 		on(event: 'disconnect', listener: (error: Error) => void): this;
 		on(event: 'error', listener: (error: Error) => void): this;
+		on(event: 'failed', listener: (error: Error) => void): this;
+		on(event: 'newSession', listener: () => void): this;
 		on(event: 'ready', listener: () => void): this;
+		on(event: 'reconnecting', listener: () => void): this;
 		on(event: 'speaking', listener: (user: User, speaking: boolean) => void): this;
 		on(event: 'warn', listener: (warning: string | Error) => void): this;
 	}
