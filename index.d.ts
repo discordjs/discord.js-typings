@@ -573,17 +573,6 @@ declare module 'discord.js' {
 		type: string;
 	}
 
-	class PendingVoiceConnection {
-		constructor(voiceManager: ClientVoiceManager, channel: VoiceChannel);
-		channel: VoiceChannel;
-		data: object;
-		deathTimer: NodeJS.Timer;
-		voiceManager: ClientVoiceManager;
-		setSessionID(sessionID: string): void;
-		setTokenAndEndpoint(token: string, endpoint: string): void;
-		upgrade(): VoiceConnection;
-	}
-
 	export class PermissionOverwrites {
 		constructor(guildChannel: GuildChannel, data: object);
 		channel: GuildChannel;
