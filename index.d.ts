@@ -1026,7 +1026,11 @@ declare module 'discord.js' {
 	};
 
 	type CollectorFilterFunction = (message?: Message, collector?: MessageCollector) => boolean;
-	interface CollectorOptions { time?: number; max?: number; maxMatches?: number; }
+	type CollectorOptions = {
+		time?: number;
+		max?: number;
+		maxMatches?: number;
+	};
 
 	type ColorResolvable = ('DEFAULT'
 		| 'AQUA'
@@ -1060,22 +1064,25 @@ declare module 'discord.js' {
 		processID: number;
 		increment: number;
 		binary: string;
-	}
-
-	type EmojiIdentifierResolvable = string | Emoji | ReactionEmoji;
+	};
 
 	type EmojiEditData = {
 		name?: string;
-		roles?: Collection<string, Role> | Array<string | Role>;
-	}
+		roles?: Collection<string, Role> | Role[] | string[];
+	};
 
-	type FileOptions = { attachment: BufferResolvable; name?: string; }
+	type EmojiIdentifierResolvable = string | Emoji | ReactionEmoji;
+
+	type FileOptions = {
+		attachment: BufferResolvable;
+		name?: string;
+	};
 
 	type GroupDMRecipientOptions = {
 		user?: UserResolvable;
 		accessToken?: string;
 		nick?: string;
-	}
+	};
 
 	type GuildEditData = {
 		name?: string;
@@ -1090,7 +1097,13 @@ declare module 'discord.js' {
 
 	type GuildMemberResolvable = GuildMember | User;
 	type GuildResolvable = Guild | string;
-	type InviteOptions = { temporary?: boolean; maxAge?: number; maxUses?: number; };
+
+	type InviteOptions = {
+		temporary?: boolean;
+		maxAge?: number;
+		maxUses?: number;
+	};
+
 	type InviteResolvable = string;
 	type MessageEditOptions = { embed: RichEmbedOptions; };
 
@@ -1241,17 +1254,39 @@ declare module 'discord.js' {
 	};
 
 	type RoleResolvable = Role | string;
-	type SplitOptions = { maxLength?: number; char?: string; prepend?: string; append?: string; };
-	type StreamOptions = { seek?: number; volume?: number; passes?: number; };
+
+	type SplitOptions = {
+		maxLength?: number;
+		char?: string;
+		prepend?: string;
+		append?: string;
+	};
+
+	type StreamOptions = {
+		seek?: number;
+		volume?: number;
+		passes?: number;
+	};
+
 	type StringResolvable = string[] | string | any;
 	type UserResolvable = User | string | Message | Guild | GuildMember;
 
 	type WebhookMessageOptions = {
+		username?: string;
+		avatarURL?: string;
 		tts?: boolean;
+		nonce?: string;
+		embeds?: object[];
 		disableEveryone?: boolean;
+		file?: FileOptions | string;
+		code?: string | boolean;
+		split?: boolean | SplitOptions;
 	};
 
-	type WebSocketOptions = { large_threshold?: number; compress?: boolean; };
+	type WebSocketOptions = {
+		large_threshold?: number;
+		compress?: boolean;
+	};
 
 	type WSEventType = 'READY'
 		| 'GUILD_SYNC'
