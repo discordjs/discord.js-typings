@@ -156,25 +156,25 @@ declare module 'discord.js' {
 		concat(...collections: Collection<any, any>[]): Collection<any, any>;
 		deleteAll(): Promise<V>[];
 		equals(collection: Collection<any, any>): boolean;
-		every(fn: Function, thisArg?: any): boolean;
+		every(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
 		exists(prop: keyof V, value: any): boolean;
-		filter(fn: Function, thisArg?: any): Collection<K, V>;
-		filterArray(fn: Function, thisArg?: any): V[];
+		filter(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): Collection<K, V>;
+		filterArray(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): V[];
 		find(prop: keyof V, value: any): V;
-		find(fn: Function): V;
+		find(fn: (value: V, key: K, collection: Collection<K, V>) => boolean): V;
 		findAll(prop: keyof V, value: any): V[];
 		findKey(prop: keyof V, value: any): K;
-		findKey(fn: Function): K;
+		findKey(fn: (value: V, key: K, collection: Collection<K, V>) => boolean): K;
 		first(): V;
 		firstKey(): K;
 		keyArray(): K[];
 		last(): V;
 		lastKey(): K;
-		map(fn: Function, thisArg?: any): any[];
+		map(fn: (value: V, key: K, collection: Collection<K, V>) => any, thisArg?: any): any[];
 		random(): V;
 		randomKey(): K;
-		reduce(fn: Function, startVal?: any): any;
-		some(fn: Function, thisArg?: any): boolean;
+		reduce(fn: (accumulator: any, value: V, key: K, collection: Collection<K, V>) => any, initialValue?: any): any;
+		some(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
 	}
 
 	export class DMChannel extends TextBasedChannel(Channel) {
