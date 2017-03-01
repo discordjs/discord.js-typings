@@ -982,7 +982,7 @@ declare module 'discord.js' {
 		deaf?: boolean;
 	}
 
-	interface AwaitMessagesOptions extends CollectorOptions { errors?: string[]; }
+	type AwaitMessagesOptions = CollectorOptions & { errors?: string[] };
 	type Base64String = string;
 	type Base64Resolvable = Buffer | Base64String;
 	type BufferResolvable = Buffer | string;
@@ -1159,7 +1159,7 @@ declare module 'discord.js' {
 		during?: Date;
 	};
 
-	interface Permissions {
+	type Permissions = {
 		CREATE_INSTANT_INVITE?: boolean;
 		KICK_MEMBERS?: boolean;
 		BAN_MEMBERS?: boolean;
@@ -1186,7 +1186,7 @@ declare module 'discord.js' {
 		MANAGE_ROLES_OR_PERMISSIONS?: boolean;
 		MANAGE_WEBHOOKS?: boolean;
 		MANAGE_EMOJIS?: boolean;
-	}
+	};
 
 	type PermissionString = 'CREATE_INSTANT_INVITE'
 		| 'KICK_MEMBERS'
