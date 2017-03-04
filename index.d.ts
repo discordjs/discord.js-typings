@@ -619,7 +619,8 @@ declare module 'discord.js' {
 		title?: string;
 		url?: string;
 		addBlankField(inline?: boolean): this;
-		addField(name: StringResolvable, value: StringResolvable, inline?: boolean): this;attachFile(file: string | FileOptions): this;
+		addField(name: StringResolvable, value: StringResolvable, inline?: boolean): this;
+		attachFile(file: string | FileOptions): this;
 		setAuthor(name: StringResolvable, icon?: string, url?: string): this;
 		setColor(color: ColorResolvable): this;
 		setDescription(description: StringResolvable): this;
