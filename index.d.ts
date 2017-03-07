@@ -268,7 +268,7 @@ declare module 'discord.js' {
 		verificationLevel: number;
 		voiceConnection: VoiceConnection;
 		addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
-		ban(user: GuildMember, deleteDays?: number): Promise<GuildMember | User | string>;
+		ban(user: UserResolvable, deleteDays?: number): Promise<GuildMember | User | string>;
 		createChannel(name: string, type: 'text' | 'voice', overwrites?: PermissionOverwrites[]): Promise<TextChannel | VoiceChannel>;
 		createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, roles?: Collection<string, Role> | Role[]): Promise<Emoji>;
 		createRole(data?: RoleData): Promise<Role>;
