@@ -170,10 +170,10 @@ declare module 'discord.js' {
 		keyArray(): K[];
 		last(): V;
 		lastKey(): K;
-		map(fn: (value: V, key: K, collection: Collection<K, V>) => any, thisArg?: any): any[];
+		map<T>(fn: (value: V, key: K, collection: Collection<K, V>) => T, thisArg?: any): T[];
 		random(): V;
 		randomKey(): K;
-		reduce(fn: (accumulator: any, value: V, key: K, collection: Collection<K, V>) => any, initialValue?: any): any;
+		reduce<T>(fn: (accumulator: any, value: V, key: K, collection: Collection<K, V>) => T, initialValue?: any): T;
 		some(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
 	}
 
