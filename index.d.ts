@@ -153,7 +153,7 @@ declare module 'discord.js' {
 
 	export class Collection<K, V> extends Map<K, V> {
 		array(): V[];
-		concat(...collections: Collection<any, any>[]): Collection<any, any>;
+		concat(...collections: Collection<K, V>[]): Collection<K, V>;
 		deleteAll(): Promise<V>[];
 		equals(collection: Collection<any, any>): boolean;
 		every(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
