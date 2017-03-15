@@ -1014,7 +1014,7 @@ declare module 'discord.js' {
 		apiRequestMethod?: string;
 		shardId?: number;
 		shardCount?: number;
-		maxMessageCache?: number;
+		messageCacheMaxSize?: number;
 		messageCacheLifetime?: number;
 		messageSweepInterval?: number;
 		fetchAllMembers?: boolean;
