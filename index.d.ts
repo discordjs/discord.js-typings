@@ -16,6 +16,7 @@ declare module 'discord.js' {
 
 	class AudioPlayer extends EventEmitter {
 		constructor(voiceConnection: VoiceConnection);
+		currentDispatcher: StreamDispatcher;
 		opusEncoder: object;
 		prism: object;
 		voiceConnection: VoiceConnection;
@@ -153,6 +154,7 @@ declare module 'discord.js' {
 
 	export class Collection<K, V> extends Map<K, V> {
 		array(): V[];
+		clone(): Collection<K, V>;
 		concat(...collections: Collection<K, V>[]): Collection<K, V>;
 		deleteAll(): Promise<V>[];
 		equals(collection: Collection<any, any>): boolean;
@@ -203,16 +205,6 @@ declare module 'discord.js' {
 		toString(): string;
 	}
 
-	export class EvaluatedPermissions {
-		constructor(member: GuildMember, raw: number);
-		member: GuildMember;
-		raw: number;
-		hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
-		hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
-		missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
-		serialize(): Permissions;
-	}
-
 	export class Game {
 		constructor(data: object);
 		name: string;
@@ -224,10 +216,13 @@ declare module 'discord.js' {
 
 	export class GroupDMChannel extends TextBasedChannel(Channel) {
 		constructor(client: Client, data: object);
+		applicationID: string;
 		icon: string;
 		lastMessageID: string;
+		managed: boolean;
 		messages: Collection<string, Message>;
 		name: string;
+		nicks: Collection<string, string>;
 		owner: User;
 		ownerID: string;
 		recipients: Collection<string, User>;
@@ -267,9 +262,10 @@ declare module 'discord.js' {
 		splashURL: string;
 		verificationLevel: number;
 		voiceConnection: VoiceConnection;
+		acknowledge(): Promise<Guild>;
 		addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		ban(user: UserResolvable, deleteDays?: number): Promise<GuildMember | User | string>;
-		createChannel(name: string, type: 'text' | 'voice', overwrites?: PermissionOverwrites[]): Promise<TextChannel | VoiceChannel>;
+		createChannel(name: string, type: 'text' | 'voice', overwrites?: PermissionOverwrites[] | object[]): Promise<TextChannel | VoiceChannel>;
 		createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, roles?: Collection<string, Role> | Role[]): Promise<Emoji>;
 		createRole(data?: RoleData): Promise<Role>;
 		delete(): Promise<Guild>;
@@ -288,6 +284,7 @@ declare module 'discord.js' {
 		search(options?: MessageSearchOptions): Promise<Message[][]>;
 		setAFKChannel(afkChannel: ChannelResovalble): Promise<Guild>;
 		setAFKTimeout(afkTimeout: number): Promise<Guild>;
+		setChannelPositions(channelPositions: ChannelPosition): Promise<Guild>;
 		setIcon(icon: Base64Resolvable): Promise<Guild>;
 		setName(name: string): Promise<Guild>;
 		setOwner(owner: GuildMemberResolvable): Promise<Guild>;
@@ -298,7 +295,6 @@ declare module 'discord.js' {
 		sync(): void;
 		toString(): string;
 		unban(user: UserResolvable): Promise<User>;
-		updateChannelPositions(channelPostitions: ChannelPosition[]): Promise<Guild>;
 	}
 
 	export class GuildChannel extends Channel {
@@ -313,7 +309,7 @@ declare module 'discord.js' {
 		edit(data: ChannelData): Promise<GuildChannel>;
 		equals(channel: GuildChannel): boolean;
 		overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions): Promise<void>;
-		permissionsFor(member: GuildMemberResolvable): EvaluatedPermissions;
+		permissionsFor(member: GuildMemberResolvable): Permissions;
 		setName(name: string): Promise<GuildChannel>;
 		setPosition(position: number): Promise<GuildChannel>;
 		setTopic(topic: string): Promise<GuildChannel>;
@@ -324,10 +320,14 @@ declare module 'discord.js' {
 		constructor(guild: Guild, data: object);
 		bannable: boolean;
 		client: Client;
+		colorRole: Role;
 		deaf: boolean;
+		displayColor: number;
+		displayHexColor: string;
 		displayName: string;
 		guild: Guild;
 		highestRole: Role;
+		hoistRole: Role;
 		id: string;
 		joinedAt: Date;
 		joinedTimestamp: number;
@@ -336,7 +336,7 @@ declare module 'discord.js' {
 		lastMessageID: string;
 		mute: boolean;
 		nickname: string;
-		permissions: EvaluatedPermissions;
+		permissions: Permissions;
 		presence: Presence;
 		roles: Collection<string, Role>;
 		selfDeaf: boolean;
@@ -354,11 +354,11 @@ declare module 'discord.js' {
 		createDM(): Promise<DMChannel>;
 		deleteDM(): Promise<DMChannel>;
 		edit(data: object): Promise<GuildMember>;
-		hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
+		hasPermission(permission: PermissionResolvable | PermissionResolvable[], explicit?: boolean, checkAdmin?: boolean, checkOwner?: boolean): boolean;
 		hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
 		kick(): Promise<GuildMember>;
 		missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
-		permissionsIn(channel: ChannelResovalble): EvaluatedPermissions;
+		permissionsIn(channel: ChannelResovalble): Permissions;
 		removeRole(role: Role | string): Promise<GuildMember>;
 		removeRoles(roles: Collection<string, Role> | Role[] | string[]): Promise<GuildMember>;
 		setDeaf(deaf: boolean): Promise<GuildMember>;
@@ -423,6 +423,7 @@ declare module 'discord.js' {
 		tts: boolean;
 		type: string;
 		webhookID: string;
+		acknowledge(): Promise<Message>;
 		clearReactions(): Promise<Message>;
 		delete(timeout?: number): Promise<Message>;
 		edit(content: StringResolvable, options?: MessageEditOptions): Promise<Message>;
@@ -456,6 +457,7 @@ declare module 'discord.js' {
 		constructor(channel: Channel, filter: CollectorFilterFunction, options?: CollectorOptions);
 		channel: Channel;
 		collected: Collection<string, Message>;
+		ended: boolean;
 		filter: CollectorFilterFunction;
 		next: Promise<Message>;
 		options: CollectorOptions;
@@ -575,10 +577,32 @@ declare module 'discord.js' {
 
 	export class PermissionOverwrites {
 		constructor(guildChannel: GuildChannel, data: object);
+		allow: number;
 		channel: GuildChannel;
+		deny: number;
 		id: string;
 		type: string;
 		delete(): Promise<PermissionOverwrites>;
+	}
+
+	export class Permissions {
+		constructor(permissions: number | PermissionResolvable[]);
+		constructor(member: GuildMember, permissions: number | PermissionResolvable[]);
+		bitfield: number;
+		member: GuildMember;
+		raw: number;
+		static ALL: number;
+		static DEFAULT: number;
+		static FLAGS: PermissionFlags;
+		add(...permissions: PermissionResolvable[]): this;
+		has(permission: PermissionResolvable | PermissionResolvable[], checkAdmin?: boolean): boolean;
+		hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
+		hasPermissions(permissions: PermissionResolvable[], explicit?: boolean): boolean;
+		missing(permissions: PermissionResolvable[], checkAdmin?: boolean): PermissionResolvable[];
+		missingPermissions(permissions: PermissionResolvable[], checkAdmin?: boolean): PermissionResolvable[];
+		remove(...permissions: PermissionResolvable[]): this;
+		serialize(checkAdmin?: boolean): PermissionObject;
+		static resolve(permission: PermissionResolvable | PermissionResolvable[]): number;
 	}
 
 	export class Presence {
@@ -612,6 +636,7 @@ declare module 'discord.js' {
 		color?: number | string;
 		description?: string;
 		fields?: { name: string; value: string; inline?: boolean; }[];
+		file?: string | FileOptions;
 		footer?: { text?: string; icon_url?: string; };
 		image?: { url: string; proxy_url?: string; height?: number; width?: number; };
 		thumbnail?: { url: string; height?: number; width?: number; };
@@ -639,6 +664,7 @@ declare module 'discord.js' {
 		color: number;
 		createdAt: Date;
 		createdTimestamp: number;
+		editable: boolean;
 		guild: Guild;
 		hexColor: string;
 		hoist: boolean;
@@ -649,14 +675,13 @@ declare module 'discord.js' {
 		name: string;
 		permissions: number;
 		position: number;
-		static comparePositions(role1: Role, role2: Role): number;
 		comparePositionTo(role: Role): number;
 		delete(): Promise<Role>;
 		edit(data: RoleData): Promise<Role>;
 		equals(role: Role): boolean;
-		hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
+		hasPermission(permission: PermissionResolvable | PermissionResolvable[], explicit?: boolean, checkAdmin?: boolean): boolean;
 		hasPermissions(permissions: PermissionResolvable[], explicit?: boolean): boolean;
-		serialize(): Permissions;
+		serialize(): PermissionObject;
 		setColor(color: string | number): Promise<Role>;
 		setHoist(hoist: boolean): Promise<Role>;
 		setMentionable(mentionable: boolean): Promise<Role>;
@@ -664,6 +689,7 @@ declare module 'discord.js' {
 		setPermissions(permissions: PermissionResolvable[]): Promise<Role>;
 		setPosition(position: number, relative?: boolean): Promise<Role>;
 		toString(): string;
+		static comparePositions(role1: Role, role2: Role): number;
 	}
 
 	class SecretKey {
@@ -689,7 +715,7 @@ declare module 'discord.js' {
 		broadcastEval(script: string): Promise<any[]>;
 		fetchClientValues(prop: string): Promise<any[]>;
 		send(message: any): Promise<void>;
-		singleton(client: Client): ShardClientUtil;
+		static singleton(client: Client): ShardClientUtil;
 	}
 
 	export class ShardingManager extends EventEmitter {
@@ -719,26 +745,19 @@ declare module 'discord.js' {
 		static generate(): string;
 	}
 
-	export class StreamDispatcher extends EventEmitter {
+	export class StreamDispatcher extends VolumeInterface {
 		constructor(player: AudioPlayer, stream: NodeJS.ReadableStream, streamOptions: StreamOptions);
 		destroyed: boolean;
 		passes: number;
-		player: AudioPlayer;
 		paused: boolean;
+		player: AudioPlayer;
+		stream: ReadableStream | VoiceBroadcast;
 		time: number;
 		totalStreamTime: number;
 		volume: number;
-		end(): void;
+		end(reason?: string): void;
 		pause(): void;
 		resume(): void;
-		setVolume(volume: number): void;
-		setVolumeDecibels(db: number): void;
-		setVolumeLogarithmic(value: number): void;
-		on(event: 'debug', listener: (information: string) => void): this;
-		on(event: 'end', listener: () => void): this;
-		on(event: 'error', listener: (err: Error) => void): this;
-		on(event: 'speaking', listener: (value: boolean) => void): this;
-		on(event: 'start', listener: () => void): this;
 	}
 
 	export class TextChannel extends TextBasedChannel(GuildChannel) {
@@ -810,8 +829,22 @@ declare module 'discord.js' {
 		static splitMessage(text: string, options?: SplitOptions): string | string[];
 	}
 
+	export class VolumeInterface extends EventEmitter {
+		constructor(object?: { volume: number })
+		setVolume(volume: number): void;
+		setVolumeDecibels(db: number): void;
+		setVolumeLogarithmic(value: number): void;
+		on(event: 'debug', listener: (information: string) => void): this;
+		on(event: 'end', listener: (reason: string) => void): this;
+		on(event: 'error', listener: (err: Error) => void): this;
+		on(event: 'speaking', listener: (value: boolean) => void): this;
+		on(event: 'start', listener: () => void): this;
+		on(event: 'volumeChange', listener: (oldVolume: number, newVolume: number) => void): this;
+	}
+
 	export class VoiceBroadcast extends EventEmitter {
 		constructor(client: Client);
+		client: Client;
 		currentTranscoder: object;
 		dispatchers: StreamDispatcher[];
 		prism: object;
@@ -889,7 +922,7 @@ declare module 'discord.js' {
 		recreate(): void;
 		on(event: 'opus', listener: (user: User, buffer: Buffer) => void): this;
 		on(event: 'pcm', listener: (user: User, buffer: Buffer) => void): this;
-		on(event: 'warn', listener: (message: string) => void): this;
+		on(event: 'warn', listener: (reason: string, message: string) => void): this;
 	}
 
 	export class VoiceRegion {
@@ -960,6 +993,7 @@ declare module 'discord.js' {
 	type TextBasedChannelFields = {
 		typing: boolean;
 		typingCount: number;
+		acknowledge(): Promise<DMChannel | GroupDMChannel | TextChannel>;
 		awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
 		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
 		createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
@@ -1160,13 +1194,46 @@ declare module 'discord.js' {
 		during?: Date;
 	};
 
-	type Permissions = {
+	type PermissionFlags = {
+		ADMINISTRATOR?: number;
+		CREATE_INSTANT_INVITE?: number;
+		KICK_MEMBERS?: number;
+		BAN_MEMBERS?: number;
+		MANAGE_CHANNELS?: number;
+		MANAGE_GUILD?: number;
+		ADD_REACTIONS?: number;
+		READ_MESSAGES?: number;
+		SEND_MESSAGES?: number;
+		SEND_TTS_MESSAGES?: number;
+		MANAGE_MESSAGES?: number;
+		EMBED_LINKS?: number;
+		ATTACH_FILES?: number;
+		READ_MESSAGE_HISTORY?: number;
+		MENTION_EVERYONE?: number;
+		USE_EXTERNAL_EMOJIS?: number;
+		EXTERNAL_EMOJIS?: number;
+		CONNECT?: number;
+		SPEAK?: number;
+		MUTE_MEMBERS?: number;
+		DEAFEN_MEMBERS?: number;
+		MOVE_MEMBERS?: number;
+		USE_VAD?: number;
+		CHANGE_NICKNAME?: number;
+		MANAGE_NICKNAMES?: number;
+		MANAGE_ROLES?: number;
+		MANAGE_ROLES_OR_PERMISSIONS?: number;
+		MANAGE_WEBHOOKS?: number;
+		MANAGE_EMOJIS?: number;
+	};
+
+	type PermissionObject = {
+		ADMINISTRATOR?: boolean;
 		CREATE_INSTANT_INVITE?: boolean;
 		KICK_MEMBERS?: boolean;
 		BAN_MEMBERS?: boolean;
-		ADMINISTRATOR?: boolean;
 		MANAGE_CHANNELS?: boolean;
 		MANAGE_GUILD?: boolean;
+		ADD_REACTIONS?: boolean;
 		READ_MESSAGES?: boolean;
 		SEND_MESSAGES?: boolean;
 		SEND_TTS_MESSAGES?: boolean;
@@ -1175,6 +1242,7 @@ declare module 'discord.js' {
 		ATTACH_FILES?: boolean;
 		READ_MESSAGE_HISTORY?: boolean;
 		MENTION_EVERYONE?: boolean;
+		USE_EXTERNAL_EMOJIS?: boolean;
 		EXTERNAL_EMOJIS?: boolean;
 		CONNECT?: boolean;
 		SPEAK?: boolean;
@@ -1184,15 +1252,16 @@ declare module 'discord.js' {
 		USE_VAD?: boolean;
 		CHANGE_NICKNAME?: boolean;
 		MANAGE_NICKNAMES?: boolean;
+		MANAGE_ROLES?: boolean;
 		MANAGE_ROLES_OR_PERMISSIONS?: boolean;
 		MANAGE_WEBHOOKS?: boolean;
 		MANAGE_EMOJIS?: boolean;
 	};
 
-	type PermissionString = 'CREATE_INSTANT_INVITE'
+	type PermissionString = 'ADMINISTRATOR'
+		| 'CREATE_INSTANT_INVITE'
 		| 'KICK_MEMBERS'
 		| 'BAN_MEMBERS'
-		| 'ADMINISTRATOR'
 		| 'MANAGE_CHANNELS'
 		| 'MANAGE_GUILD'
 		| 'ADD_REACTIONS'
@@ -1204,6 +1273,7 @@ declare module 'discord.js' {
 		| 'ATTACH_FILES'
 		| 'READ_MESSAGE_HISTORY'
 		| 'MENTION_EVERYONE'
+		| 'USE_EXTERNAL_EMOJIS'
 		| 'EXTERNAL_EMOJIS'
 		| 'CONNECT'
 		| 'SPEAK'
@@ -1213,11 +1283,12 @@ declare module 'discord.js' {
 		| 'USE_VAD'
 		| 'CHANGE_NICKNAME'
 		| 'MANAGE_NICKNAMES'
+		| 'MANAGE_ROLES'
 		| 'MANAGE_ROLES_OR_PERMISSIONS'
 		| 'MANAGE_WEBHOOKS'
 		| 'MANAGE_EMOJIS';
 
-	type PermissionOverwriteOptions = Permissions;
+	type PermissionOverwriteOptions = PermissionObject;
 	type PermissionResolvable = PermissionString | PermissionString[] | number[];
 
 	type PresenceData = {
@@ -1238,6 +1309,7 @@ declare module 'discord.js' {
 		timestamp?: Date;
 		color?: number | string;
 		fields?: { name: string; value: string; inline?: boolean; }[];
+		file?: string | FileOptions;
 		author?: { name: string; url?: string; icon_url?: string; };
 		thumbnail?: { url: string; height?: number; width?: number; };
 		image?: { url: string; proxy_url?: string; height?: number; width?: number; };
