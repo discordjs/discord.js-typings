@@ -411,6 +411,7 @@ declare module 'discord.js' {
 		member: GuildMember;
 		mentions: {
 			users: Collection<string, User>;
+			members: Collection<string, GuildMember>;
 			roles: Collection<string, Role>;
 			channels: Collection<string, GuildChannel>;
 			everyone: boolean;
