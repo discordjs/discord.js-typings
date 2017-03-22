@@ -981,6 +981,7 @@ declare module 'discord.js' {
 	const TextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & TextBasedChannelFields>;
 
 	type PartialTextBasedChannelFields = {
+		acknowledge(): Promise<DMChannel | GroupDMChannel | TextChannel>;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		send(options?: MessageOptions): Promise<Message | Message[]>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
@@ -994,7 +995,6 @@ declare module 'discord.js' {
 	type TextBasedChannelFields = {
 		typing: boolean;
 		typingCount: number;
-		acknowledge(): Promise<DMChannel | GroupDMChannel | TextChannel>;
 		awaitMessages(filter: CollectorFilterFunction, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
 		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
 		createCollector(filter: CollectorFilterFunction, options?: CollectorOptions): MessageCollector;
