@@ -12,7 +12,7 @@ declare module 'discord.js' {
 
 	export const version: string;
 
-//#region Classes
+	//#region Classes
 
 	class AudioPlayer extends EventEmitter {
 		constructor(voiceConnection: VoiceConnection);
@@ -481,6 +481,8 @@ declare module 'discord.js' {
 		message: Message;
 		provider: MessageEmbedProvider;
 		thumbnail: MessageEmbedThumbnail;
+		image: MessageEmbedImage;
+		video: MessageEmbedVideo;
 		title: string;
 		type: string;
 		url: string;
@@ -522,6 +524,23 @@ declare module 'discord.js' {
 		embed: MessageEmbed;
 		height: number;
 		proxyURL: string;
+		url: string;
+		width: number;
+	}
+
+	export class MessageEmbedImage {
+		constructor(embed: MessageEmbed, data: object);
+		embed: MessageEmbed;
+		height: number;
+		proxyURL: string;
+		url: string;
+		width: number;
+	}
+
+	export class MessageEmbedVideo {
+		constructor(embed: MessageEmbed, data: object);
+		embed: MessageEmbed;
+		height: number;
 		url: string;
 		width: number;
 	}
@@ -665,6 +684,7 @@ declare module 'discord.js' {
 		color: number;
 		createdAt: Date;
 		createdTimestamp: number;
+		defaultRole: Role;
 		editable: boolean;
 		guild: Guild;
 		hexColor: string;
@@ -968,9 +988,9 @@ declare module 'discord.js' {
 		setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 	}
 
-//#endregion
+	//#endregion
 
-//#region Mixins
+	//#region Mixins
 
 	// Model the TextBasedChannel mixin system, allowing application of these fields
 	// to the classes that use these methods without having to manually add them
@@ -1006,9 +1026,9 @@ declare module 'discord.js' {
 		stopTyping(force?: boolean): void;
 	} & PartialTextBasedChannelFields;
 
-//#endregion
+	//#endregion
 
-//#region Typedefs
+	//#region Typedefs
 
 	type AddGuildMemberOptions = {
 		accessToken: String;
@@ -1159,25 +1179,25 @@ declare module 'discord.js' {
 		maxID?: string;
 		minID?: string;
 		has?: 'link'
-			| 'embed'
-			| 'file'
-			| 'video'
-			| 'image'
-			| 'sound'
-			| '-link'
-			| '-embed'
-			| '-file'
-			| '-video'
-			| '-image'
-			| '-sound';
+		| 'embed'
+		| 'file'
+		| 'video'
+		| 'image'
+		| 'sound'
+		| '-link'
+		| '-embed'
+		| '-file'
+		| '-video'
+		| '-image'
+		| '-sound';
 		channel?: ChannelResovalble;
 		author?: UserResolvable;
 		authorType?: 'user'
-			| 'bot'
-			| 'webhook'
-			| '-user'
-			| '-bot'
-			| '-webhook';
+		| 'bot'
+		| 'webhook'
+		| '-user'
+		| '-bot'
+		| '-webhook';
 		sortBy?: 'relevant' | 'recent';
 		sortOrder?: 'asc' | 'desc';
 		contextSize?: number;
@@ -1396,5 +1416,5 @@ declare module 'discord.js' {
 		| 'RELATIONSHIP_ADD'
 		| 'RELATIONSHIP_REMOVE';
 
-//#endregion
+	//#endregion
 }
