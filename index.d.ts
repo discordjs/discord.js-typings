@@ -481,6 +481,8 @@ declare module 'discord.js' {
 		message: Message;
 		provider: MessageEmbedProvider;
 		thumbnail: MessageEmbedThumbnail;
+		image: MessageEmbedImage;
+		video: MessageEmbedVideo;
 		title: string;
 		type: string;
 		url: string;
@@ -522,6 +524,23 @@ declare module 'discord.js' {
 		embed: MessageEmbed;
 		height: number;
 		proxyURL: string;
+		url: string;
+		width: number;
+	}
+
+	export class MessageEmbedImage {
+		constructor(embed: MessageEmbed, data: object);
+		embed: MessageEmbed;
+		height: number;
+		proxyURL: string;
+		url: string;
+		width: number;
+	}
+
+	export class MessageEmbedVideo {
+		constructor(embed: MessageEmbed, data: object);
+		embed: MessageEmbed;
+		height: number;
 		url: string;
 		width: number;
 	}
@@ -665,6 +684,7 @@ declare module 'discord.js' {
 		color: number;
 		createdAt: Date;
 		createdTimestamp: number;
+		defaultRole: Role;
 		editable: boolean;
 		guild: Guild;
 		hexColor: string;
