@@ -245,6 +245,7 @@ declare module 'discord.js' {
 		defaultChannel: TextChannel;
 		embedEnabled: boolean;
 		emojis: Collection<string, Emoji>;
+		explicitContentFilter: number;
 		features: object[];
 		icon: string;
 		iconURL: string;
