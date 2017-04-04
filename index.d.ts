@@ -233,7 +233,6 @@ declare module 'discord.js' {
 
 	export class Guild {
 		constructor(client: Client, data: object);
-		_sortedRoles: Collection<string, Role>;
 		afkChannelID: string;
 		afkTimeout: number;
 		applicationID: string;
@@ -265,8 +264,6 @@ declare module 'discord.js' {
 		splashURL: string;
 		verificationLevel: number;
 		voiceConnection: VoiceConnection;
-		_sortedChannels(type: 'text' | 'voice'): Collection<string, TextChannel | VoiceChannel>;
-		_sortChannelPositionWithID(collection: Collection<string, any>);
 		acknowledge(): Promise<Guild>;
 		addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		ban(user: UserResolvable, deleteDays?: number): Promise<GuildMember | User | string>;
