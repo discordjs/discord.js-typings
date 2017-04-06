@@ -177,6 +177,7 @@ declare module 'discord.js' {
 		randomKey(): K;
 		reduce<T>(fn: (accumulator: any, value: V, key: K, collection: Collection<K, V>) => T, initialValue?: any): T;
 		some(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
+		sort(compareFunction?: (a: [K, V], b: [K, V]) => number): Collection<K, V>;
 	}
 
 	export class DMChannel extends TextBasedChannel(Channel) {
@@ -243,6 +244,7 @@ declare module 'discord.js' {
 		defaultChannel: TextChannel;
 		embedEnabled: boolean;
 		emojis: Collection<string, Emoji>;
+		explicitContentFilter: number;
 		features: object[];
 		icon: string;
 		iconURL: string;
@@ -282,9 +284,10 @@ declare module 'discord.js' {
 		member(user: UserResolvable): GuildMember;
 		pruneMembers(days: number, dry?: boolean): Promise<number>;
 		search(options?: MessageSearchOptions): Promise<Message[][]>;
-		setAFKChannel(afkChannel: ChannelResovalble): Promise<Guild>;
+		setAFKChannel(afkChannel: ChannelResolvable): Promise<Guild>;
 		setAFKTimeout(afkTimeout: number): Promise<Guild>;
-		setChannelPositions(channelPositions: ChannelPosition): Promise<Guild>;
+		setChannelPosition(channel: string | GuildChannel, position: number, relative?: boolean);
+		setChannelPositions(channelPositions: ChannelPosition[]): Promise<Guild>;
 		setIcon(icon: Base64Resolvable): Promise<Guild>;
 		setName(name: string): Promise<Guild>;
 		setOwner(owner: GuildMemberResolvable): Promise<Guild>;
@@ -299,6 +302,7 @@ declare module 'discord.js' {
 
 	export class GuildChannel extends Channel {
 		constructor(guild: Guild, data: object);
+		calculatedPosition: number;
 		deletable: boolean;
 		guild: Guild;
 		name: string;
@@ -311,7 +315,7 @@ declare module 'discord.js' {
 		overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions): Promise<void>;
 		permissionsFor(member: GuildMemberResolvable): Permissions;
 		setName(name: string): Promise<GuildChannel>;
-		setPosition(position: number): Promise<GuildChannel>;
+		setPosition(position: number, relative?: boolean): Promise<GuildChannel>;
 		setTopic(topic: string): Promise<GuildChannel>;
 		toString(): string;
 	}
@@ -358,14 +362,14 @@ declare module 'discord.js' {
 		hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
 		kick(): Promise<GuildMember>;
 		missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
-		permissionsIn(channel: ChannelResovalble): Permissions;
+		permissionsIn(channel: ChannelResolvable): Permissions;
 		removeRole(role: Role | string): Promise<GuildMember>;
 		removeRoles(roles: Collection<string, Role> | Role[] | string[]): Promise<GuildMember>;
 		setDeaf(deaf: boolean): Promise<GuildMember>;
 		setMute(mute: boolean): Promise<GuildMember>;
 		setNickname(nickname: string): Promise<GuildMember>;
 		setRoles(roles: Collection<string, Role> | Role[] | string[]): Promise<GuildMember>;
-		setVoiceChannel(voiceChannel: ChannelResovalble): Promise<GuildMember>;
+		setVoiceChannel(voiceChannel: ChannelResolvable): Promise<GuildMember>;
 		toString(): string;
 	}
 
@@ -818,9 +822,9 @@ declare module 'discord.js' {
 		removeFriend(): Promise<User>;
 		setNote(note: string): Promise<User>;
 		toString(): string;
-		typingDurationIn(channel: ChannelResovalble): number;
-		typingIn(channel: ChannelResovalble): boolean;
-		typingSinceIn(channel: ChannelResovalble): Date;
+		typingDurationIn(channel: ChannelResolvable): number;
+		typingIn(channel: ChannelResolvable): boolean;
+		typingSinceIn(channel: ChannelResolvable): Date;
 		unblock(): Promise<User>;
 	}
 
@@ -1059,11 +1063,11 @@ declare module 'discord.js' {
 	};
 
 	type ChannelPosition = {
-		id: string;
+		channel: ChannelResolvable;
 		position: number;
 	};
 
-	type ChannelResovalble = Channel | Guild | Message | string;
+	type ChannelResolvable = Channel | Guild | Message | string;
 
 	type ClientOptions = {
 		apiRequestMethod?: string;
@@ -1144,7 +1148,7 @@ declare module 'discord.js' {
 		name?: string;
 		region?: string;
 		verificationLevel?: number;
-		afkChannel?: ChannelResovalble;
+		afkChannel?: ChannelResolvable;
 		afkTimeout?: number;
 		icon?: Base64Resolvable;
 		owner?: GuildMemberResolvable;
@@ -1190,7 +1194,7 @@ declare module 'discord.js' {
 			| '-video'
 			| '-image'
 			| '-sound';
-		channel?: ChannelResovalble;
+		channel?: ChannelResolvable;
 		author?: UserResolvable;
 		authorType?: 'user'
 			| 'bot'
