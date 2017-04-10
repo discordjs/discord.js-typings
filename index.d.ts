@@ -819,6 +819,7 @@ declare module 'discord.js' {
 		note?: string;
 		presence: Presence;
 		username: string;
+		tag: string;
 		addFriend(): Promise<User>;
 		block(): Promise<User>;
 		createDM(): Promise<DMChannel>
