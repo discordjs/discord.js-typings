@@ -413,13 +413,7 @@ declare module 'discord.js' {
 		hit: boolean;
 		id: string;
 		member: GuildMember;
-		mentions: {
-			users: Collection<string, User>;
-			members: Collection<string, GuildMember>;
-			roles: Collection<string, Role>;
-			channels: Collection<string, GuildChannel>;
-			everyone: boolean;
-		};
+		mentions: MessageMentions;
 		nonce: string;
 		pinnable: boolean;
 		pinned: boolean;
@@ -547,6 +541,18 @@ declare module 'discord.js' {
 		height: number;
 		url: string;
 		width: number;
+	}
+
+	export class MessageMentions {
+		channels: Collection<string, GuildChannel>;
+		everyone: boolean;
+		members: Collection<string, GuildMember>;
+		roles: Collection<string, Role>;
+		users: Collection<string,User>;
+		static CHANNELS_PATTERN: RegExp;
+		static EVERYONE_PATTERN: RegExp;
+		static ROLES_PATTERN: RegExp;
+		static USERS_PATTERN: RegExp;
 	}
 
 	export class MessageReaction {
