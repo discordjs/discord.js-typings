@@ -544,11 +544,11 @@ declare module 'discord.js' {
 	}
 
 	export class MessageMentions {
-		channels: Collection<string, GuildChannel>;
+		channels: Collection<string, TextChannel>;
 		everyone: boolean;
 		members: Collection<string, GuildMember>;
 		roles: Collection<string, Role>;
-		users: Collection<string,User>;
+		users: Collection<string, User>;
 		static CHANNELS_PATTERN: RegExp;
 		static EVERYONE_PATTERN: RegExp;
 		static ROLES_PATTERN: RegExp;
