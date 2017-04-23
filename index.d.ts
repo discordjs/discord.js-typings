@@ -42,34 +42,35 @@ declare module 'discord.js' {
 		private _intervals: NodeJS.Timer;
 		private _pingTimestamp: number;
 		private _timeouts: NodeJS.Timer;
+		private dataManager: object;
+		private manager: ClientManager;
+		private resolver: ClientDataResolver;
+		private rest: object;
+		private voice: ClientVoiceManager;
+		private ws: object;
+		private _eval(script: string): any;
+		private _pong(startTime: number): void;
+		private _setPresence(id: Snowflake, presence: object): void;
+		private _validateOptions(options?: ClientOptions): void;
+		
 		public broadcasts: VoiceBroadcast[];
 		public readonly browser: boolean;
 		public channels: Collection<Snowflake, Channel>;
-		private dataManager: object;
 		public readonly emojis: Collection<Snowflake, Emoji>;
 		public guilds: Collection<Snowflake, Guild>;
-		private manager: ClientManager;
 		public options: ClientOptions;
 		public readonly ping: number;
 		public pings: number[];
 		public presences: Collection<Snowflake, Presence>;
 		public readyAt: Date;
 		public readonly readyTimestamp: number;
-		private resolver: ClientDataResolver;
-		private rest: object;
 		public shard?: ShardClientUtil;
 		public readonly status: number;
 		public token: string;
 		public readonly uptime: number;
 		public user: ClientUser;
 		public users: Collection<Snowflake, User>;
-		private voice: ClientVoiceManager;
 		public readonly voiceConnections: Collection<Snowflake, VoiceConnection>;
-		private ws: object;
-		private _eval(script: string): any;
-		private _pong(startTime: number): void;
-		private _setPresence(id: Snowflake, presence: object): void;
-		private _validateOptions(options?: ClientOptions): void;
 		public clearInterval(interval: NodeJS.Timer): void;
 		public clearTimeout(timeout: NodeJS.Timer): void;
 		public createVoiceBroadcast(): VoiceBroadcast;
@@ -85,6 +86,7 @@ declare module 'discord.js' {
 		public setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 		public sweepMessages(lifetime?: number): number;
 		public syncGuilds(guilds?: Guild[] | Collection<Snowflake, Guild>): void;
+
 		on(event: string, listener: Function): this;
 		on(event: 'channelCreate', listener: (channel: Channel) => void): this;
 		on(event: 'channelDelete', listener: (channel: Channel) => void): this;
@@ -144,6 +146,7 @@ declare module 'discord.js' {
 		public resolveString(data: StringResolvable): string;
 		public resolveUser(user: UserResolvable): User;
 		public resolveUserID(user: UserResolvable): Snowflake;
+
 		public static resolveColor(color: ColorResolvable): number;
 	}
 
@@ -156,8 +159,8 @@ declare module 'discord.js' {
 	}
 
 	export class ClientOAuth2Application extends OAuth2Application {
-		flags: number;
-		owner: User;
+		public flags: number;
+		public owner: User;
 	}
 
 	export class ClientUser extends User {
@@ -224,6 +227,7 @@ declare module 'discord.js' {
 	export class Collection<K, V> extends Map<K, V> {
 		private _array: V[];
 		private _keyArray: K[];
+
 		public array(): V[];
 		public clone(): Collection<K, V>;
 		public concat(...collections: Collection<K, V>[]): Collection<K, V>;
@@ -254,18 +258,20 @@ declare module 'discord.js' {
 	abstract class Collector {
 		constructor(client: Client, filter: any[], options?: CollectorOptions);
 		private _timeout: number;
-		public client: Client;
-		public collected: Collection<any, any>;
-		public ended: boolean;
-		public filter: CollectorFilter;
 		private listener: Function;
-		public readonly next: Promise<void>;
-		public options: CollectorOptions;
 		private _handle(...args: any[]): void;
 		private cleanup(): void;
 		private handle(...args: any[]): object;
 		private postCheck(...args: any[]): string;
+		
+		public client: Client;
+		public collected: Collection<any, any>;
+		public ended: boolean;
+		public filter: CollectorFilter;
+		public readonly next: Promise<void>;
+		public options: CollectorOptions;
 		public stop(reason?: string): void;
+
 		on(event: 'collect', listener: (element: any, collector: Collector) => void): this;
 		on(event: 'end', listener: (collected: Collection<any, any>, reason: string) => void): string;
 	}
@@ -324,6 +330,10 @@ declare module 'discord.js' {
 	export class Guild {
 		constructor(client: Client, data: object);
 		private readonly _sortedRoles: Collection<Snowflake, Role>;
+		private _sortedChannels(type: string): Collection<Snowflake, GuildChannel>
+		private _sortPositionWithID(collection: Collection<any, any>): Collection<any, any>;
+		private setup(data: any): void;
+
 		public afkChannelID: string;
 		public afkTimeout: number;
 		public applicationID: string;
@@ -356,8 +366,6 @@ declare module 'discord.js' {
 		public readonly splashURL: string;
 		public verificationLevel: number;
 		public readonly voiceConnection: VoiceConnection;
-		private _sortedChannels(type: string): Collection<Snowflake, GuildChannel>
-		private _sortPositionWithID(collection: Collection<any, any>): Collection<any, any>;
 		public acknowledge(): Promise<Guild>;
 		public addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		public allowDMs(allow: boolean): Promise<Guild>;
@@ -389,7 +397,6 @@ declare module 'discord.js' {
 		public setRegion(region: string): Promise<Guild>;
 		public setRolePosition(role: string | Role, position: number, relative?: boolean): Promise<Guild>;
 		public setSplash(splash: Base64Resolvable): Promise<Guild>;
-		private setup(data: any): void;
 		public setVerificationLevel(verificationLevel: number): Promise<Guild>;
 		public sync(): void;
 		public toString(): string;
@@ -492,6 +499,8 @@ declare module 'discord.js' {
 	export class Message {
 		constructor(channel: TextChannel | DMChannel | GroupDMChannel, data: object, client: Client);
 		private _edits: Message[];
+		private patch(data: object): void;
+
 		public attachments: Collection<Snowflake, MessageAttachment>;
 		public author: User;
 		public channel: TextChannel | DMChannel | GroupDMChannel;
@@ -530,7 +539,6 @@ declare module 'discord.js' {
 		public fetchWebhook(): Promise<Webhook>;
 		public isMemberMentioned(member: GuildMember | User): boolean;
 		public isMentioned(data: GuildChannel | User | Role | Snowflake): boolean;
-		private patch(data: object): void;
 		public pin(): Promise<Message>;
 		public react(emoji: string | Emoji | ReactionEmoji): Promise<MessageReaction>;
 		public reply(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
@@ -648,15 +656,17 @@ declare module 'discord.js' {
 		private _content: Message;
 		private _guild: Guild;
 		private _members: Collection<Snowflake, GuildMember>;
+
 		public readonly channels: Collection<Snowflake, TextChannel>;
 		public everyone: boolean;
 		public members: Collection<Snowflake, GuildMember>;
 		public roles: Collection<Snowflake, Role>;
 		public users: Collection<Snowflake, User>;
-		static CHANNELS_PATTERN: RegExp;
-		static EVERYONE_PATTERN: RegExp;
-		static ROLES_PATTERN: RegExp;
-		static USERS_PATTERN: RegExp;
+
+		public static CHANNELS_PATTERN: RegExp;
+		public static EVERYONE_PATTERN: RegExp;
+		public static ROLES_PATTERN: RegExp;
+		public static USERS_PATTERN: RegExp;
 	}
 
 	export class MessageReaction {
@@ -722,12 +732,10 @@ declare module 'discord.js' {
 	export class Permissions {
 		constructor(permissions: number | PermissionResolvable[]);
 		constructor(member: GuildMember, permissions: number | PermissionResolvable[]);
+		private readonly raw: number;
+		
 		public bitfield: number;
 		public member: GuildMember;
-		private readonly raw: number;
-		static ALL: number;
-		static DEFAULT: number;
-		static FLAGS: PermissionFlags;
 		public add(...permissions: PermissionResolvable[]): this;
 		public has(permission: PermissionResolvable | PermissionResolvable[], checkAdmin?: boolean): boolean;
 		public hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
@@ -736,7 +744,11 @@ declare module 'discord.js' {
 		public missingPermissions(permissions: PermissionResolvable[], checkAdmin?: boolean): PermissionResolvable[];
 		public remove(...permissions: PermissionResolvable[]): this;
 		public serialize(checkAdmin?: boolean): PermissionObject;
-		static resolve(permission: PermissionResolvable | PermissionResolvable[]): number;
+
+		public static ALL: number;
+		public static DEFAULT: number;
+		public static FLAGS: PermissionFlags;
+		public static resolve(permission: PermissionResolvable | PermissionResolvable[]): number;
 	}
 
 	export class Presence {
@@ -837,7 +849,8 @@ declare module 'discord.js' {
 		public setPermissions(permissions: PermissionResolvable[]): Promise<Role>;
 		public setPosition(position: number, relative?: boolean): Promise<Role>;
 		public toString(): string;
-		static comparePositions(role1: Role, role2: Role): number;
+
+		public static comparePositions(role1: Role, role2: Role): number;
 	}
 
 	class SecretKey {
@@ -860,11 +873,12 @@ declare module 'discord.js' {
 
 	export class Shard {
 		constructor(manager: ShardingManager, id: number, args?: string[]);
+		private _handleMessage(message: any): void;
+
 		public env: object;
 		public id: string;
 		public manager: ShardingManager;
 		public process: ChildProcess;
-		private _handleMessage(message: any): void;
 		public eval(script: string): Promise<any>;
 		public fetchClientValue(prop: string): Promise<any>;
 		public send(message: any): Promise<Shard>;
@@ -872,14 +886,16 @@ declare module 'discord.js' {
 
 	export class ShardClientUtil {
 		constructor(client: Client);
-		public readonly count: number;
-		public readonly id: number;
 		private _handleMessage(message: any): void;
 		private _respond(type: string, message: any): void;
+
+		public readonly count: number;
+		public readonly id: number;
 		public broadcastEval(script: string): Promise<any[]>;
 		public fetchClientValues(prop: string): Promise<any[]>;
 		public send(message: any): Promise<void>;
-		static singleton(client: Client): ShardClientUtil;
+
+		public static singleton(client: Client): ShardClientUtil;
 	}
 
 	export class ShardingManager extends EventEmitter {
@@ -889,25 +905,27 @@ declare module 'discord.js' {
 			shardArgs?: string[];
 			token?: string;
 		});
+		private _spawn(amount: number, delay: number): Promise<Collection<number, Shard>>;
+
 		public file: string;
 		public respawn: boolean;
 		public shardArgs: string[];
 		public shards: Collection<number, Shard>;
 		public token: string;
 		public totalShards: number | string;
-		private _spawn(amount: number, delay: number): Promise<Collection<number, Shard>>;
 		public broadcast(message: any): Promise<Shard[]>;
 		public broadcastEval(script: string): Promise<any[]>;
 		public createShard(id: number): Promise<Shard>;
 		public fetchClientValues(prop: string): Promise<any[]>;
 		public spawn(amount?: number, delay?: number): Promise<Collection<number, Shard>>;
+
 		on(event: 'launch', listener: (shard: Shard) => void): this;
 		on(event: 'message', listener: (shard: Shard, message: any) => void): this;
 	}
 
 	export class SnowflakeUtil {
-		static deconstruct(snowflake: Snowflake): DeconstructedSnowflake;
-		static generate(): Snowflake;
+		public static deconstruct(snowflake: Snowflake): DeconstructedSnowflake;
+		public static generate(): Snowflake;
 	}
 
 	export class StreamDispatcher extends VolumeInterface {
@@ -936,36 +954,36 @@ declare module 'discord.js' {
 
 	export class User extends PartialTextBasedChannel() {
 		constructor(client: Client, data: object);
-		avatar: string;
-		avatarURL: string;
-		bot: boolean;
-		client: Client;
-		createdAt: Date;
-		createdTimestamp: number;
-		defaultAvatarURL: string;
-		discriminator: string;
-		displayAvatarURL: string;
-		dmChannel: DMChannel;
-		id: string;
-		lastMessage: Message;
-		lastMessageID: string;
-		note?: string;
-		presence: Presence;
-		username: string;
-		tag: string;
-		addFriend(): Promise<User>;
-		block(): Promise<User>;
-		createDM(): Promise<DMChannel>
-		deleteDM(): Promise<DMChannel>;
-		equals(user: User): boolean;
-		fetchProfile(): Promise<UserProfile>;
-		removeFriend(): Promise<User>;
-		setNote(note: string): Promise<User>;
-		toString(): string;
-		typingDurationIn(channel: ChannelResolvable): number;
-		typingIn(channel: ChannelResolvable): boolean;
-		typingSinceIn(channel: ChannelResolvable): Date;
-		unblock(): Promise<User>;
+		public avatar: string;
+		public readonly avatarURL: string;
+		public bot: boolean;
+		public readonly client: Client;
+		public readonly createdAt: Date;
+		public readonly createdTimestamp: number;
+		public readonly defaultAvatarURL: string;
+		public discriminator: string;
+		public readonly displayAvatarURL: string;
+		public readonly dmChannel: DMChannel;
+		public readonly id: Snowflake;
+		public lastMessage: Message;
+		public lastMessageID: string;
+		public readonly note?: string;
+		public readonly presence: Presence;
+		public readonly tag: string;
+		public username: string;
+		public addFriend(): Promise<User>;
+		public block(): Promise<User>;
+		public createDM(): Promise<DMChannel>
+		public deleteDM(): Promise<DMChannel>;
+		public equals(user: User): boolean;
+		public fetchProfile(): Promise<UserProfile>;
+		public removeFriend(): Promise<User>;
+		public setNote(note: string): Promise<User>;
+		public toString(): string;
+		public typingDurationIn(channel: ChannelResolvable): number;
+		public typingIn(channel: ChannelResolvable): boolean;
+		public typingSinceIn(channel: ChannelResolvable): Date;
+		public unblock(): Promise<User>;
 	}
 
 	export class UserConnection {
@@ -989,18 +1007,18 @@ declare module 'discord.js' {
 	}
 
 	export class Util {
-		static arrayEqual(a: any[], b: any[]): boolean;
-		static cloneObject(obj: object): object;
-		static convertToBuffer(ab: ArrayBuffer | string): Buffer;
-		static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string;
-		static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
-		static makeError(obj: { name: string, message: string, stack: string }): Error;
-		static makePlainError(err: Error): object;
-		static mergeDefault(def: object, given: object): object;
-		static moveElementInArray(array: any[], element: any, newIndex: number, offset?: boolean): number;
-		static parseEmoji(text: string): object;
-		static splitMessage(text: string, options?: SplitOptions): string | string[];
-		static str2ab(str: string): ArrayBuffer;
+		public static arrayEqual(a: any[], b: any[]): boolean;
+		public static cloneObject(obj: object): object;
+		public static convertToBuffer(ab: ArrayBuffer | string): Buffer;
+		public static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string;
+		public static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
+		public static makeError(obj: { name: string, message: string, stack: string }): Error;
+		public static makePlainError(err: Error): object;
+		public static mergeDefault(def: object, given: object): object;
+		public static moveElementInArray(array: any[], element: any, newIndex: number, offset?: boolean): number;
+		public static parseEmoji(text: string): object;
+		public static splitMessage(text: string, options?: SplitOptions): string | string[];
+		public static str2ab(str: string): ArrayBuffer;
 	}
 
 	export class VoiceBroadcast extends EventEmitter {
@@ -1018,6 +1036,7 @@ declare module 'discord.js' {
 		public playOpusStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
 		public playStream(stream: ReadableStream, options?: StreamOptions): VoiceBroadcast;
 		public resume(): void;
+
 		on(event: string, listener: Function): this;
 		on(event: 'error', listener: (error: Error) => void): this;
 		on(event: 'subscribe', listener: (dispatcher: StreamDispatcher) => void): this;
@@ -1042,25 +1061,42 @@ declare module 'discord.js' {
 
 	export class VoiceConnection extends EventEmitter {
 		constructor(voiceManager: ClientVoiceManager, channel: VoiceChannel);
-		channel: VoiceChannel;
-		client: Client;
-		player: AudioPlayer;
-		prism: object;
-		receivers: VoiceReceiver[];
-		speaking: boolean;
-		status: number;
-		voiceManager: ClientVoiceManager;
-		createReceiver(): VoiceReceiver;
-		disconnect(): void;
-		playArbitraryInput(input: string, options?: StreamOptions): StreamDispatcher;
-		playBroadcast(broadcast: VoiceBroadcast): StreamDispatcher;
-		playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
-		playFile(file: string, options?: StreamOptions): StreamDispatcher;
-		playOpusStream(steam: ReadableStream, options?: StreamOptions): StreamDispatcher;
-		playStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
-		sendVoiceStateUpdate(options: object): void;
-		setSessionID(sessionID: string): void;
-		setTokenAndEndpoint(token: string, endpoint: string): void;
+		private authentication: object;
+		private sockets: object;
+		private ssrcMap: Map<number, boolean>;
+		private authenticate(): void;
+		private authenticateFailed(reason: string): void;
+		private checkAuthenticated(): void;
+		private cleanup(): void;
+		private connect(): void;
+		private onReady(data: object): void;
+		private onSessionDescription(mode: string, secret: string): void;
+		private onSpeaking(data: object): void;
+		private reconnect(token: string, endpoint: string): void;
+		private setSpeaking(value: boolean): void;
+		private updateChannel(channel: VoiceChannel): void;
+
+		public channel: VoiceChannel;
+		public readonly client: Client;
+		public readonly dispatcher: StreamDispatcher;
+		public player: AudioPlayer;
+		public prism: object;
+		public receivers: VoiceReceiver[];
+		public speaking: boolean;
+		public status: number;
+		public voiceManager: ClientVoiceManager;
+		public createReceiver(): VoiceReceiver;
+		public disconnect(): void;
+		public playArbitraryInput(input: string, options?: StreamOptions): StreamDispatcher;
+		public playBroadcast(broadcast: VoiceBroadcast): StreamDispatcher;
+		public playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
+		public playFile(file: string, options?: StreamOptions): StreamDispatcher;
+		public playOpusStream(steam: ReadableStream, options?: StreamOptions): StreamDispatcher;
+		public playStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
+		public sendVoiceStateUpdate(options: object): void;
+		public setSessionID(sessionID: string): void;
+		public setTokenAndEndpoint(token: string, endpoint: string): void;
+
 		on(event: 'authenticated', listener: () => void): this;
 		on(event: 'debug', listener: (message: string) => void): this;
 		on(event: 'disconnect', listener: (error: Error) => void): this;
@@ -1087,13 +1123,15 @@ declare module 'discord.js' {
 
 	export class VoiceReceiver extends EventEmitter {
 		constructor(connection: VoiceConnection);
+		private stoppedSpeaking(user: User): void;
+
 		public destroyed: boolean;
 		public voiceConnection: VoiceConnection;
 		public createOpusStream(user: UserResolvable): ReadableStream;
 		public createPCMStream(user: UserResolvable): ReadableStream;
 		public destroy(): void;
 		public recreate(): void;
-		private stoppedSpeaking(user: User): void;
+
 		on(event: 'opus', listener: (user: User, buffer: Buffer) => void): this;
 		on(event: 'pcm', listener: (user: User, buffer: Buffer) => void): this;
 		on(event: 'warn', listener: (reason: string, message: string) => void): this;
@@ -1128,6 +1166,7 @@ declare module 'discord.js' {
 		public sendHeartbeat(): void;
 		public sendPacket(packet: object): Promise<string>;
 		public setHeartbeat(interval: number): void;
+
 		on(event: 'ready', listener: (packet: object) => void): this;
 		on(event: 'sessionDescription', listener: (encryptionMode: string, secretKey: SecretKey) => void): this;
 		on(event: 'speaking', listener: (data: object) => void): this;
@@ -1143,6 +1182,7 @@ declare module 'discord.js' {
 		public setVolume(volume: number): void;
 		public setVolumeDecibels(db: number): void;
 		public setVolumeLogarithmic(value: number): void;
+
 		on(event: 'debug', listener: (information: string) => void): this;
 		on(event: 'end', listener: (reason: string) => void): this;
 		on(event: 'error', listener: (err: Error) => void): this;
@@ -1176,9 +1216,10 @@ declare module 'discord.js' {
 		constructor(id: string, token: string, options?: ClientOptions);
 		private _intervals: NodeJS.Timer;
 		private _timeouts: NodeJS.Timer;
-		public options: ClientOptions;
 		private resolver: ClientDataResolver;
 		private rest: object;
+
+		public options: ClientOptions;
 		public clearInterval(interval: NodeJS.Timer): void;
 		public clearTimeout(timeout: NodeJS.Timer): void;
 		public destroy(): void;
