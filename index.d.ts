@@ -52,7 +52,7 @@ declare module 'discord.js' {
 		private _pong(startTime: number): void;
 		private _setPresence(id: Snowflake, presence: object): void;
 		private _validateOptions(options?: ClientOptions): void;
-		
+
 		public broadcasts: VoiceBroadcast[];
 		public readonly browser: boolean;
 		public channels: Collection<Snowflake, Channel>;
@@ -263,7 +263,7 @@ declare module 'discord.js' {
 		private cleanup(): void;
 		private handle(...args: any[]): object;
 		private postCheck(...args: any[]): string;
-		
+
 		public client: Client;
 		public collected: Collection<any, any>;
 		public ended: boolean;
@@ -733,7 +733,7 @@ declare module 'discord.js' {
 		constructor(permissions: number | PermissionResolvable[]);
 		constructor(member: GuildMember, permissions: number | PermissionResolvable[]);
 		private readonly raw: number;
-		
+
 		public bitfield: number;
 		public member: GuildMember;
 		public add(...permissions: PermissionResolvable[]): this;
@@ -1417,7 +1417,7 @@ declare module 'discord.js' {
 		max: number;
 		maxMatches: number;
 	};
-	
+
 	type MessageEditOptions = {
 		embed?: RichEmbedOptions;
 		code?: string | boolean;
