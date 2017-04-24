@@ -1587,7 +1587,7 @@ declare module 'discord.js' {
 
 	type ReactionCollectorOptions = CollectorOptions & {
 		max: number;
-		maxMemojis: number;
+		maxEmojis: number;
 		maxUsers: number;
 	};
 
