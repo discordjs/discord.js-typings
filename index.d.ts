@@ -255,25 +255,26 @@ declare module 'discord.js' {
 		public sort(compareFunction?: (a: [K, V], b: [K, V]) => number): Collection<K, V>;
 	}
 
-	abstract class Collector {
-		constructor(client: Client, filter: any[], options?: CollectorOptions);
-		private _timeout: number;
-		private listener: Function;
+	abstract class Collector<K, V> {
+		constructor(client: Client, filter: CollectorFilter, options?: CollectorOptions);
+		private _timeout: NodeJS.Timer;
 		private _handle(...args: any[]): void;
-		private cleanup(): void;
-		private handle(...args: any[]): object;
-		private postCheck(...args: any[]): string;
 
-		public client: Client;
-		public collected: Collection<any, any>;
+		public readonly client: Client;
+		public collected: Collection<K, V>;
 		public ended: boolean;
 		public filter: CollectorFilter;
-		public readonly next: Promise<void>;
+		public readonly next: Promise<V>;
 		public options: CollectorOptions;
 		public stop(reason?: string): void;
 
-		on(event: 'collect', listener: (element: any, collector: Collector) => void): this;
-		on(event: 'end', listener: (collected: Collection<any, any>, reason: string) => void): string;
+		protected listener: Function;
+		public abstract cleanup(): void;
+		public abstract handle(...args: any[]): CollectorHandler<K, V>;
+		public abstract postCheck(...args: any[]): string | null;
+
+		public on(event: 'collect', listener: (element: V, collector: Collector<K, V>) => void): this;
+		public on(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): string;
 	}
 
 	export class DMChannel extends TextBasedChannel(Channel) {
@@ -560,17 +561,15 @@ declare module 'discord.js' {
 		public width: number;
 	}
 
-	export class MessageCollector extends Collector {
+	export class MessageCollector extends Collector<Snowflake, Message> {
 		constructor(channel: TextChannel | DMChannel | GroupDMChannel, filter: CollectorFilter, options?: MessageCollectorOptions);
 		public channel: Channel;
-		public readonly client: Client;
-		public collected: Collection<any, any>;
-		public ended: boolean;
-		public filter: CollectorFilter;
-		public readonly next: Promise<any>;
-		public options: CollectorOptions;
+		public options: MessageCollectorOptions;
 		public received: number;
-		public stop(reason?: string): void;
+
+		public cleanup(): void;
+		public handle(message: Message): CollectorHandler<Snowflake, Message>;
+		public postCheck(): string;
 	}
 
 	export class MessageEmbed {
@@ -758,18 +757,16 @@ declare module 'discord.js' {
 		public equals(presence: Presence): boolean;
 	}
 
-	export class ReactionCollector extends Collector {
+	export class ReactionCollector extends Collector<Snowflake, MessageReaction> {
 		constructor(message: Message, filter: CollectorFilter, options?: ReactionCollectorOptions);
-		public readonly client: Client;
-		public collected: Collection<any, any>;
-		public ended: boolean;
-		public filter: CollectorFilter;
 		public message: Message;
-		public readonly next: Promise<void>;
-		public options: CollectorOptions;
+		public options: ReactionCollectorOptions;
 		public total: number;
 		public users: Collection<Snowflake, User>;
-		public stop(reason?: string): void;
+
+		public cleanup(): void;
+		public handle(reaction: MessageReaction): CollectorHandler<Snowflake, MessageReaction>;
+		public postCheck(reaction: MessageReaction, user: User): string;
 	}
 
 	export class ReactionEmoji {
@@ -1325,8 +1322,8 @@ declare module 'discord.js' {
 		ws?: WebSocketOptions;
 	};
 
-	type CollectorFilter = Function;
-
+	type CollectorHandler<K, V> = { key: K, value: V };
+	type CollectorFilter = (...args: any[]) => boolean;
 	type CollectorOptions = { time?: number };
 
 	type ColorResolvable = ('DEFAULT'
@@ -1414,8 +1411,8 @@ declare module 'discord.js' {
 	type InviteResolvable = string;
 
 	type MessageCollectorOptions = CollectorOptions & {
-		max: number;
-		maxMatches: number;
+		max?: number;
+		maxMatches?: number;
 	};
 
 	type MessageEditOptions = {
@@ -1586,9 +1583,9 @@ declare module 'discord.js' {
 	type PresenceStatus = 'online' | 'idle' | 'invisible' | 'dnd';
 
 	type ReactionCollectorOptions = CollectorOptions & {
-		max: number;
-		maxEmojis: number;
-		maxUsers: number;
+		max?: number;
+		maxEmojis?: number;
+		maxUsers?: number;
 	};
 
 	type RichEmbedOptions = {
