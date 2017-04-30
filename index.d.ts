@@ -355,6 +355,7 @@ declare module 'discord.js' {
 		public readonly joinedAt: Date;
 		public joinedTimestamp: number;
 		public large: boolean;
+		public readonly me: GuildMember;
 		public memberCount: number;
 		public members: Collection<Snowflake, GuildMember>;
 		public name: string;
@@ -693,6 +694,7 @@ declare module 'discord.js' {
 		public iconURL: string;
 		public id: Snowflake;
 		public name: string;
+		public owner: User;
 		public redirectURIs: string[];
 		public rpcApplicationState: boolean;
 		public rpcOrigins: string[];
