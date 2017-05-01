@@ -421,7 +421,7 @@ declare module 'discord.js' {
 		constructor(guild: Guild, data: object);
 		public action: GuildAuditLogsAction;
 		public actionType: GuildAuditLogsActionType;
-		public changes?: object[];
+		public changes?: GuildAuditLogsEntryChange[];
 		public executor: User;
 		public extra?: object | Role | GuildMember;
 		public id: Snowflake;
@@ -1444,6 +1444,12 @@ declare module 'discord.js' {
 		| 'DELETE'
 		| 'UPDATE'
 		| 'ALL';
+
+	type GuildAuditLogsEntryChange = {
+		name: string;
+		old: any;
+		new: any;
+	}
 
 	type GuildAuditLogsTarget = keyof GuildAuditLogsTargets;
 
