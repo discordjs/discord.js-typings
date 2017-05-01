@@ -405,7 +405,7 @@ declare module 'discord.js' {
 		public unban(user: UserResolvable): Promise<User>;
 	}
 
-	class GuildAuditLogs {
+	export class GuildAuditLogs {
 		constructor(guild: Guild, data: object);
 		public entries: Collection<Snowflake, GuildAuditLogsEntry>;
 
@@ -422,6 +422,8 @@ declare module 'discord.js' {
 		public action: GuildAuditLogsAction;
 		public actionType: GuildAuditLogsActionType;
 		public changes?: GuildAuditLogsEntryChange[];
+		public readonly createdTimestamp: number;
+		public readonly createdAt: Date;
 		public executor: User;
 		public extra?: object | Role | GuildMember;
 		public id: Snowflake;
