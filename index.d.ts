@@ -277,6 +277,13 @@ declare module 'discord.js' {
 		public on(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): string;
 	}
 
+	class DiscordAPIError extends Error {
+		constructor(error: object);
+		public code: number;
+
+		public static flattenErrors(obj: object, key: string): string[];
+	}
+
 	export class DMChannel extends TextBasedChannel(Channel) {
 		constructor(client: Client, data: object);
 		public lastMessageID: Snowflake;
