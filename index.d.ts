@@ -1449,7 +1449,7 @@ declare module 'discord.js' {
 		name: string;
 		old: any;
 		new: any;
-	}
+	};
 
 	type GuildAuditLogsTarget = keyof GuildAuditLogsTargets;
 
