@@ -378,7 +378,7 @@ declare module 'discord.js' {
 		public deleteEmoji(emoji: Emoji | string): Promise<void>;
 		public edit(data: GuildEditData): Promise<Guild>;
 		public equals(guild: Guild): boolean;
-		public fetchAuditLogs(options?: GuildFetchAuditLogsOptions): Promise<GuildAuditLogs>;
+		public fetchAuditLogs(options?: GuildAuditLogsFetchOptions): Promise<GuildAuditLogs>;
 		public fetchBans(): Promise<Collection<Snowflake, User>>;
 		public fetchInvites(): Promise<Collection<Snowflake, Invite>>;
 		public fetchMember(user: UserResolvable, cache?: boolean): Promise<GuildMember>;
@@ -1453,6 +1453,14 @@ declare module 'discord.js' {
 		new: any;
 	};
 
+	type GuildAuditLogsFetchOptions = {
+		before?: Snowflake | GuildAuditLogsEntry;
+		after?: Snowflake | GuildAuditLogsEntry;
+		limit?: number;
+		user?: UserResolvable;
+		type?: string | number;
+	};
+
 	type GuildAuditLogsTarget = keyof GuildAuditLogsTargets;
 
 	type GuildAuditLogsTargets = {
@@ -1474,14 +1482,6 @@ declare module 'discord.js' {
 		icon?: Base64Resolvable;
 		owner?: GuildMemberResolvable;
 		splash?: Base64Resolvable;
-	};
-
-	type GuildFetchAuditLogsOptions = {
-		before?: Snowflake | GuildAuditLogsEntry;
-		after?: Snowflake | GuildAuditLogsEntry;
-		limit?: number;
-		user?: UserResolvable;
-		type?: string | number;
 	};
 
 	type GuildMemberEditData = {
