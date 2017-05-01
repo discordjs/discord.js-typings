@@ -299,6 +299,11 @@ declare module 'discord.js' {
 		public readonly roles: Collection<Snowflake, Role>;
 		public readonly url: string;
 		public edit(data: EmojiEditData): Promise<Emoji>;
+		public setName(name: string): Promise<Emoji>;
+		public addRestrictedRole(role: Role): Promise<Emoji>;
+		public addRestrictedRoles(roles: Role[]): Promise<Emoji>;
+		public removeRestrictedRole(role: Role): Promise<Emoji>;
+		public removeRestrictedRoles(roles: Role[]): Promise<Emoji>;
 		public equals(other: Emoji | object): boolean;
 		public toString(): string;
 	}
