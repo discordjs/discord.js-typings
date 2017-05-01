@@ -1606,6 +1606,7 @@ declare module 'discord.js' {
 		MANAGE_CHANNELS?: boolean;
 		MANAGE_GUILD?: boolean;
 		ADD_REACTIONS?: boolean;
+		VIEW_AUDIT_LOG?: boolean;
 		READ_MESSAGES?: boolean;
 		SEND_MESSAGES?: boolean;
 		SEND_TTS_MESSAGES?: boolean;
