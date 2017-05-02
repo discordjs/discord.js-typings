@@ -1304,8 +1304,8 @@ declare module 'discord.js' {
 
 	type AuditLogChange = {
 		key: string;
-		old?: string | boolean | number;
-		new?: string | boolean | number;
+		old?: any;
+		new?: any;
 	};
 
 	type AwaitMessagesOptions = MessageCollectorOptions & { errors?: string[] };
