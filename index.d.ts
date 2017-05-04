@@ -1446,6 +1446,7 @@ declare module 'discord.js' {
 		EMOJI_CREATE?: number,
 		EMOJI_UPDATE?: number,
 		EMOJI_DELETE?: number,
+		MESSAGE_DELETE?: number,
 	};
 
 	type GuildAuditLogsActionType = 'CREATE'
