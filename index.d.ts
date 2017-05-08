@@ -1472,6 +1472,7 @@ declare module 'discord.js' {
 		INVITE?: string;
 		WEBHOOK?: string;
 		EMOJI?: string;
+		MESSAGE?: string;
 	};
 
 	type GuildEditData = {
