@@ -531,6 +531,8 @@ declare module 'discord.js' {
 		public inviter: User;
 		public maxAge: number;
 		public maxUses: number;
+		public memberCount: number;
+		public presenceCount: number;
 		public temporary: boolean;
 		public readonly url: string;
 		public uses: number;
@@ -1296,6 +1298,7 @@ declare module 'discord.js' {
 		awaitMessages(filter: CollectorFilter, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
 		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
 		createCollector(filter: CollectorFilter, options?: CollectorOptions): MessageCollector;
+		createMessageCollector(filter: CollectorFilter, options?: CollectorOptions): MessageCollector;
 		fetchMessage(messageID: string): Promise<Message>;
 		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
 		fetchPinnedMessages(): Promise<Collection<string, Message>>;
