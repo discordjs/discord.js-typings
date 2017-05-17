@@ -1306,6 +1306,8 @@ declare module 'discord.js' {
 		startTyping(count?: number): void;
 		stopTyping(force?: boolean): void;
 	} & PartialTextBasedChannelFields;
+      lastMessage?: Message;
+      lastMessage?: Message;
 
 //#endregion
 
