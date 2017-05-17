@@ -481,7 +481,6 @@ declare module 'discord.js' {
 		public readonly joinedAt: Date;
 		public joinedTimestamp: number;
 		public readonly kickable: boolean;
-		public lastMessage: Message;
 		public lastMessageID: string;
 		public readonly mute: boolean;
 		public nickname: string;
@@ -1006,7 +1005,6 @@ declare module 'discord.js' {
 		public readonly displayAvatarURL: string;
 		public readonly dmChannel: DMChannel;
 		public readonly id: Snowflake;
-		public lastMessage: Message;
 		public lastMessageID: string;
 		public readonly note?: string;
 		public readonly presence: Presence;
@@ -1281,6 +1279,7 @@ declare module 'discord.js' {
 	const TextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & TextBasedChannelFields>;
 
 	type PartialTextBasedChannelFields = {
+		lastMessage?: Message;
 		acknowledge(): Promise<DMChannel | GroupDMChannel | TextChannel>;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		send(options?: MessageOptions): Promise<Message | Message[]>;
@@ -1306,8 +1305,6 @@ declare module 'discord.js' {
 		startTyping(count?: number): void;
 		stopTyping(force?: boolean): void;
 	} & PartialTextBasedChannelFields;
-      lastMessage?: Message;
-      lastMessage?: Message;
 
 //#endregion
 
