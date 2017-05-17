@@ -277,6 +277,13 @@ declare module 'discord.js' {
 		public on(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): string;
 	}
 
+	class DiscordAPIError extends Error {
+		constructor(error: object);
+		public code: number;
+
+		public static flattenErrors(obj: object, key: string): string[];
+	}
+
 	export class DMChannel extends TextBasedChannel(Channel) {
 		constructor(client: Client, data: object);
 		public lastMessageID: Snowflake;
@@ -299,6 +306,11 @@ declare module 'discord.js' {
 		public readonly roles: Collection<Snowflake, Role>;
 		public readonly url: string;
 		public edit(data: EmojiEditData): Promise<Emoji>;
+		public setName(name: string): Promise<Emoji>;
+		public addRestrictedRole(role: Role): Promise<Emoji>;
+		public addRestrictedRoles(roles: Role[]): Promise<Emoji>;
+		public removeRestrictedRole(role: Role): Promise<Emoji>;
+		public removeRestrictedRoles(roles: Role[]): Promise<Emoji>;
 		public equals(other: Emoji | object): boolean;
 		public toString(): string;
 	}
@@ -355,6 +367,7 @@ declare module 'discord.js' {
 		public readonly joinedAt: Date;
 		public joinedTimestamp: number;
 		public large: boolean;
+		public readonly me: GuildMember;
 		public memberCount: number;
 		public members: Collection<Snowflake, GuildMember>;
 		public name: string;
@@ -370,7 +383,7 @@ declare module 'discord.js' {
 		public acknowledge(): Promise<Guild>;
 		public addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		public allowDMs(allow: boolean): Promise<Guild>;
-		public ban(user: UserResolvable, deleteDays?: number): Promise<GuildMember | User | string>;
+		public ban(user: UserResolvable, options?: BanOptions | number | string): Promise<GuildMember | User | string>;
 		public createChannel(name: string, type: 'text' | 'voice', overwrites?: PermissionOverwrites[] | object[]): Promise<TextChannel | VoiceChannel>;
 		public createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, roles?: Collection<Snowflake, Role> | Role[]): Promise<Emoji>;
 		public createRole(data?: RoleData): Promise<Role>;
@@ -378,6 +391,7 @@ declare module 'discord.js' {
 		public deleteEmoji(emoji: Emoji | string): Promise<void>;
 		public edit(data: GuildEditData): Promise<Guild>;
 		public equals(guild: Guild): boolean;
+		public fetchAuditLogs(options?: GuildAuditLogsFetchOptions): Promise<GuildAuditLogs>;
 		public fetchBans(): Promise<Collection<Snowflake, User>>;
 		public fetchInvites(): Promise<Collection<Snowflake, Invite>>;
 		public fetchMember(user: UserResolvable, cache?: boolean): Promise<GuildMember>;
@@ -402,6 +416,33 @@ declare module 'discord.js' {
 		public sync(): void;
 		public toString(): string;
 		public unban(user: UserResolvable): Promise<User>;
+	}
+
+	export class GuildAuditLogs {
+		constructor(guild: Guild, data: object);
+		public entries: Collection<Snowflake, GuildAuditLogsEntry>;
+
+		public static Actions: GuildAuditLogsActions;
+		public static Targets: GuildAuditLogsTargets;
+		public static Entry: typeof GuildAuditLogsEntry;
+		public static actionType(action: number): GuildAuditLogsActionType;
+		public static build(...args: any[]): Promise<GuildAuditLogs>;
+		public static targetType(target: number): GuildAuditLogsTarget;
+	}
+
+	class GuildAuditLogsEntry {
+		constructor(guild: Guild, data: object);
+		public action: GuildAuditLogsAction;
+		public actionType: GuildAuditLogsActionType;
+		public changes?: AuditLogChange[];
+		public readonly createdTimestamp: number;
+		public readonly createdAt: Date;
+		public executor: User;
+		public extra?: object | Role | GuildMember;
+		public id: Snowflake;
+		public reason?: string;
+		public target?: Guild | User | Role | Emoji | Invite | Webhook;
+		public targetType: GuildAuditLogsTarget;
 	}
 
 	export class GuildChannel extends Channel {
@@ -458,13 +499,13 @@ declare module 'discord.js' {
 		public voiceSessionID: string;
 		public addRole(role: Role | Snowflake): Promise<GuildMember>;
 		public addRoles(roles: Collection<Snowflake, Role> | Role[] | Snowflake[]): Promise<GuildMember>;
-		public ban(deleteDays?: number): Promise<GuildMember>;
+		public ban(options?: BanOptions | number | string): Promise<GuildMember>;
 		public createDM(): Promise<DMChannel>;
 		public deleteDM(): Promise<DMChannel>;
 		public edit(data: object): Promise<GuildMember>;
 		public hasPermission(permission: PermissionResolvable | PermissionResolvable[], explicit?: boolean, checkAdmin?: boolean, checkOwner?: boolean): boolean;
 		public hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
-		public kick(): Promise<GuildMember>;
+		public kick(reason?: string): Promise<GuildMember>;
 		public missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
 		public permissionsIn(channel: ChannelResolvable): Permissions;
 		public removeRole(role: Role | Snowflake): Promise<GuildMember>;
@@ -490,6 +531,8 @@ declare module 'discord.js' {
 		public inviter: User;
 		public maxAge: number;
 		public maxUses: number;
+		public memberCount: number;
+		public presenceCount: number;
 		public temporary: boolean;
 		public readonly url: string;
 		public uses: number;
@@ -693,6 +736,7 @@ declare module 'discord.js' {
 		public iconURL: string;
 		public id: Snowflake;
 		public name: string;
+		public owner: User;
 		public redirectURIs: string[];
 		public rpcApplicationState: boolean;
 		public rpcOrigins: string[];
@@ -1254,6 +1298,7 @@ declare module 'discord.js' {
 		awaitMessages(filter: CollectorFilter, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
 		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
 		createCollector(filter: CollectorFilter, options?: CollectorOptions): MessageCollector;
+		createMessageCollector(filter: CollectorFilter, options?: CollectorOptions): MessageCollector;
 		fetchMessage(messageID: string): Promise<Message>;
 		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
 		fetchPinnedMessages(): Promise<Collection<string, Message>>;
@@ -1274,9 +1319,20 @@ declare module 'discord.js' {
 		deaf?: boolean;
 	}
 
+	type AuditLogChange = {
+		key: string;
+		old?: any;
+		new?: any;
+	};
+
 	type AwaitMessagesOptions = MessageCollectorOptions & { errors?: string[] };
 
 	type AwaitReactionsOptions = ReactionCollectorOptions & { errors?: string[] };
+
+	type BanOptions = {
+		days?: number;
+		reason?: string;
+	};
 
 	type Base64Resolvable = Buffer | Base64String;
 
@@ -1377,6 +1433,63 @@ declare module 'discord.js' {
 		user?: UserResolvable | Snowflake;
 		accessToken?: string;
 		nick?: string;
+	};
+
+	type GuildAuditLogsAction = keyof GuildAuditLogsActions;
+
+	type GuildAuditLogsActions = {
+		GUILD_UPDATE?: number,
+		CHANNEL_CREATE?: number,
+		CHANNEL_UPDATE?: number,
+		CHANNEL_DELETE?: number,
+		CHANNEL_OVERWRITE_CREATE?: number,
+		CHANNEL_OVERWRITE_UPDATE?: number,
+		CHANNEL_OVERWRITE_DELETE?: number,
+		MEMBER_KICK?: number,
+		MEMBER_PRUNE?: number,
+		MEMBER_BAN_ADD?: number,
+		MEMBER_BAN_REMOVE?: number,
+		MEMBER_UPDATE?: number,
+		MEMBER_ROLE_UPDATE?: number,
+		ROLE_CREATE?: number,
+		ROLE_UPDATE?: number,
+		ROLE_DELETE?: number,
+		INVITE_CREATE?: number,
+		INVITE_UPDATE?: number,
+		INVITE_DELETE?: number,
+		WEBHOOK_CREATE?: number,
+		WEBHOOK_UPDATE?: number,
+		WEBHOOK_DELETE?: number,
+		EMOJI_CREATE?: number,
+		EMOJI_UPDATE?: number,
+		EMOJI_DELETE?: number,
+		MESSAGE_DELETE?: number,
+	};
+
+	type GuildAuditLogsActionType = 'CREATE'
+		| 'DELETE'
+		| 'UPDATE'
+		| 'ALL';
+
+	type GuildAuditLogsFetchOptions = {
+		before?: Snowflake | GuildAuditLogsEntry;
+		after?: Snowflake | GuildAuditLogsEntry;
+		limit?: number;
+		user?: UserResolvable;
+		type?: string | number;
+	};
+
+	type GuildAuditLogsTarget = keyof GuildAuditLogsTargets;
+
+	type GuildAuditLogsTargets = {
+		GUILD?: string;
+		CHANNEL?: string;
+		USER?: string;
+		ROLE?: string;
+		INVITE?: string;
+		WEBHOOK?: string;
+		EMOJI?: string;
+		MESSAGE?: string;
 	};
 
 	type GuildEditData = {
@@ -1481,6 +1594,7 @@ declare module 'discord.js' {
 		MANAGE_CHANNELS?: number;
 		MANAGE_GUILD?: number;
 		ADD_REACTIONS?: number;
+		VIEW_AUDIT_LOG?: number;
 		READ_MESSAGES?: number;
 		SEND_MESSAGES?: number;
 		SEND_TTS_MESSAGES?: number;
@@ -1513,6 +1627,7 @@ declare module 'discord.js' {
 		MANAGE_CHANNELS?: boolean;
 		MANAGE_GUILD?: boolean;
 		ADD_REACTIONS?: boolean;
+		VIEW_AUDIT_LOG?: boolean;
 		READ_MESSAGES?: boolean;
 		SEND_MESSAGES?: boolean;
 		SEND_TTS_MESSAGES?: boolean;
