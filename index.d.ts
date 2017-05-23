@@ -252,7 +252,7 @@ declare module 'discord.js' {
 		public randomKey(): K;
 		public reduce<T>(fn: (accumulator: any, value: V, key: K, collection: Collection<K, V>) => T, initialValue?: any): T;
 		public some(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
-		public sort(compareFunction?: (a: [K, V], b: [K, V]) => number): Collection<K, V>;
+		public sort(compareFunction?: (a: V, b: V, c?: K, d?: K) => number): Collection<K, V>;
 	}
 
 	abstract class Collector<K, V> {
