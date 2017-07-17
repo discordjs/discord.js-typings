@@ -406,6 +406,7 @@ declare module 'discord.js' {
 		public setAFKTimeout(afkTimeout: number): Promise<Guild>;
 		public setChannelPosition(channel: string | GuildChannel, position: number, relative?: boolean): Promise<Guild>;
 		public setChannelPositions(channelPositions: ChannelPosition[]): Promise<Guild>;
+		public setExcplicitContentFilter(explicitContentFilter: number): Promise<Guild>;
 		public setIcon(icon: Base64Resolvable): Promise<Guild>;
 		public setName(name: string): Promise<Guild>;
 		public setOwner(owner: GuildMemberResolvable): Promise<Guild>;
@@ -533,8 +534,10 @@ declare module 'discord.js' {
 		public memberCount: number;
 		public presenceCount: number;
 		public temporary: boolean;
+		public textChannelCount: number;
 		public readonly url: string;
 		public uses: number;
+		public voiceChannelCount: number;
 		public delete(): Promise<Invite>;
 		public toString(): string;
 	}
@@ -987,6 +990,7 @@ declare module 'discord.js' {
 		public lastMessageID: string;
 		public readonly members: Collection<Snowflake, GuildMember>;
 		public messages: Collection<Snowflake, Message>;
+		public nsfw: boolean;
 		public topic: string;
 		public createWebhook(name: string, avatar: BufferResolvable): Promise<Webhook>;
 		public fetchWebhooks(): Promise<Collection<Snowflake, Webhook>>;
@@ -1437,6 +1441,7 @@ declare module 'discord.js' {
 	type GuildAuditLogsAction = keyof GuildAuditLogsActions;
 
 	type GuildAuditLogsActions = {
+		ALL?: null,
 		GUILD_UPDATE?: number,
 		CHANNEL_CREATE?: number,
 		CHANNEL_UPDATE?: number,
@@ -1481,6 +1486,7 @@ declare module 'discord.js' {
 	type GuildAuditLogsTarget = keyof GuildAuditLogsTargets;
 
 	type GuildAuditLogsTargets = {
+		ALL?: string;
 		GUILD?: string;
 		CHANNEL?: string;
 		USER?: string;
@@ -1495,6 +1501,7 @@ declare module 'discord.js' {
 		name?: string;
 		region?: string;
 		verificationLevel?: number;
+		explicitContentFilter?: number;
 		afkChannel?: ChannelResolvable;
 		afkTimeout?: number;
 		icon?: Base64Resolvable;
@@ -1583,6 +1590,7 @@ declare module 'discord.js' {
 		before?: Date;
 		after?: Date;
 		during?: Date;
+		nsfw?: boolean;
 	};
 
 	type PermissionFlags = {
