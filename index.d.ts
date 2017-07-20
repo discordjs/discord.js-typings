@@ -345,7 +345,8 @@ declare module 'discord.js' {
 		private readonly _sortedRoles: Collection<Snowflake, Role>;
 		private _sortedChannels(type: string): Collection<Snowflake, GuildChannel>
 		private _sortPositionWithID(collection: Collection<any, any>): Collection<any, any>;
-		private setup(data: any): void;
+
+		protected setup(data: any): void;
 
 		public afkChannelID: string;
 		public afkTimeout: number;
