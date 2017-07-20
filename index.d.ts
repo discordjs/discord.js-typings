@@ -345,7 +345,6 @@ declare module 'discord.js' {
 		private readonly _sortedRoles: Collection<Snowflake, Role>;
 		private _sortedChannels(type: string): Collection<Snowflake, GuildChannel>
 		private _sortPositionWithID(collection: Collection<any, any>): Collection<any, any>;
-		private setup(data: any): void;
 
 		public afkChannelID: string;
 		public afkTimeout: number;
@@ -380,6 +379,7 @@ declare module 'discord.js' {
 		public readonly splashURL: string;
 		public verificationLevel: number;
 		public readonly voiceConnection: VoiceConnection;
+		public setup(data: any): void;
 		public acknowledge(): Promise<Guild>;
 		public addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		public allowDMs(allow: boolean): Promise<Guild>;
