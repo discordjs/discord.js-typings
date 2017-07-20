@@ -379,7 +379,6 @@ declare module 'discord.js' {
 		public readonly splashURL: string;
 		public verificationLevel: number;
 		public readonly voiceConnection: VoiceConnection;
-		public setup(data: any): void;
 		public acknowledge(): Promise<Guild>;
 		public addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		public allowDMs(allow: boolean): Promise<Guild>;
@@ -413,6 +412,7 @@ declare module 'discord.js' {
 		public setRegion(region: string): Promise<Guild>;
 		public setRolePosition(role: string | Role, position: number, relative?: boolean): Promise<Guild>;
 		public setSplash(splash: Base64Resolvable): Promise<Guild>;
+		public setup(data: any): void;
 		public setVerificationLevel(verificationLevel: number): Promise<Guild>;
 		public sync(): void;
 		public toString(): string;
