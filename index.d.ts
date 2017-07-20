@@ -346,6 +346,8 @@ declare module 'discord.js' {
 		private _sortedChannels(type: string): Collection<Snowflake, GuildChannel>
 		private _sortPositionWithID(collection: Collection<any, any>): Collection<any, any>;
 
+		protected setup(data: any): void;
+
 		public afkChannelID: string;
 		public afkTimeout: number;
 		public applicationID: string;
@@ -412,7 +414,6 @@ declare module 'discord.js' {
 		public setRegion(region: string): Promise<Guild>;
 		public setRolePosition(role: string | Role, position: number, relative?: boolean): Promise<Guild>;
 		public setSplash(splash: Base64Resolvable): Promise<Guild>;
-		public setup(data: any): void;
 		public setVerificationLevel(verificationLevel: number): Promise<Guild>;
 		public sync(): void;
 		public toString(): string;
