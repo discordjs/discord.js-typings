@@ -1380,6 +1380,7 @@ declare module 'discord.js' {
 		restTimeOffset?: number;
 		disabledEvents?: WSEventType[];
 		ws?: WebSocketOptions;
+		http?: HTTPOptions;
 	};
 
 	type CollectorHandler<K, V> = { key: K, value: V };
@@ -1521,6 +1522,12 @@ declare module 'discord.js' {
 	type GuildMemberResolvable = GuildMember | User;
 
 	type GuildResolvable = Guild | Snowflake;
+
+	type HTTPOptions = {
+		version?: number,
+		host?: string,
+		cdn?: string,
+	}
 
 	type InviteOptions = {
 		temporary?: boolean;
