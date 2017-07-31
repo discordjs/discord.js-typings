@@ -34,7 +34,6 @@ declare module 'discord.js' {
 		private _attach(): void;
 	}
 
-
 	class BaseOpus {
 		constructor(options?: { fec: boolean, plp: number });
 	}
