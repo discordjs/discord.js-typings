@@ -23,6 +23,18 @@ declare module 'discord.js' {
 		public voiceConnection: VoiceConnection;
 	}
 
+	export class Attachment {
+		constructor(file: string | BufferResolvable | NodeJS.ReadWriteStream, name?: string);
+		public file: string | { attachment: string | BufferResolvable | NodeJS.ReadWriteStream, name: string };
+		public name(): string;
+		public attachment(): BufferResolvable | string | NodeJS.ReadWriteStream;
+		public setAttachment(): this;
+		public setFile(): this;
+		public setname(): this;
+		private _attach(): void;
+	}
+
+
 	class BaseOpus {
 		constructor(options?: { fec: boolean, plp: number });
 	}
@@ -637,6 +649,18 @@ declare module 'discord.js' {
 		public type: string;
 		public url: string;
 		public video: MessageEmbedVideo;
+		public addBlankField(inline?: boolean): this;
+		public addField(name: StringResolvable, value: StringResolvable, inline?: boolean): this;
+		public attachFile(file: FileOptions | string): this;
+		public setAuthor(name: StringResolvable, icon?: string, url?: string): this;
+		public setColor(color: ColorResolvable): this;
+		public setDescription(description: StringResolvable): this;
+		public setFooter(text: StringResolvable, icon?: string): this;
+		public setImage(url: string): this;
+		public setThumbnail(url: string): this;
+		public setTimestamp(timestamp?: Date): this;
+		public setTitle(title: StringResolvable): this;
+		public setURL(url: string): this;
 	}
 
 	export class MessageEmbedAuthor {
