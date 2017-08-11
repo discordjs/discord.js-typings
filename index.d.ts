@@ -498,24 +498,24 @@ declare module 'discord.js' {
 		public readonly voiceChannel: VoiceChannel;
 		public voiceChannelID: string;
 		public voiceSessionID: string;
-		public addRole(role: Role | Snowflake): Promise<GuildMember>;
-		public addRoles(roles: Collection<Snowflake, Role> | Role[] | Snowflake[]): Promise<GuildMember>;
+		public addRole(role: Role | Snowflake, reason?: string): Promise<GuildMember>;
+		public addRoles(roles: Collection<Snowflake, Role> | Role[] | Snowflake[], reason: string): Promise<GuildMember>;
 		public ban(options?: BanOptions | number | string): Promise<GuildMember>;
 		public createDM(): Promise<DMChannel>;
 		public deleteDM(): Promise<DMChannel>;
-		public edit(data: object): Promise<GuildMember>;
+		public edit(data: GuildMemberEditData, reason?: string): Promise<GuildMember>;
 		public hasPermission(permission: PermissionResolvable | PermissionResolvable[], explicit?: boolean, checkAdmin?: boolean, checkOwner?: boolean): boolean;
 		public hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
 		public kick(reason?: string): Promise<GuildMember>;
 		public missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
 		public permissionsIn(channel: ChannelResolvable): Permissions;
-		public removeRole(role: Role | Snowflake): Promise<GuildMember>;
-		public removeRoles(roles: Collection<Snowflake, Role> | Role[] | Snowflake[]): Promise<GuildMember>;
-		public setDeaf(deaf: boolean): Promise<GuildMember>;
-		public setMute(mute: boolean): Promise<GuildMember>;
-		public setNickname(nickname: string): Promise<GuildMember>;
-		public setRoles(roles: Collection<Snowflake, Role> | Role[] | Snowflake[]): Promise<GuildMember>;
-		public setVoiceChannel(voiceChannel: ChannelResolvable): Promise<GuildMember>;
+		public removeRole(role: Role | Snowflake, reason?: string): Promise<GuildMember>;
+		public removeRoles(roles: Collection<Snowflake, Role> | Role[] | Snowflake[], reason?: string): Promise<GuildMember>;
+		public setDeaf(deaf: boolean, reason?: string): Promise<GuildMember>;
+		public setMute(mute: boolean, reason?: string): Promise<GuildMember>;
+		public setNickname(nickname: string, reason?: string): Promise<GuildMember>;
+		public setRoles(roles: Collection<Snowflake, Role> | Role[] | Snowflake[], reason?: string): Promise<GuildMember>;
+		public setVoiceChannel(voiceChannel: ChannelResolvable, reason?: string): Promise<GuildMember>;
 		public toString(): string;
 	}
 
