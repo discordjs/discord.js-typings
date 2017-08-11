@@ -227,7 +227,7 @@ declare module 'discord.js' {
 		public update(name: string, value: any): Promise<object>;
 	}
 
-	export class ClientUserGuildSettings {
+	class ClientUserGuildSettings {
 		constructor(data: object, guild: Guild);
 		private patch(data: object): void;
 
