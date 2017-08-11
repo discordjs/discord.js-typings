@@ -92,6 +92,7 @@ declare module 'discord.js' {
 		public on(event: 'channelDelete', listener: (channel: Channel) => void): this;
 		public on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
 		public on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
+		public on(event: 'clientUserGuildSettingsUpdate', listener: (clientUserGuildSettings: ClientUserGuildSettings) => void): this;
 		public on(event: 'clientUserSettingsUpdate', listener: (clientUserSettings: ClientUserSettings) => void): this;
 		public on(event: 'debug', listener: (info: string) => void): this;
 		public on(event: 'disconnect', listener: (event: any) => void): this;
@@ -230,8 +231,9 @@ declare module 'discord.js' {
 		constructor(data: object, guild: Guild);
 		private patch(data: object): void;
 
-		public guild: Guild;
+		public guildID: Snowflake;
 		public channelOverrides: Collection<Snowflake, ClientUserChannelOverride>;
+		public client: Client;
 		public messageNotifications: MessageNotifications;
 		public mobilePush: boolean;
 		public muted: boolean;
