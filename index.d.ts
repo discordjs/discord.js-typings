@@ -174,7 +174,7 @@ declare module 'discord.js' {
 		public premium?: boolean;
 		public settings?: ClientUserSettings;
 		public verified: boolean;
-		public acceptInvite(invite: Invite | string): Promise<Guild>
+		public acceptInvite(invite: Invite | string): Promise<Guild>;
 		public addFriend(user?: UserResolvable): Promise<User>;
 		public createGroupDM(recipients: GroupDMRecipientOptions[]): Promise<GroupDMChannel>;
 		public createGuild(name: string, region: string, icon?: BufferResolvable | Base64Resolvable): Promise<Guild>;
@@ -305,8 +305,8 @@ declare module 'discord.js' {
 		public requiresColons: boolean;
 		public readonly roles: Collection<Snowflake, Role>;
 		public readonly url: string;
-		public edit(data: EmojiEditData): Promise<Emoji>;
-		public setName(name: string): Promise<Emoji>;
+		public edit(data: EmojiEditData, reason?: string): Promise<Emoji>;
+		public setName(name: string, reason?: string): Promise<Emoji>;
 		public addRestrictedRole(role: Role): Promise<Emoji>;
 		public addRestrictedRoles(roles: Role[]): Promise<Emoji>;
 		public removeRestrictedRole(role: Role): Promise<Emoji>;
@@ -343,7 +343,7 @@ declare module 'discord.js' {
 	export class Guild {
 		constructor(client: Client, data: object);
 		private readonly _sortedRoles: Collection<Snowflake, Role>;
-		private _sortedChannels(type: string): Collection<Snowflake, GuildChannel>
+		private _sortedChannels(type: string): Collection<Snowflake, GuildChannel>;
 		private _sortPositionWithID(collection: Collection<any, any>): Collection<any, any>;
 
 		protected setup(data: any): void;
@@ -356,7 +356,6 @@ declare module 'discord.js' {
 		public readonly client: Client;
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
-		public readonly defaultChannel: TextChannel;
 		public readonly defaultRole: Role;
 		public embedEnabled: boolean;
 		public emojis: Collection<Snowflake, Emoji>;
@@ -386,11 +385,11 @@ declare module 'discord.js' {
 		public allowDMs(allow: boolean): Promise<Guild>;
 		public ban(user: UserResolvable, options?: BanOptions | number | string): Promise<GuildMember | User | string>;
 		public createChannel(name: string, type: 'text' | 'voice', overwrites?: PermissionOverwrites[] | object[]): Promise<TextChannel | VoiceChannel>;
-		public createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, roles?: Collection<Snowflake, Role> | Role[]): Promise<Emoji>;
-		public createRole(data?: RoleData): Promise<Role>;
+		public createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, options?: GuildCreateEmojiOptions): Promise<Emoji>;
+		public createRole(data?: RoleData, reason?: string): Promise<Role>;
 		public delete(): Promise<Guild>;
-		public deleteEmoji(emoji: Emoji | string): Promise<void>;
-		public edit(data: GuildEditData): Promise<Guild>;
+		public deleteEmoji(emoji: Emoji | string, reason?: string): Promise<void>;
+		public edit(data: GuildEditData, reason?: string): Promise<Guild>;
 		public equals(guild: Guild): boolean;
 		public fetchAuditLogs(options?: GuildAuditLogsFetchOptions): Promise<GuildAuditLogs>;
 		public fetchBans(): Promise<Collection<Snowflake, User>>;
@@ -401,23 +400,23 @@ declare module 'discord.js' {
 		public fetchWebhooks(): Promise<Collection<Snowflake, Webhook>>;
 		public leave(): Promise<Guild>;
 		public member(user: UserResolvable): GuildMember;
-		public pruneMembers(days: number, dry?: boolean): Promise<number>;
+		public pruneMembers(options?: GuildPruneMembersOptions): Promise<number>;
 		public search(options?: MessageSearchOptions): Promise<Message[][]>;
-		public setAFKChannel(afkChannel: ChannelResolvable): Promise<Guild>;
-		public setAFKTimeout(afkTimeout: number): Promise<Guild>;
+		public setAFKChannel(afkChannel: ChannelResolvable, reason?: string): Promise<Guild>;
+		public setAFKTimeout(afkTimeout: number, reason?: string): Promise<Guild>;
 		public setChannelPosition(channel: string | GuildChannel, position: number, relative?: boolean): Promise<Guild>;
 		public setChannelPositions(channelPositions: ChannelPosition[]): Promise<Guild>;
-		public setExcplicitContentFilter(explicitContentFilter: number): Promise<Guild>;
-		public setIcon(icon: Base64Resolvable): Promise<Guild>;
-		public setName(name: string): Promise<Guild>;
-		public setOwner(owner: GuildMemberResolvable): Promise<Guild>;
-		public setRegion(region: string): Promise<Guild>;
+		public setExplicitContentFilter(explicitContentFilter: number, reason?: string): Promise<Guild>;
+		public setIcon(icon: Base64Resolvable, reason?: string): Promise<Guild>;
+		public setName(name: string, reason?: string): Promise<Guild>;
+		public setOwner(owner: GuildMemberResolvable, reason?: string): Promise<Guild>;
+		public setRegion(region: string, reason?: string): Promise<Guild>;
 		public setRolePosition(role: string | Role, position: number, relative?: boolean): Promise<Guild>;
-		public setSplash(splash: Base64Resolvable): Promise<Guild>;
-		public setVerificationLevel(verificationLevel: number): Promise<Guild>;
+		public setSplash(splash: Base64Resolvable, reason?: string): Promise<Guild>;
+		public setVerificationLevel(verificationLevel: number, reason?: string): Promise<Guild>;
 		public sync(): void;
 		public toString(): string;
-		public unban(user: UserResolvable): Promise<User>;
+		public unban(user: UserResolvable, reason?: string): Promise<User>;
 	}
 
 	export class GuildAuditLogs {
@@ -455,15 +454,16 @@ declare module 'discord.js' {
 		public name: string;
 		public permissionOverwrites: Collection<Snowflake, PermissionOverwrites>;
 		public position: number;
-		public clone(name?: string, withPermissions?: boolean, withTopic?: boolean): Promise<GuildChannel>;
+		public clone(options?: GuildChannelCloneOptions): Promise<GuildChannel>;
 		public createInvite(options?: InviteOptions): Promise<Invite>;
-		public edit(data: ChannelData): Promise<GuildChannel>;
+		public delete(reason?: string): Promise<GuildChannel>;
+		public edit(data: ChannelData, reason?: string): Promise<GuildChannel>;
 		public equals(channel: GuildChannel): boolean;
-		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions): Promise<void>;
+		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions, reason?: string): Promise<void>;
 		public permissionsFor(member: GuildMemberResolvable): Permissions;
-		public setName(name: string): Promise<GuildChannel>;
+		public setName(name: string, reason?: string): Promise<GuildChannel>;
 		public setPosition(position: number, relative?: boolean): Promise<GuildChannel>;
-		public setTopic(topic: string): Promise<GuildChannel>;
+		public setTopic(topic: string, reason?: string): Promise<GuildChannel>;
 		public toString(): string;
 	}
 
@@ -880,17 +880,17 @@ declare module 'discord.js' {
 		public permissions: number;
 		public position: number;
 		public comparePositionTo(role: Role): number;
-		public delete(): Promise<Role>;
-		public edit(data: RoleData): Promise<Role>;
+		public delete(reason?: string): Promise<Role>;
+		public edit(data: RoleData, reason?: string): Promise<Role>;
 		public equals(role: Role): boolean;
 		public hasPermission(permission: PermissionResolvable | PermissionResolvable[], explicit?: boolean, checkAdmin?: boolean): boolean;
 		public hasPermissions(permissions: PermissionResolvable[], explicit?: boolean): boolean;
 		public serialize(): PermissionObject;
-		public setColor(color: string | number): Promise<Role>;
-		public setHoist(hoist: boolean): Promise<Role>;
-		public setMentionable(mentionable: boolean): Promise<Role>;
-		public setName(name: string): Promise<Role>;
-		public setPermissions(permissions: PermissionResolvable[]): Promise<Role>;
+		public setColor(color: string | number, reason?: string): Promise<Role>;
+		public setHoist(hoist: boolean, reason?: string): Promise<Role>;
+		public setMentionable(mentionable: boolean, reason?: string): Promise<Role>;
+		public setName(name: string, reason?: string): Promise<Role>;
+		public setPermissions(permissions: PermissionResolvable[], reason?: string): Promise<Role>;
 		public setPosition(position: number, relative?: boolean): Promise<Role>;
 		public toString(): string;
 
@@ -993,7 +993,7 @@ declare module 'discord.js' {
 		public messages: Collection<Snowflake, Message>;
 		public nsfw: boolean;
 		public topic: string;
-		public createWebhook(name: string, avatar: BufferResolvable): Promise<Webhook>;
+		public createWebhook(name: string, avatar: BufferResolvable, reason?: string): Promise<Webhook>;
 		public fetchWebhooks(): Promise<Collection<Snowflake, Webhook>>;
 	}
 
@@ -1017,7 +1017,7 @@ declare module 'discord.js' {
 		public username: string;
 		public addFriend(): Promise<User>;
 		public block(): Promise<User>;
-		public createDM(): Promise<DMChannel>
+		public createDM(): Promise<DMChannel>;
 		public deleteDM(): Promise<DMChannel>;
 		public equals(user: User): boolean;
 		public fetchProfile(): Promise<UserProfile>;
@@ -1099,8 +1099,8 @@ declare module 'discord.js' {
 		public userLimit: number;
 		public join(): Promise<VoiceConnection>;
 		public leave(): void;
-		public setBitrate(bitrate: number): Promise<VoiceChannel>;
-		public setUserLimit(userLimit: number): Promise<VoiceChannel>;
+		public setBitrate(bitrate: number, reason?: string): Promise<VoiceChannel>;
+		public setUserLimit(userLimit: number, reason?: string): Promise<VoiceChannel>;
 	}
 
 	export class VoiceConnection extends EventEmitter {
@@ -1321,7 +1321,7 @@ declare module 'discord.js' {
 		roles?: Collection<string, Role> | Role[] | string[];
 		mute?: boolean;
 		deaf?: boolean;
-	}
+	};
 
 	type AuditLogChange = {
 		key: string;
@@ -1499,6 +1499,18 @@ declare module 'discord.js' {
 		MESSAGE?: string;
 	};
 
+	type GuildChannelCloneOptions = {
+		name?: string;
+		withPermissions?: boolean;
+		withTopic?: boolean;
+		reason?: string;
+	};
+
+	type GuildCreateEmojiOptions = {
+		roles?: Collection<Snowflake, Role> | Role[];
+		reason?: string;
+	};
+
 	type GuildEditData = {
 		name?: string;
 		region?: string;
@@ -1521,18 +1533,26 @@ declare module 'discord.js' {
 
 	type GuildMemberResolvable = GuildMember | User;
 
+	type GuildPruneMembersOptions = {
+		days?: number;
+		dry?: boolean;
+		reason?: string;
+	};
+
 	type GuildResolvable = Guild | Snowflake;
 
 	type HTTPOptions = {
 		version?: number,
 		host?: string,
 		cdn?: string,
-	}
+	};
 
 	type InviteOptions = {
 		temporary?: boolean;
 		maxAge?: number;
 		maxUses?: number;
+		unique?: boolean;
+		reason?: string;
 	};
 
 	type InviteResolvable = string;
@@ -1708,7 +1728,7 @@ declare module 'discord.js' {
 			name?: string;
 			url?: string;
 		}
-	}
+	};
 
 	type PresenceStatus = 'online' | 'idle' | 'invisible' | 'dnd';
 
