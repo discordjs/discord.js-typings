@@ -106,7 +106,7 @@ declare module 'discord.js' {
 		public on(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
 		public on(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
 		public on(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
-		public on(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: Guild) => void): this;
+		public on(event: 'guildMembersChunk', listener: (members: GuildMember[], guild: Guild) => void): this;
 		public on(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: boolean) => void): this;
 		public on(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
 		public on(event: 'guildUnavailable', listener: (guild: Guild) => void): this;
@@ -252,7 +252,7 @@ declare module 'discord.js' {
 		public randomKey(): K;
 		public reduce<T>(fn: (accumulator: any, value: V, key: K, collection: Collection<K, V>) => T, initialValue?: any): T;
 		public some(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
-		public sort(compareFunction?: (a: [K, V], b: [K, V]) => number): Collection<K, V>;
+		public sort(compareFunction?: (a: V, b: V, c?: K, d?: K) => number): Collection<K, V>;
 	}
 
 	abstract class Collector<K, V> {
@@ -345,7 +345,8 @@ declare module 'discord.js' {
 		private readonly _sortedRoles: Collection<Snowflake, Role>;
 		private _sortedChannels(type: string): Collection<Snowflake, GuildChannel>
 		private _sortPositionWithID(collection: Collection<any, any>): Collection<any, any>;
-		private setup(data: any): void;
+
+		protected setup(data: any): void;
 
 		public afkChannelID: string;
 		public afkTimeout: number;
@@ -406,6 +407,7 @@ declare module 'discord.js' {
 		public setAFKTimeout(afkTimeout: number): Promise<Guild>;
 		public setChannelPosition(channel: string | GuildChannel, position: number, relative?: boolean): Promise<Guild>;
 		public setChannelPositions(channelPositions: ChannelPosition[]): Promise<Guild>;
+		public setExcplicitContentFilter(explicitContentFilter: number): Promise<Guild>;
 		public setIcon(icon: Base64Resolvable): Promise<Guild>;
 		public setName(name: string): Promise<Guild>;
 		public setOwner(owner: GuildMemberResolvable): Promise<Guild>;
@@ -481,7 +483,6 @@ declare module 'discord.js' {
 		public readonly joinedAt: Date;
 		public joinedTimestamp: number;
 		public readonly kickable: boolean;
-		public lastMessage: Message;
 		public lastMessageID: string;
 		public readonly mute: boolean;
 		public nickname: string;
@@ -534,8 +535,10 @@ declare module 'discord.js' {
 		public memberCount: number;
 		public presenceCount: number;
 		public temporary: boolean;
+		public textChannelCount: number;
 		public readonly url: string;
 		public uses: number;
+		public voiceChannelCount: number;
 		public delete(): Promise<Invite>;
 		public toString(): string;
 	}
@@ -988,6 +991,7 @@ declare module 'discord.js' {
 		public lastMessageID: string;
 		public readonly members: Collection<Snowflake, GuildMember>;
 		public messages: Collection<Snowflake, Message>;
+		public nsfw: boolean;
 		public topic: string;
 		public createWebhook(name: string, avatar: BufferResolvable): Promise<Webhook>;
 		public fetchWebhooks(): Promise<Collection<Snowflake, Webhook>>;
@@ -1006,7 +1010,6 @@ declare module 'discord.js' {
 		public readonly displayAvatarURL: string;
 		public readonly dmChannel: DMChannel;
 		public readonly id: Snowflake;
-		public lastMessage: Message;
 		public lastMessageID: string;
 		public readonly note?: string;
 		public readonly presence: Presence;
@@ -1281,6 +1284,7 @@ declare module 'discord.js' {
 	const TextBasedChannel: <T>(Base?: Constructable<T>) => Constructable<T & TextBasedChannelFields>;
 
 	type PartialTextBasedChannelFields = {
+		lastMessage?: Message;
 		acknowledge(): Promise<DMChannel | GroupDMChannel | TextChannel>;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		send(options?: MessageOptions): Promise<Message | Message[]>;
@@ -1376,6 +1380,7 @@ declare module 'discord.js' {
 		restTimeOffset?: number;
 		disabledEvents?: WSEventType[];
 		ws?: WebSocketOptions;
+		http?: HTTPOptions;
 	};
 
 	type CollectorHandler<K, V> = { key: K, value: V };
@@ -1438,6 +1443,7 @@ declare module 'discord.js' {
 	type GuildAuditLogsAction = keyof GuildAuditLogsActions;
 
 	type GuildAuditLogsActions = {
+		ALL?: null,
 		GUILD_UPDATE?: number,
 		CHANNEL_CREATE?: number,
 		CHANNEL_UPDATE?: number,
@@ -1482,6 +1488,7 @@ declare module 'discord.js' {
 	type GuildAuditLogsTarget = keyof GuildAuditLogsTargets;
 
 	type GuildAuditLogsTargets = {
+		ALL?: string;
 		GUILD?: string;
 		CHANNEL?: string;
 		USER?: string;
@@ -1496,6 +1503,7 @@ declare module 'discord.js' {
 		name?: string;
 		region?: string;
 		verificationLevel?: number;
+		explicitContentFilter?: number;
 		afkChannel?: ChannelResolvable;
 		afkTimeout?: number;
 		icon?: Base64Resolvable;
@@ -1514,6 +1522,12 @@ declare module 'discord.js' {
 	type GuildMemberResolvable = GuildMember | User;
 
 	type GuildResolvable = Guild | Snowflake;
+
+	type HTTPOptions = {
+		version?: number,
+		host?: string,
+		cdn?: string,
+	}
 
 	type InviteOptions = {
 		temporary?: boolean;
@@ -1584,6 +1598,7 @@ declare module 'discord.js' {
 		before?: Date;
 		after?: Date;
 		during?: Date;
+		nsfw?: boolean;
 	};
 
 	type PermissionFlags = {
@@ -1684,7 +1699,7 @@ declare module 'discord.js' {
 
 	type PermissionOverwriteOptions = PermissionObject;
 
-	type PermissionResolvable = PermissionString | PermissionString[] | number[];
+	type PermissionResolvable = PermissionString | number;
 
 	type PresenceData = {
 		status?: PresenceStatus;
