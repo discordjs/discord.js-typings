@@ -173,6 +173,7 @@ declare module 'discord.js' {
 		public notes?: Collection<Snowflake, string>;
 		public premium?: boolean;
 		public settings?: ClientUserSettings;
+		public guildSettings?: Collection<Snowflake, ClientUserGuildSettings>;
 		public verified: boolean;
 		public acceptInvite(invite: Invite | string): Promise<Guild>
 		public addFriend(user?: UserResolvable): Promise<User>;
@@ -189,6 +190,14 @@ declare module 'discord.js' {
 		public setPresence(data: PresenceData): Promise<ClientUser>;
 		public setStatus(status: PresenceStatus): Promise<ClientUser>;
 		public setUsername(username: string, password?: string): Promise<ClientUser>;
+	}
+
+	class ClientUserChannelOverride {
+		constructor(user: User, data: object);
+		private patch(data: object): void;
+
+		public messageNotifications: GuildChannelMessageNotifications;
+		public muted: boolean;
 	}
 
 	export class ClientUserSettings {
@@ -214,6 +223,19 @@ declare module 'discord.js' {
 		public patch(data: object): void;
 		public removeRestrictedGuild(guild: Guild): Promise<Guild>;
 		public setGuildPosition(guild: Guild, position: number, relative?: boolean): Promise<Guild>;
+		public update(name: string, value: any): Promise<object>;
+	}
+
+	export class ClientUserGuildSettings {
+		constructor(data: object, guild: Guild);
+		private patch(data: object): void;
+
+		public guild: Guild;
+		public channelOverrides: Collection<Snowflake, ClientUserChannelOverride>;
+		public messageNotifications: MessageNotifications;
+		public mobilePush: boolean;
+		public muted: boolean;
+		public suppressEveryone: boolean;
 		public update(name: string, value: any): Promise<object>;
 	}
 
@@ -371,6 +393,9 @@ declare module 'discord.js' {
 		public readonly me: GuildMember;
 		public memberCount: number;
 		public members: Collection<Snowflake, GuildMember>;
+		public readonly messageNotifications: MessageNotifications;
+		public readonly mobilePush?: boolean;
+		public readonly muted?: boolean;
 		public name: string;
 		public readonly owner: GuildMember;
 		public ownerID: string;
@@ -379,6 +404,7 @@ declare module 'discord.js' {
 		public roles: Collection<Snowflake, Role>;
 		public splash: string;
 		public readonly splashURL: string;
+		public readonly suppressEveryone?: boolean;
 		public verificationLevel: number;
 		public readonly voiceConnection: VoiceConnection;
 		public acknowledge(): Promise<Guild>;
@@ -452,6 +478,8 @@ declare module 'discord.js' {
 		public readonly calculatedPosition: number;
 		public readonly deletable: boolean;
 		public guild: Guild;
+		public readonly messageNotifications?: GuildChannelMessageNotifications;
+		public readonly muted?: boolean;
 		public name: string;
 		public permissionOverwrites: Collection<Snowflake, PermissionOverwrites>;
 		public position: number;
@@ -1499,6 +1527,9 @@ declare module 'discord.js' {
 		MESSAGE?: string;
 	};
 
+	type GuildChannelMessageNotifications = MessageNotifications
+		| 'INHERIT';
+
 	type GuildEditData = {
 		name?: string;
 		region?: string;
@@ -1546,6 +1577,10 @@ declare module 'discord.js' {
 		embed?: RichEmbedOptions;
 		code?: string | boolean;
 	};
+
+	type MessageNotifications = 'EVERYTHING'
+		| 'MENTIONS'
+		| 'NOTHING';
 
 	type MessageOptions = {
 		tts?: boolean;
@@ -1810,6 +1845,8 @@ declare module 'discord.js' {
 		| 'MESSAGE_REACTION_REMOVE'
 		| 'MESSAGE_REACTION_REMOVE_ALL'
 		| 'USER_UPDATE'
+		| 'USER_SETTINGS_UPDATE'
+		| 'USER_GUILD_SETTINGS_UPDATE'
 		| 'USER_NOTE_UPDATE'
 		| 'PRESENCE_UPDATE'
 		| 'VOICE_STATE_UPDATE'
