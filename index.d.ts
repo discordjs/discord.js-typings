@@ -505,7 +505,6 @@ declare module 'discord.js' {
 		public deleteDM(): Promise<DMChannel>;
 		public edit(data: object): Promise<GuildMember>;
 		public hasPermission(permission: PermissionResolvable | PermissionResolvable[], explicit?: boolean, checkAdmin?: boolean, checkOwner?: boolean): boolean;
-		public hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
 		public kick(reason?: string): Promise<GuildMember>;
 		public missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
 		public permissionsIn(channel: ChannelResolvable): Permissions;
@@ -581,7 +580,6 @@ declare module 'discord.js' {
 		public createReactionCollector(filter: CollectorFilter, options?: ReactionCollectorOptions): ReactionCollector;
 		public delete(timeout?: number): Promise<Message>;
 		public edit(content: StringResolvable, options?: MessageEditOptions): Promise<Message>;
-		public editCode(lang: string, content: StringResolvable): Promise<Message>;
 		public equals(message: Message, rawData: object): boolean;
 		public fetchWebhook(): Promise<Webhook>;
 		public isMemberMentioned(member: GuildMember | User): boolean;
@@ -777,17 +775,11 @@ declare module 'discord.js' {
 
 	export class Permissions {
 		constructor(permissions: number | PermissionResolvable[]);
-		constructor(member: GuildMember, permissions: number | PermissionResolvable[]);
-		private readonly raw: number;
 
 		public bitfield: number;
-		public member: GuildMember;
 		public add(...permissions: PermissionResolvable[]): this;
 		public has(permission: PermissionResolvable | PermissionResolvable[], checkAdmin?: boolean): boolean;
-		public hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
-		public hasPermissions(permissions: PermissionResolvable[], explicit?: boolean): boolean;
 		public missing(permissions: PermissionResolvable[], checkAdmin?: boolean): PermissionResolvable[];
-		public missingPermissions(permissions: PermissionResolvable[], checkAdmin?: boolean): PermissionResolvable[];
 		public remove(...permissions: PermissionResolvable[]): this;
 		public serialize(checkAdmin?: boolean): PermissionObject;
 
@@ -884,7 +876,6 @@ declare module 'discord.js' {
 		public edit(data: RoleData): Promise<Role>;
 		public equals(role: Role): boolean;
 		public hasPermission(permission: PermissionResolvable | PermissionResolvable[], explicit?: boolean, checkAdmin?: boolean): boolean;
-		public hasPermissions(permissions: PermissionResolvable[], explicit?: boolean): boolean;
 		public serialize(): PermissionObject;
 		public setColor(color: string | number): Promise<Role>;
 		public setHoist(hoist: boolean): Promise<Role>;
@@ -1249,10 +1240,6 @@ declare module 'discord.js' {
 		public edit(name: string, avatar: BufferResolvable): Promise<Webhook>;
 		public send(content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
 		public send(options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		public sendCode(lang: string, content: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message>;
-		public sendMessage(content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		public sendMessage(options?: WebhookMessageOptions): Promise<Message | Message[]>;
 		public sendSlackMessage(body: object): Promise<void>;
 	}
 
@@ -1288,12 +1275,6 @@ declare module 'discord.js' {
 		acknowledge(): Promise<DMChannel | GroupDMChannel | TextChannel>;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		send(options?: MessageOptions): Promise<Message | Message[]>;
-		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<Message>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<Message>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<Message>;
-		sendMessage(content?: string, options?: MessageOptions): Promise<Message | Message[]>;
-		sendMessage(options?: MessageOptions): Promise<Message | Message[]>;
 	};
 
 	type TextBasedChannelFields = {
@@ -1301,7 +1282,6 @@ declare module 'discord.js' {
 		typingCount: number;
 		awaitMessages(filter: CollectorFilter, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
 		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
-		createCollector(filter: CollectorFilter, options?: CollectorOptions): MessageCollector;
 		createMessageCollector(filter: CollectorFilter, options?: CollectorOptions): MessageCollector;
 		fetchMessage(messageID: string): Promise<Message>;
 		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
