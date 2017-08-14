@@ -328,7 +328,7 @@ declare module 'discord.js' {
 		constructor(data: object);
 		public name: string;
 		public readonly streaming: boolean;
-		public type: number;
+		public type: GameType;
 		public url: string;
 		public equals(game: Game): boolean;
 	}
@@ -1444,6 +1444,11 @@ declare module 'discord.js' {
 		attachment: BufferResolvable;
 		name?: string;
 	};
+
+	type GameType = 'PLAYING'
+		| 'STREAMING'
+		| 'LISTENING'
+		| 'WATCHING';
 
 	type GroupDMRecipientOptions = {
 		user?: UserResolvable | Snowflake;
