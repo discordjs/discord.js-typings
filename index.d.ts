@@ -154,6 +154,8 @@ declare module 'discord.js' {
 		public rpcOrigins: string[];
 		public secret: string;
 		public coverImage(options?: AvatarOptions): string;
+		public createAsset(name: string, data: Base64Resolvable, type: 'big' | 'small' | 'Big' | 'Small'): Promise<object>;
+		public fetchAssets(): ClientApplicationAsset;
 		public iconURL(options?: AvatarOptions): string;
 		public reset(): ClientApplication;
 		public toString(): string;
