@@ -1000,7 +1000,6 @@ declare module 'discord.js' {
 		public readonly createdTimestamp: number;
 		public readonly defaultAvatarURL: string;
 		public discriminator: string;
-		public readonly displayAvatarURL: string;
 		public readonly dmChannel: DMChannel;
 		public readonly id: Snowflake;
 		public lastMessageID: string;
@@ -1013,6 +1012,7 @@ declare module 'discord.js' {
 		public block(): Promise<User>;
 		public createDM(): Promise<DMChannel>
 		public deleteDM(): Promise<DMChannel>;
+		public displayAvatarURL(options?: AvatarOptions): string;
 		public equals(user: User): boolean;
 		public fetchProfile(): Promise<UserProfile>;
 		public removeFriend(): Promise<User>;
