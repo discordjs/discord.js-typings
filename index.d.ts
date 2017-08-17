@@ -153,6 +153,7 @@ declare module 'discord.js' {
 		public rpcApplicationState: boolean;
 		public rpcOrigins: string[];
 		public secret: string;
+		public coverImage(options?: AvatarOptions): string;
 		public iconURL(options?: AvatarOptions): string;
 		public reset(): ClientApplication;
 		public toString(): string;
