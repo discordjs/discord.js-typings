@@ -389,7 +389,7 @@ declare module 'discord.js' {
 		public readonly defaultChannel: TextChannel;
 		public readonly defaultRole: Role;
 		public embedEnabled: boolean;
-		public emojis: Collection<Snowflake, Emoji>;
+		public emojis?: Collection<Snowflake, Emoji>;
 		public explicitContentFilter: number;
 		public features: object[];
 		public icon: string;
@@ -552,14 +552,14 @@ declare module 'discord.js' {
 
 	export class Invite {
 		constructor(client: Client, data: object);
-		public channel: GuildChannel | PartialGuildChannel;
+		public channel: GuildChannel;
 		public readonly client: Client;
 		public code: string;
 		public readonly createdAt: Date;
 		public createdTimestamp: number;
 		public readonly expiresAt: Date;
 		public readonly expiresTimestamp: number;
-		public guild: Guild | PartialGuild;
+		public guild: Guild;
 		public inviter: User;
 		public maxAge: number;
 		public maxUses: number;
@@ -756,23 +756,6 @@ declare module 'discord.js' {
 		public users: Collection<string, User>;
 		public fetchUsers(limit?: number): Promise<Collection<Snowflake, User>>;
 		public remove(user?: UserResolvable): Promise<MessageReaction>;
-	}
-
-	export class PartialGuild {
-		constructor(client: Client, data: object);
-		public readonly client: Client;
-		public icon: string;
-		public id: Snowflake;
-		public name: string;
-		public splash: string;
-	}
-
-	export class PartialGuildChannel {
-		constructor(client: Client, data: object);
-		public readonly client: Client;
-		public id: Snowflake;
-		public name: string;
-		public type: string;
 	}
 
 	export class PermissionOverwrites {
@@ -1105,7 +1088,7 @@ declare module 'discord.js' {
 		public readonly connection: VoiceConnection;
 		public readonly full: boolean;
 		public readonly joinable: boolean;
-		public members: Collection<Snowflake, GuildMember>;
+		public readonly members: Collection<Snowflake, GuildMember>;
 		public readonly speakable: boolean;
 		public userLimit: number;
 		public join(): Promise<VoiceConnection>;
