@@ -78,7 +78,7 @@ declare module 'discord.js' {
 		public clearTimeout(timeout: NodeJS.Timer): void;
 		public createVoiceBroadcast(): VoiceBroadcast;
 		public destroy(): Promise<void>;
-		public fetchApplication(id?: Snowflake): Promise<ClientOAuth2Application>;
+		public fetchApplication(id?: Snowflake): Promise<ClientApplication>;
 		public fetchInvite(invite: InviteResolvable): Promise<Invite>;
 		public fetchUser(id: Snowflake, cache?: boolean): Promise<User>;
 		public fetchVoiceRegions(): Promise<Collection<string, VoiceRegion>>;
@@ -159,11 +159,6 @@ declare module 'discord.js' {
 		public heartbeatInterval: number;
 		public connectToWebSocket(token: string, resolve: Function, reject: Function): void;
 		public setupKeepAlive(time: number): void;
-	}
-
-	export class ClientOAuth2Application extends OAuth2Application {
-		public flags: number;
-		public owner: User;
 	}
 
 	export class ClientUser extends User {
@@ -372,7 +367,6 @@ declare module 'discord.js' {
 		public explicitContentFilter: number;
 		public features: object[];
 		public icon: string;
-		public readonly iconURL: string;
 		public id: Snowflake;
 		public readonly joinedAt: Date;
 		public joinedTimestamp: number;
@@ -388,7 +382,6 @@ declare module 'discord.js' {
 		public region: string;
 		public roles: Collection<Snowflake, Role>;
 		public splash: string;
-		public readonly splashURL: string;
 		public verificationLevel: number;
 		public readonly voiceConnection: VoiceConnection;
 		public acknowledge(): Promise<Guild>;
@@ -409,6 +402,7 @@ declare module 'discord.js' {
 		public fetchMembers(query?: string, limit?: number): Promise<Guild>;
 		public fetchVoiceRegions(): Promise<Collection<string, VoiceRegion>>;
 		public fetchWebhooks(): Promise<Collection<Snowflake, Webhook>>;
+		public iconURL(options?: AvatarOptions): string;
 		public leave(): Promise<Guild>;
 		public member(user: UserResolvable): GuildMember;
 		public pruneMembers(days: number, dry?: boolean): Promise<number>;
@@ -425,6 +419,7 @@ declare module 'discord.js' {
 		public setRolePosition(role: string | Role, position: number, relative?: boolean): Promise<Guild>;
 		public setSplash(splash: Base64Resolvable): Promise<Guild>;
 		public setVerificationLevel(verificationLevel: number): Promise<Guild>;
+		public splashURL(options?: AvatarOptions): string;
 		public sync(): void;
 		public toString(): string;
 		public unban(user: UserResolvable): Promise<User>;
@@ -558,6 +553,8 @@ declare module 'discord.js' {
 		private _edits: Message[];
 		private patch(data: object): void;
 
+		public application?: ClientApplication;
+		public activity?: GroupActivity;
 		public attachments: Collection<Snowflake, MessageAttachment>;
 		public author: User;
 		public channel: TextChannel | DMChannel | GroupDMChannel;
@@ -735,7 +732,7 @@ declare module 'discord.js' {
 		public remove(user?: UserResolvable): Promise<MessageReaction>;
 	}
 
-	export class OAuth2Application {
+	export class ClientApplication {
 		constructor(client: Client, data: object);
 		public bot: object;
 		public botPublic: boolean;
@@ -746,15 +743,15 @@ declare module 'discord.js' {
 		public description: string;
 		public flags: number;
 		public icon: string;
-		public iconURL: string;
 		public id: Snowflake;
 		public name: string;
-		public owner: User;
+		public owner?: User;
 		public redirectURIs: string[];
 		public rpcApplicationState: boolean;
 		public rpcOrigins: string[];
 		public secret: string;
-		public reset(): OAuth2Application;
+		public iconURL(options?: AvatarOptions): string;
+		public reset(): ClientApplication;
 		public toString(): string;
 	}
 
@@ -1011,7 +1008,6 @@ declare module 'discord.js' {
 	export class User extends PartialTextBasedChannel() {
 		constructor(client: Client, data: object);
 		public avatar: string;
-		public readonly avatarURL: string;
 		public bot: boolean;
 		public readonly client: Client;
 		public readonly createdAt: Date;
@@ -1027,6 +1023,7 @@ declare module 'discord.js' {
 		public readonly tag: string;
 		public username: string;
 		public addFriend(): Promise<User>;
+		public avatarURL(options?: AvatarOptions): string;
 		public block(): Promise<User>;
 		public createDM(): Promise<DMChannel>
 		public deleteDM(): Promise<DMChannel>;
@@ -1340,6 +1337,11 @@ declare module 'discord.js' {
 		new?: any;
 	};
 
+	type AvatarOptions = {
+		format?: ImageExt;
+		size?: ImageSize;
+	};
+
 	type AwaitMessagesOptions = MessageCollectorOptions & { errors?: string[] };
 
 	type AwaitReactionsOptions = ReactionCollectorOptions & { errors?: string[] };
@@ -1376,6 +1378,18 @@ declare module 'discord.js' {
 	};
 
 	type ChannelResolvable = Channel | Guild | Message | Snowflake;
+
+	type ClientApplicationAsset = {
+		name: string;
+		id: string;
+		type: 'BIG' | 'SMALL';
+	};
+
+	type ClientApplicationCreateAssetOptions = {
+		name: string;
+		data: Base64Resolvable;
+		type: 'big' | 'small';
+	};
 
 	type ClientOptions = {
 		apiRequestMethod?: string;
@@ -1443,6 +1457,11 @@ declare module 'discord.js' {
 	type FileOptions = {
 		attachment: BufferResolvable;
 		name?: string;
+	};
+
+	type GroupActivity = {
+		partyID: string;
+		type: string;
 	};
 
 	type GroupDMRecipientOptions = {
@@ -1539,6 +1558,17 @@ declare module 'discord.js' {
 		host?: string,
 		cdn?: string,
 	}
+
+	type ImageExt = 'webp'
+		| 'png'
+		| 'jpg'
+		| 'gif';
+
+	type ImageSize = 128
+		| 256
+		| 512
+		| 1024
+		| 2048;
 
 	type InviteOptions = {
 		temporary?: boolean;
