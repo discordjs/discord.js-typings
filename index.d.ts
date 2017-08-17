@@ -135,6 +135,29 @@ declare module 'discord.js' {
 		public on(event: 'warn', listener: (info: string) => void): this;
 	}
 
+	export class ClientApplication {
+		constructor(client: Client, data: object);
+		public bot: object;
+		public botPublic: boolean;
+		public botRequireCodeGrant: boolean;
+		public readonly client: Client;
+		public readonly createdAt: Date;
+		public readonly createdTimestamp: number;
+		public description: string;
+		public flags: number;
+		public icon: string;
+		public id: Snowflake;
+		public name: string;
+		public owner?: User;
+		public redirectURIs: string[];
+		public rpcApplicationState: boolean;
+		public rpcOrigins: string[];
+		public secret: string;
+		public iconURL(options?: AvatarOptions): string;
+		public reset(): ClientApplication;
+		public toString(): string;
+	}
+
 	class ClientDataResolver {
 		constructor(client: Client);
 		public resolveBase64(data: Base64Resolvable): string;
@@ -730,29 +753,6 @@ declare module 'discord.js' {
 		public users: Collection<string, User>;
 		public fetchUsers(limit?: number): Promise<Collection<Snowflake, User>>;
 		public remove(user?: UserResolvable): Promise<MessageReaction>;
-	}
-
-	export class ClientApplication {
-		constructor(client: Client, data: object);
-		public bot: object;
-		public botPublic: boolean;
-		public botRequireCodeGrant: boolean;
-		public readonly client: Client;
-		public readonly createdAt: Date;
-		public readonly createdTimestamp: number;
-		public description: string;
-		public flags: number;
-		public icon: string;
-		public id: Snowflake;
-		public name: string;
-		public owner?: User;
-		public redirectURIs: string[];
-		public rpcApplicationState: boolean;
-		public rpcOrigins: string[];
-		public secret: string;
-		public iconURL(options?: AvatarOptions): string;
-		public reset(): ClientApplication;
-		public toString(): string;
 	}
 
 	export class PartialGuild {
