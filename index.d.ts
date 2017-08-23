@@ -22,6 +22,7 @@ declare module 'discord.js' {
 		public prism: object;
 		public readonly transcoder: object;
 		public voiceConnection: VoiceConnection;
+		public setBitrate(value: number | 'auto'): void;
 	}
 
 	export class Attachment {
@@ -36,7 +37,9 @@ declare module 'discord.js' {
 	}
 
 	class BaseOpus {
-		constructor(options?: { fec: boolean, plp: number });
+		constructor(options?: { bitrate?: number, fec?: boolean, plp?: number });
+		public bitrate: number;
+		public options: object;
 	}
 
 	export class Channel {
@@ -312,13 +315,19 @@ declare module 'discord.js' {
 		public findKey(prop: keyof V, value: any): K;
 		public findKey(fn: (value: V, key: K, collection: Collection<K, V>) => boolean): K;
 		public first(): V;
+		public first(count: number): V[];
 		public firstKey(): K;
+		public firstKey(count: number): K[];
 		public keyArray(): K[];
 		public last(): V;
+		public last(count: number): V[];
 		public lastKey(): K;
+		public lastKey(count: number): K[];
 		public map<T>(fn: (value: V, key: K, collection: Collection<K, V>) => T, thisArg?: any): T[];
 		public random(): V;
+		public random(count: number): V[];
 		public randomKey(): K;
+		public randomKey(count: number): K[];
 		public reduce<T>(fn: (accumulator: any, value: V, key: K, collection: Collection<K, V>) => T, initialValue?: any): T;
 		public some(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
 		public sort(compareFunction?: (a: V, b: V, c?: K, d?: K) => number): Collection<K, V>;
@@ -444,6 +453,7 @@ declare module 'discord.js' {
 		public readonly mobilePush?: boolean;
 		public readonly muted?: boolean;
 		public name: string;
+		public readonly nameAcronym: string;
 		public readonly owner: GuildMember;
 		public ownerID: string;
 		public presences: Collection<Snowflake, Presence>;
@@ -492,6 +502,33 @@ declare module 'discord.js' {
 		public sync(): void;
 		public toString(): string;
 		public unban(user: UserResolvable, reason?: string): Promise<User>;
+	}
+
+	export class GuildAuditLogs {
+		constructor(guild: Guild, data: object);
+		public entries: Collection<Snowflake, GuildAuditLogsEntry>;
+
+		public static Actions: GuildAuditLogsActions;
+		public static Targets: GuildAuditLogsTargets;
+		public static Entry: typeof GuildAuditLogsEntry;
+		public static actionType(action: number): GuildAuditLogsActionType;
+		public static build(...args: any[]): Promise<GuildAuditLogs>;
+		public static targetType(target: number): GuildAuditLogsTarget;
+	}
+
+	class GuildAuditLogsEntry {
+		constructor(guild: Guild, data: object);
+		public action: GuildAuditLogsAction;
+		public actionType: GuildAuditLogsActionType;
+		public changes?: AuditLogChange[];
+		public readonly createdTimestamp: number;
+		public readonly createdAt: Date;
+		public executor: User;
+		public extra?: object | Role | GuildMember;
+		public id: Snowflake;
+		public reason?: string;
+		public target?: Guild | User | Role | Emoji | Invite | Webhook;
+		public targetType: GuildAuditLogsTarget;
 	}
 
 	export class GuildAuditLogs {
@@ -938,6 +975,7 @@ declare module 'discord.js' {
 		public end(reason?: string): void;
 		public pause(): void;
 		public resume(): void;
+		public setBitrate(bitrate: number | 'auto'): void;
 	}
 
 	export class TextChannel extends TextBasedChannel(GuildChannel) {
@@ -1087,7 +1125,7 @@ declare module 'discord.js' {
 		public createReceiver(): VoiceReceiver;
 		public disconnect(): void;
 		public playArbitraryInput(input: string, options?: StreamOptions): StreamDispatcher;
-		public playBroadcast(broadcast: VoiceBroadcast): StreamDispatcher;
+		public playBroadcast(broadcast: VoiceBroadcast, options?: StreamOptions): StreamDispatcher;
 		public playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
 		public playFile(file: string, options?: StreamOptions): StreamDispatcher;
 		public playOpusStream(steam: ReadableStream, options?: StreamOptions): StreamDispatcher;
@@ -1276,6 +1314,12 @@ declare module 'discord.js' {
 	type AvatarOptions = {
 		format?: ImageExt;
 		size?: ImageSize;
+	};
+
+	type AuditLogChange = {
+		key: string;
+		old?: any;
+		new?: any;
 	};
 
 	type AwaitMessagesOptions = MessageCollectorOptions & { errors?: string[] };
@@ -1487,7 +1531,6 @@ declare module 'discord.js' {
 
 	type GuildChannelMessageNotifications = MessageNotifications
 		| 'INHERIT';
-
 	type GuildEditData = {
 		name?: string;
 		region?: string;
@@ -1566,7 +1609,7 @@ declare module 'discord.js' {
 		disableEveryone?: boolean;
 		file?: FileOptions | string;
 		files?: FileOptions[] | string[];
-		code?: string;
+		code?: string | boolean;
 		split?: boolean | SplitOptions;
 		reply?: UserResolvable;
 	};
@@ -1765,6 +1808,7 @@ declare module 'discord.js' {
 		seek?: number;
 		volume?: number;
 		passes?: number;
+		bitrate?: number | 'auto';
 	};
 
 	type StringResolvable = string | string[] | any;
