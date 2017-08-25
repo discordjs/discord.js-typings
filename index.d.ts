@@ -531,33 +531,6 @@ declare module 'discord.js' {
 		public targetType: GuildAuditLogsTarget;
 	}
 
-	export class GuildAuditLogs {
-		constructor(guild: Guild, data: object);
-		public entries: Collection<Snowflake, GuildAuditLogsEntry>;
-
-		public static Actions: GuildAuditLogsActions;
-		public static Targets: GuildAuditLogsTargets;
-		public static Entry: typeof GuildAuditLogsEntry;
-		public static actionType(action: number): GuildAuditLogsActionType;
-		public static build(...args: any[]): Promise<GuildAuditLogs>;
-		public static targetType(target: number): GuildAuditLogsTarget;
-	}
-
-	class GuildAuditLogsEntry {
-		constructor(guild: Guild, data: object);
-		public action: GuildAuditLogsAction;
-		public actionType: GuildAuditLogsActionType;
-		public changes?: AuditLogChange[];
-		public readonly createdTimestamp: number;
-		public readonly createdAt: Date;
-		public executor: User;
-		public extra?: object | Role | GuildMember;
-		public id: Snowflake;
-		public reason?: string;
-		public target?: Guild | User | Role | Emoji | Invite | Webhook;
-		public targetType: GuildAuditLogsTarget;
-	}
-
 	export class GuildChannel extends Channel {
 		constructor(guild: Guild, data: object);
 		public readonly calculatedPosition: number;
@@ -1314,12 +1287,6 @@ declare module 'discord.js' {
 	type AvatarOptions = {
 		format?: ImageExt;
 		size?: ImageSize;
-	};
-
-	type AuditLogChange = {
-		key: string;
-		old?: any;
-		new?: any;
 	};
 
 	type AwaitMessagesOptions = MessageCollectorOptions & { errors?: string[] };
