@@ -637,7 +637,7 @@ declare module 'discord.js' {
 		public clearReactions(): Promise<Message>;
 		public createReactionCollector(filter: CollectorFilter, options?: ReactionCollectorOptions): ReactionCollector;
 		public delete(timeout?: number): Promise<Message>;
-		public edit(content: StringResolvable, options?: MessageEditOptions): Promise<Message>;
+		public edit(content: StringResolvable, options?: MessageEditOptions | RichEmbed): Promise<Message>;
 		public editCode(lang: string, content: StringResolvable): Promise<Message>;
 		public equals(message: Message, rawData: object): boolean;
 		public fetchWebhook(): Promise<Webhook>;
@@ -898,7 +898,7 @@ declare module 'discord.js' {
 		public color?: number;
 		public description?: string;
 		public fields?: { name: string; value: string; inline?: boolean; }[];
-		public file?: string | FileOptions;
+		public file?: Attachment | string | FileOptions;
 		public footer?: { text?: string; icon_url?: string; };
 		public image?: { url: string; proxy_url?: string; height?: number; width?: number; };
 		public thumbnail?: { url: string; height?: number; width?: number; };
@@ -907,7 +907,7 @@ declare module 'discord.js' {
 		public url?: string;
 		public addBlankField(inline?: boolean): this;
 		public addField(name: StringResolvable, value: StringResolvable, inline?: boolean): this;
-		public attachFile(file: FileOptions | string): this;
+		public attachFile(file: Attachment | FileOptions | string): this;
 		public setAuthor(name: StringResolvable, icon?: string, url?: string): this;
 		public setColor(color: ColorResolvable): this;
 		public setDescription(description: StringResolvable): this;
@@ -1802,7 +1802,7 @@ declare module 'discord.js' {
 		timestamp?: Date;
 		color?: number | string;
 		fields?: { name: string; value: string; inline?: boolean; }[];
-		file?: string | FileOptions;
+		file?: Attachment| string | FileOptions;
 		author?: { name: string; url?: string; icon_url?: string; };
 		thumbnail?: { url: string; height?: number; width?: number; };
 		image?: { url: string; proxy_url?: string; height?: number; width?: number; };
