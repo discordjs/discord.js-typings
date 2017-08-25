@@ -244,7 +244,7 @@ declare module 'discord.js' {
 	class ClientUserChannelOverride {
 		constructor(user: User, data: object);
 		private patch(data: object): void;
- 
+
 		public messageNotifications: GuildChannelMessageNotifications;
 		public muted: boolean;
 	}
@@ -278,7 +278,7 @@ declare module 'discord.js' {
 	class ClientUserGuildSettings {
 		constructor(data: object, guild: Guild);
 		private patch(data: object): void;
- 
+
 		public guildID: Snowflake;
 		public channelOverrides: Collection<Snowflake, ClientUserChannelOverride>;
 		public client: Client;
@@ -490,7 +490,7 @@ declare module 'discord.js' {
 		public setAFKTimeout(afkTimeout: number, reason?: string): Promise<Guild>;
 		public setChannelPosition(channel: string | GuildChannel, position: number, relative?: boolean): Promise<Guild>;
 		public setChannelPositions(channelPositions: ChannelPosition[]): Promise<Guild>;
-		public setExcplicitContentFilter(explicitContentFilter: number, reason?: string): Promise<Guild>;
+		public setExplicitContentFilter(explicitContentFilter: number, reason?: string): Promise<Guild>;
 		public setIcon(icon: Base64Resolvable, reason?: string): Promise<Guild>;
 		public setName(name: string, reason?: string): Promise<Guild>;
 		public setOwner(owner: GuildMemberResolvable, reason?: string): Promise<Guild>;
