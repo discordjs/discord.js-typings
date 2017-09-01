@@ -36,17 +36,6 @@ declare module 'discord.js' {
 		public setBitrate(value: number | 'auto'): void;
 	}
 
-	export class Attachment {
-		constructor(file: string | BufferResolvable | NodeJS.ReadWriteStream, name?: string);
-		private _attach(): void;
-		public file: string | { attachment: string | BufferResolvable | NodeJS.ReadWriteStream, name: string };
-		public name(): string;
-		public attachment(): BufferResolvable | string | NodeJS.ReadWriteStream;
-		public setAttachment(): this;
-		public setFile(): this;
-		public setName(): this;
-	}
-
 	class BaseOpus {
 		constructor(options?: { bitrate?: number, fec?: boolean, plp?: number });
 		public bitrate: number;
@@ -137,7 +126,7 @@ declare module 'discord.js' {
 		public on(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, Message>) => void): this;
 		public on(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
 		public on(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
-		public on(event: 'ready' | 'reconnecting', listener: () => void): this;
+		public on(event: 'ready' | 'reconnecting' | 'resume', listener: () => void): this;
 		public on(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
 		public on(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
 		public on(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
@@ -233,7 +222,6 @@ declare module 'discord.js' {
 		public friends: Collection<Snowflake, User>;
 		public mfaEnabled?: boolean;
 		public mobile?: boolean;
-		public note?: string;
 		public notes?: Collection<Snowflake, string>;
 		public premium?: boolean;
 		public settings?: ClientUserSettings;
@@ -301,20 +289,6 @@ declare module 'discord.js' {
 		public addRestrictedGuild(guild: Guild): Promise<Guild>;
 		public removeRestrictedGuild(guild: Guild): Promise<Guild>;
 		public setGuildPosition(guild: Guild, position: number, relative?: boolean): Promise<Guild>;
-		public update(name: string, value: any): Promise<object>;
-	}
-
-	class ClientUserGuildSettings {
-		constructor(data: object, guild: Guild);
-		private patch(data: object): void;
-
-		public guildID: Snowflake;
-		public channelOverrides: Collection<Snowflake, ClientUserChannelOverride>;
-		public client: Client;
-		public messageNotifications: MessageNotifications;
-		public mobilePush: boolean;
-		public muted: boolean;
-		public suppressEveryone: boolean;
 		public update(name: string, value: any): Promise<object>;
 	}
 
@@ -496,6 +470,8 @@ declare module 'discord.js' {
 		public roles: Collection<Snowflake, Role>;
 		public splash: string;
 		public readonly suppressEveryone?: boolean;
+		public readonly systemChannel: GuildChannel;
+		public systemChannelID: Snowflake;
 		public verificationLevel: number;
 		public readonly voiceConnection: VoiceConnection;
 		public acknowledge(): Promise<Guild>;
@@ -739,10 +715,10 @@ declare module 'discord.js' {
 	export class MessageEmbed {
 		constructor(data: MessageEmbedOptions);
 		public author?: { name: string; url?: string; icon_url?: string; };
-		public color?: number | string;
+		public color?: number;
 		public description?: string;
 		public fields?: { name: string; value: string; inline?: boolean; }[];
-		public file?: string | FileOptions;
+		public file?: Attachment | string | FileOptions;
 		public footer?: { text?: string; icon_url?: string; };
 		public image?: { url: string; proxy_url?: string; height?: number; width?: number; };
 		public thumbnail?: { url: string; height?: number; width?: number; };
@@ -751,7 +727,7 @@ declare module 'discord.js' {
 		public url?: string;
 		public addBlankField(inline?: boolean): this;
 		public addField(name: StringResolvable, value: StringResolvable, inline?: boolean): this;
-		public attachFile(file: FileOptions | string): this;
+		public attachFile(file: Attachment | FileOptions | string): this;
 		public setAuthor(name: StringResolvable, icon?: string, url?: string): this;
 		public setColor(color: ColorResolvable): this;
 		public setDescription(description: StringResolvable): this;
@@ -1249,8 +1225,8 @@ declare module 'discord.js' {
 		public token: string;
 		public delete(reason?: string): Promise<void>;
 		public edit(options: WebhookEditData, reason?: string): Promise<Webhook>;
-		public send(content?: StringResolvable, options?: WebhookMessageOptions): Promise<Message | Message[]>;
-		public send(options?: WebhookMessageOptions): Promise<Message | Message[]>;
+		public send(content?: StringResolvable, options?: WebhookMessageOptions | MessageEmbed | Attachment): Promise<Message | Message[]>;
+		public send(options?: WebhookMessageOptions | MessageEmbed | Attachment): Promise<Message | Message[]>;
 		public sendSlackMessage(body: object): Promise<void>;
 	}
 
@@ -1284,8 +1260,8 @@ declare module 'discord.js' {
 	type PartialTextBasedChannelFields = {
 		lastMessage: Message;
 		acknowledge(): Promise<DMChannel | GroupDMChannel | TextChannel>;
-		send(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
-		send(options?: MessageOptions): Promise<Message | Message[]>;
+		send(content?: StringResolvable, options?: MessageOptions | MessageEmbed | Attachment): Promise<Message | Message[]>;
+		send(options?: MessageOptions | MessageEmbed | Attachment): Promise<Message | Message[]>;
 	};
 
 	type TextBasedChannelFields = {
@@ -1602,10 +1578,6 @@ declare module 'discord.js' {
 		embed?: MessageEmbedOptions;
 		code?: string | boolean;
 	};
-	
-	type MessageNotifications = 'EVERYTHING'
-		| 'MENTIONS'
-		| 'NOTHING';
 
 	type MessageNotifications = 'EVERYTHING'
 		| 'MENTIONS'
@@ -1844,7 +1816,7 @@ declare module 'discord.js' {
 		avatarURL?: string;
 		tts?: boolean;
 		nonce?: string;
-		embeds?: (RichEmbed | object)[];
+		embeds?: (MessageEmbed | object)[];
 		disableEveryone?: boolean;
 		file?: FileOptions | BufferResolvable | Attachment;
 		files?: (FileOptions | BufferResolvable | Attachment)[];
