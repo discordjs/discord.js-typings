@@ -13,7 +13,7 @@ declare module 'discord.js' {
 
 	export const version: string;
 
-//#region Classes
+	//#region Classes
 
 	class Attachment {
 		constructor(file: BufferResolvable | Stream, name?: string);
@@ -478,7 +478,7 @@ declare module 'discord.js' {
 		public addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		public allowDMs(allow: boolean): Promise<Guild>;
 		public ban(user: UserResolvable, options?: BanOptions | number | string): Promise<GuildMember | User | string>;
-		public createChannel(name: string, type: 'text' | 'voice', overwrites?: PermissionOverwrites[] | object[]): Promise<TextChannel | VoiceChannel>;
+		public createChannel(name: string, type: 'text' | 'voice' | 'category', overwrites?: PermissionOverwrites[] | object[]): Promise<TextChannel | VoiceChannel>;
 		public createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, options?: GuildCreateEmojiOptions): Promise<Emoji>;
 		public createRole(data?: RoleData, reason?: string): Promise<Role>;
 		public delete(): Promise<Guild>;
@@ -553,12 +553,13 @@ declare module 'discord.js' {
 		public position: number;
 		public clone(options?: GuildChannelCloneOptions): Promise<GuildChannel>;
 		public createInvite(options?: InviteOptions): Promise<Invite>;
-		public edit(data: ChannelData, reason?: string	): Promise<GuildChannel>;
+		public edit(data: ChannelData, reason?: string): Promise<GuildChannel>;
 		public equals(channel: GuildChannel): boolean;
 		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions, reason?: string): Promise<void>;
 		public permissionsFor(member: GuildMemberResolvable): Permissions;
 		public setName(name: string, reason?: string): Promise<GuildChannel>;
 		public setPosition(position: number, relative?: boolean): Promise<GuildChannel>;
+		public setParent(channel: GuildChannel | Snowflake, lockPermissions?: boolean, reason?: string): Promise<GuildChannel>;
 		public setTopic(topic: string, reason?: string): Promise<GuildChannel>;
 		public toString(): string;
 	}
@@ -1245,9 +1246,9 @@ declare module 'discord.js' {
 		public setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 	}
 
-//#endregion
+	//#endregion
 
-//#region Mixins
+	//#region Mixins
 
 	// Model the TextBasedChannel mixin system, allowing application of these fields
 	// to the classes that use these methods without having to manually add them
@@ -1278,9 +1279,9 @@ declare module 'discord.js' {
 		stopTyping(force?: boolean): void;
 	} & PartialTextBasedChannelFields;
 
-//#endregion
+	//#endregion
 
-//#region Typedefs
+	//#region Typedefs
 
 	type AddGuildMemberOptions = {
 		accessToken: String;
@@ -1600,25 +1601,25 @@ declare module 'discord.js' {
 		maxID?: Snowflake;
 		minID?: Snowflake;
 		has?: 'link'
-			| 'embed'
-			| 'file'
-			| 'video'
-			| 'image'
-			| 'sound'
-			| '-link'
-			| '-embed'
-			| '-file'
-			| '-video'
-			| '-image'
-			| '-sound';
+		| 'embed'
+		| 'file'
+		| 'video'
+		| 'image'
+		| 'sound'
+		| '-link'
+		| '-embed'
+		| '-file'
+		| '-video'
+		| '-image'
+		| '-sound';
 		channel?: ChannelResolvable;
 		author?: UserResolvable;
 		authorType?: 'user'
-			| 'bot'
-			| 'webhook'
-			| '-user'
-			| '-bot'
-			| '-webhook';
+		| 'bot'
+		| 'webhook'
+		| '-user'
+		| '-bot'
+		| '-webhook';
 		sortBy?: 'relevant' | 'recent';
 		sortOrder?: 'asc' | 'desc';
 		contextSize?: number;
@@ -1763,7 +1764,7 @@ declare module 'discord.js' {
 		timestamp?: Date;
 		color?: number | string;
 		fields?: { name: string; value: string; inline?: boolean; }[];
-		file?: Attachment| string | FileOptions;
+		file?: Attachment | string | FileOptions;
 		author?: { name: string; url?: string; icon_url?: string; };
 		thumbnail?: { url: string; height?: number; width?: number; };
 		image?: { url: string; proxy_url?: string; height?: number; width?: number; };
@@ -1868,5 +1869,5 @@ declare module 'discord.js' {
 		| 'RELATIONSHIP_ADD'
 		| 'RELATIONSHIP_REMOVE';
 
-//#endregion
+	//#endregion
 }
