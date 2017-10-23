@@ -1601,25 +1601,25 @@ declare module 'discord.js' {
 		maxID?: Snowflake;
 		minID?: Snowflake;
 		has?: 'link'
-		| 'embed'
-		| 'file'
-		| 'video'
-		| 'image'
-		| 'sound'
-		| '-link'
-		| '-embed'
-		| '-file'
-		| '-video'
-		| '-image'
-		| '-sound';
+				| 'embed'
+				| 'file'
+				| 'video'
+				| 'image'
+				| 'sound'
+				| '-link'
+				| '-embed'
+				| '-file'
+				| '-video'
+				| '-image'
+				| '-sound';
 		channel?: ChannelResolvable;
 		author?: UserResolvable;
 		authorType?: 'user'
-		| 'bot'
-		| 'webhook'
-		| '-user'
-		| '-bot'
-		| '-webhook';
+				| 'bot'
+				| 'webhook'
+				| '-user'
+				| '-bot'
+				| '-webhook';
 		sortBy?: 'relevant' | 'recent';
 		sortOrder?: 'asc' | 'desc';
 		contextSize?: number;
