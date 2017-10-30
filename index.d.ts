@@ -45,7 +45,7 @@ declare module 'discord.js' {
 		public setBitrate(value: number | 'auto'): void;
 	}
 
-	class Base {
+	export class Base {
 		constructor (client: Client);
 		public readonly client: Client;
 	}
@@ -71,7 +71,7 @@ declare module 'discord.js' {
 		public options: object;
 	}
 
-	class CategoryChannel extends GuildChannel {
+	export class CategoryChannel extends GuildChannel {
 		public readonly children: Collection<Snowflake, GuildChannel>;
 	}
 
@@ -242,7 +242,7 @@ declare module 'discord.js' {
 		public setUsername(username: string, password?: string): Promise<ClientUser>;
 	}
 
-	class ClientUserChannelOverride {
+	export class ClientUserChannelOverride {
 		constructor(data: object);
 		private patch(data: object): void;
 
@@ -250,7 +250,7 @@ declare module 'discord.js' {
 		public muted: boolean;
 	}
 
-	class ClientUserGuildSettings {
+	export class ClientUserGuildSettings {
 		constructor(client: Client, data: object);
 		private patch(data: object): void;
 		private update(name: string, value: any): Promise<object>;
@@ -835,7 +835,7 @@ declare module 'discord.js' {
 		public toString(): string;
 	}
 
-	class RichPresenceAssets {
+	export class RichPresenceAssets {
 		constructor(activity: Activity, assets: object);
 		public largeImage: Snowflake;
 		public largeText: string;
@@ -959,6 +959,7 @@ declare module 'discord.js' {
 		public nsfw: boolean;
 		public topic: string;
 		public createWebhook(name: string, options?: { avatar?: BufferResolvable | Base64Resolvable, reason?: string }): Promise<Webhook>;
+		public setNSFW(nsfw: boolean, reason?: string): Promise<TextChannel>;
 		public fetchWebhooks(): Promise<Collection<Snowflake, Webhook>>;
 	}
 
@@ -988,7 +989,7 @@ declare module 'discord.js' {
 		public typingSinceIn(channel: ChannelResolvable): Date;
 	}
 
-	class UserConnection {
+	export class UserConnection {
 		constructor(user: User, data: object);
 		public id: string;
 		public integrations: object[];
@@ -1133,7 +1134,7 @@ declare module 'discord.js' {
 		on(event: 'warn', listener: (reason: string, message: string) => void): this;
 	}
 
-	class VoiceRegion {
+	export class VoiceRegion {
 		constructor(data: object);
 		public custom: boolean;
 		public deprecated: boolean;
@@ -1252,7 +1253,7 @@ declare module 'discord.js' {
 		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
 		createMessageCollector(filter: CollectorFilter, options?: CollectorOptions): MessageCollector;
 		search(options?: MessageSearchOptions): Promise<MessageSearchResult>;
-		startTyping(count?: number): void;
+		startTyping(count?: number): Promise<void>;
 		stopTyping(force?: boolean): void;
 	} & PartialTextBasedChannelFields;
 
@@ -1359,8 +1360,8 @@ declare module 'discord.js' {
 	type BufferResolvable = Buffer | string;
 
 	type ChannelCreationOverwrites = {
-		allow: PermissionResolvable[] | number;
-		deny: PermissionResolvable[] | number;
+		allow?: PermissionResolvable[] | number;
+		deny?: PermissionResolvable[] | number;
 		id: RoleResolvable | UserResolvable;
 	}
 
@@ -1368,11 +1369,12 @@ declare module 'discord.js' {
 		name?: string;
 		position?: number;
 		topic?: string;
+		nsfw?: boolean;
 		bitrate?: number;
 		userLimit?: number;
 		parentID?: Snowflake;
 		lockPermissions?: boolean;
-		permissionOverwrites: PermissionOverwrites[];
+		permissionOverwrites?: PermissionOverwrites[];
 	};
 
 	type ChannelLogsQueryOptions = {
