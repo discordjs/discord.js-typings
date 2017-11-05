@@ -1186,43 +1186,66 @@ declare module 'discord.js' {
 
 //#region Stores
 
-	export class DataStore<K, V, R = any> extends Collection<K, V> {
-		resolve(resolvable: R): V;
-		resolveID(resolvable: R): K;
+	export class DataStore<K, V, VConstructor = Constructable<V>, R = any> extends Collection<K, V> {
+		constructor(client: Client, iterable: Iterable<any>, holds: VConstructor);
+		public client: Client;
+		public holds: VConstructor;
+		public create(data: any, cache?: boolean, { id, extras }?: { id: K, extras: any[] }): V;
+		public remove(key: K): void;
+		public resolve(resolvable: R): V;
+		public resolveID(resolvable: R): K;
 	}
 
-	class ChannelStore extends DataStore<Snowflake, Channel, ChannelResolvable> { }
+	export class ChannelStore extends DataStore<Snowflake, Channel, typeof Channel, ChannelResolvable> {
+		constructor(client: Client, iterable: Iterable<any>, options?: { lru: boolean });
+		constructor(client: Client, options?: { lru: boolean });
+	}
 
-	class ClientPresenceStore extends PresenceStore {
+	export class ClientPresenceStore extends PresenceStore {
 		public setClientPresence(data: PresenceData): Promise<Presence>;
 	}
 
-	class EmojiStore extends DataStore<Snowflake, Emoji, EmojiResolvable> {
+	export class EmojiStore extends DataStore<Snowflake, Emoji, typeof Emoji, EmojiResolvable> {
+		constructor(guild: Guild, iterable?: Iterable<any>);
 		public resolveIdentifier(emoji: EmojiIdentifierResolvable): string;
 	}
 
-	class GuildChannelStore extends DataStore<Snowflake, GuildChannel, GuildChannelResolvable> { }
-
-	class GuildMemberStore extends DataStore<Snowflake, GuildMember, GuildMemberResolvable> {
-		fetch(options: UserResolvable | FetchMemberOptions): Promise<GuildMember>;
-		fetch(options: FetchMembersOptions): Promise<Collection<Snowflake, GuildMember>>;
+	export class GuildChannelStore extends DataStore<Snowflake, GuildChannel, typeof GuildChannel, GuildChannelResolvable> {
+		constructor(guild: Guild, iterable?: Iterable<any>);
 	}
 
-	class GuildStore extends DataStore<Snowflake, Guild, GuildResolvable> { }
-
-	class MessageStore extends DataStore<Snowflake, Message, MessageResolvable> {
-		fetch(message: Snowflake): Promise<Message>;
-		fetch(options: ChannelLogsQueryOptions): Promise<Collection<Snowflake, Message>>;
-		fetchPinned(): Promise<Collection<Snowflake, Message>>;
+	export class GuildMemberStore extends DataStore<Snowflake, GuildMember, typeof GuildMember, GuildMemberResolvable> {
+		constructor(guild: Guild, iterable?: Iterable<any>);
+		public fetch(options: UserResolvable | FetchMemberOptions): Promise<GuildMember>;
+		public fetch(): Promise<GuildMemberStore>;
+		public fetch(options: FetchMembersOptions): Promise<Collection<Snowflake, GuildMember>>;
 	}
 
-	class PresenceStore extends DataStore<Snowflake, Presence, PresenceResolvable> { }
+	export class GuildStore extends DataStore<Snowflake, Guild, typeof Guild, GuildResolvable> {
+		constructor(client: Client, iterable?: Iterable<any>);
+	}
 
-	class ReactionStore extends DataStore<Snowflake, MessageReaction, MessageReactionResolvable> { }
+	export class MessageStore extends DataStore<Snowflake, Message, typeof Message, MessageResolvable> {
+		constructor(channel: TextChannel | DMChannel | GroupDMChannel, iterable?: Iterable<any>);
+		public fetch(message: Snowflake): Promise<Message>;
+		public fetch(options?: ChannelLogsQueryOptions): Promise<Collection<Snowflake, Message>>;
+		public fetchPinned(): Promise<Collection<Snowflake, Message>>;
+	}
 
-	class RoleStore extends DataStore<Snowflake, Role, RoleResolvable> { }
+	export class PresenceStore extends DataStore<Snowflake, Presence, typeof Presence, PresenceResolvable> {
+		constructor(client: Client, iterable?: Iterable<any>);
+	}
 
-	class UserStore extends DataStore<Snowflake, User, UserResolvable> {
+	export class ReactionStore extends DataStore<Snowflake, MessageReaction, typeof MessageReaction, MessageReactionResolvable> {
+		constructor(message: Message, iterable?: Iterable<any>);
+	}
+
+	export class RoleStore extends DataStore<Snowflake, Role, typeof Role, RoleResolvable> {
+		constructor(guild: Guild, iterable?: Iterable<any>);
+	}
+
+	export class UserStore extends DataStore<Snowflake, User, typeof User, UserResolvable> {
+		constructor(client: Client, iterable?: Iterable<any>);
 		public fetch(id: Snowflake, cache?: boolean): Promise<User>;
 	}
 
