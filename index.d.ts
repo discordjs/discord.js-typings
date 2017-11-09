@@ -1667,7 +1667,7 @@ declare module 'discord.js' {
 
 	type MessageCollectorOptions = CollectorOptions & {
 		max?: number;
-		maxMatches?: number;
+		maxProcessed?: number;
 	};
 
 	type MessageEditOptions = {
