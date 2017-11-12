@@ -146,6 +146,7 @@ declare module 'discord.js' {
 		public on(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, Message>) => void): this;
 		public on(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
 		public on(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
+		public on(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
 		public on(event: 'ready' | 'reconnecting' | 'resumed', listener: () => void): this;
 		public on(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
 		public on(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
@@ -176,6 +177,7 @@ declare module 'discord.js' {
 		public once(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, Message>) => void): this;
 		public once(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
 		public once(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
+		public once(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
 		public once(event: 'ready' | 'reconnecting' | 'resumed', listener: () => void): this;
 		public once(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
 		public once(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
@@ -1676,6 +1678,21 @@ declare module 'discord.js' {
 		code?: string | boolean;
 	};
 
+	type MessageEmbedOptions = {
+		title?: string;
+		description?: string;
+		url?: string;
+		timestamp?: Date | number;
+		color?: number | string;
+		fields?: { name: string; value: string; inline?: boolean; }[];
+		files?: (MessageAttachment | string | FileOptions)[];
+		author?: { name?: string; url?: string; icon_url?: string; iconURL?: string; };
+		thumbnail?: { url?: string; height?: number; width?: number; };
+		image?: { url?: string; proxy_url?: string; proxyURL?: string; height?: number; width?: number; };
+		video?: { url?: string; height?: number; width?: number; };
+		footer?: { text?: string; icon_url?: string; iconURL?: string; };
+	};
+
 	type MessageNotifications = 'EVERYTHING'
 		| 'MENTIONS'
 		| 'NOTHING';
@@ -1877,25 +1894,19 @@ declare module 'discord.js' {
 
 	type PresenceStatus = 'online' | 'idle' | 'invisible' | 'dnd';
 
+	type RateLimitData = {
+		timeout: number;
+		limit: number;
+		timeDifference: number;
+		method: string;
+		path: string;
+		route: string;
+	}
+
 	type ReactionCollectorOptions = CollectorOptions & {
 		max?: number;
 		maxEmojis?: number;
 		maxUsers?: number;
-	};
-
-	type MessageEmbedOptions = {
-		title?: string;
-		description?: string;
-		url?: string;
-		timestamp?: Date | number;
-		color?: number | string;
-		fields?: { name: string; value: string; inline?: boolean; }[];
-		files?: (MessageAttachment | string | FileOptions)[];
-		author?: { name?: string; url?: string; icon_url?: string; iconURL?: string; };
-		thumbnail?: { url?: string; height?: number; width?: number; };
-		image?: { url?: string; proxy_url?: string; proxyURL?: string; height?: number; width?: number; };
-		video?: { url?: string; height?: number; width?: number; };
-		footer?: { text?: string; icon_url?: string; iconURL?: string; };
 	};
 
 	type RoleData = {
