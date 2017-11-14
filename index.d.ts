@@ -774,8 +774,7 @@ declare module 'discord.js' {
 		public readonly emoji: Emoji | ReactionEmoji;
 		public me: boolean;
 		public message: Message;
-		public users: Collection<Snowflake, User>;
-		public fetchUsers(options?: { limit?: number; after: Snowflake }): Promise<Collection<Snowflake, User>>;
+		public users: ReactionUserStore;
 		public remove(user?: UserResolvable): Promise<MessageReaction>;
 	}
 
@@ -1225,6 +1224,11 @@ declare module 'discord.js' {
 
 	export class GuildStore extends DataStore<Snowflake, Guild, typeof Guild, GuildResolvable> {
 		constructor(client: Client, iterable?: Iterable<any>);
+	}
+
+	export class ReactionUserStore extends DataStore<Snowflake, User, typeof User, UserResolvable> {
+		constructor(client: Client, iterable: Iterable<any> | undefined, reaction: MessageReaction);
+		public fetch(options?: { limit?: number, after?: Snowflake, before?: Snowflake }): Promise<this>;
 	}
 
 	export class MessageStore extends DataStore<Snowflake, Message, typeof Message, MessageResolvable> {
