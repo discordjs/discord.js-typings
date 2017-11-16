@@ -444,7 +444,7 @@ declare module 'discord.js' {
 		public embedEnabled: boolean;
 		public emojis: EmojiStore;
 		public explicitContentFilter: number;
-		public features: string[];
+		public features: GuildFeatures[];
 		public icon: string;
 		public id: Snowflake;
 		public readonly joinedAt: Date;
@@ -825,6 +825,16 @@ declare module 'discord.js' {
 		public collect(reaction: MessageReaction): CollectorHandler<Snowflake, MessageReaction>;
 		public dispose(reaction: MessageReaction, user: User): string;
 		public endReason(): string;
+
+		public on(event: 'collect', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
+		public on(event: 'dispose', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
+		public on(event: 'end', listener: (collected: Collection<Snowflake, MessageReaction>, reason: string) => void): string;
+		public on(event: 'remove', listener: (reaction: MessageReaction) => void): string;
+
+		public once(event: 'collect', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
+		public once(event: 'dispose', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
+		public once(event: 'end', listener: (collected: Collection<Snowflake, MessageReaction>, reason: string) => void): string;
+		public once(event: 'remove', listener: (reaction: MessageReaction) => void): string;
 	}
 
 	export class ReactionEmoji {
@@ -1624,6 +1634,12 @@ declare module 'discord.js' {
 		owner?: GuildMemberResolvable;
 		splash?: Base64Resolvable;
 	};
+
+	type GuildFeatures = 'INVITE_SPLASH'
+	| 'MORE_EMOJI'
+	| 'VERIFIED'
+	| 'VIP_REGIONS'
+	| 'VANITY_URL';
 
 	type GuildMemberEditData = {
 		nick?: string;
