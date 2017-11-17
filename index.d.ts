@@ -54,7 +54,7 @@ declare module 'discord.js' {
 		constructor(options?: ClientOptions);
 		private _intervals: Set<NodeJS.Timer>;
 		private _timeouts: Set<NodeJS.Timer>;
-		private api: object;
+		private readonly api: object;
 		private rest: object;
 
 		public options: ClientOptions;
@@ -87,7 +87,7 @@ declare module 'discord.js' {
 
 	export class Client extends BaseClient {
 		constructor(options?: ClientOptions);
-		private _pingTimestamp: number;
+		private readonly _pingTimestamp: number;
 		private actions: object;
 		private manager: ClientManager;
 		private voice: object;
@@ -468,7 +468,7 @@ declare module 'discord.js' {
 		public roles: RoleStore;
 		public splash: string;
 		public readonly suppressEveryone: boolean;
-		public readonly systemChannel: GuildChannel;
+		public readonly systemChannel: TextChannel;
 		public systemChannelID: Snowflake;
 		public verificationLevel: number;
 		public readonly verified: boolean;
@@ -476,7 +476,7 @@ declare module 'discord.js' {
 		public acknowledge(): Promise<Guild>;
 		public addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		public allowDMs(allow: boolean): Promise<Guild>;
-		public ban(user: UserResolvable, options?: BanOptions): Promise<GuildMember | User | string>;
+		public ban(user: UserResolvable, options?: BanOptions): Promise<GuildMember | User | Snowflake>;
 		public createChannel(name: string, type: 'text' | 'voice' | 'category', options: GuildCreateChannelOptions): Promise<TextChannel | VoiceChannel>;
 		public createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, options?: GuildCreateEmojiOptions): Promise<Emoji>;
 		public createRole(options?: { data?: RoleData, reason?: string}): Promise<Role>;
@@ -588,15 +588,15 @@ declare module 'discord.js' {
 		public readonly permissions: Permissions;
 		public readonly presence: Presence;
 		public readonly roles: Collection<Snowflake, Role>;
-		public selfDeaf: boolean;
-		public selfMute: boolean;
-		public serverDeaf: boolean;
-		public serverMute: boolean;
+		public readonly selfDeaf: boolean;
+		public readonly selfMute: boolean;
+		public readonly serverDeaf: boolean;
+		public readonly serverMute: boolean;
 		public speaking: boolean;
 		public user: User;
 		public readonly voiceChannel: VoiceChannel;
-		public voiceChannelID: Snowflake;
-		public voiceSessionID: string;
+		public readonly voiceChannelID: Snowflake;
+		public readonly voiceSessionID: string;
 		public addRole(role: RoleResolvable, reason?: string): Promise<GuildMember>;
 		public addRoles(roles: Collection<Snowflake, Role> | RoleResolvable[], reason?: string): Promise<GuildMember>;
 		public ban(options?: BanOptions): Promise<GuildMember>;
@@ -1033,11 +1033,13 @@ declare module 'discord.js' {
 
 	export class Util {
 		public static arraysEqual(a: any[], b: any[]): boolean;
+		public static binaryToID(num: string): Snowflake;
 		public static cloneObject(obj: object): object;
 		public static convertToBuffer(ab: ArrayBuffer | string): Buffer;
 		public static discordSort<K, V extends { rawPosition: number; id: string; }>(collection: Collection<K, V>): Collection<K, V>
 		public static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string;
 		public static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
+		public static idToBinary(num: Snowflake): string;
 		public static makeError(obj: { name: string, message: string, stack: string }): Error;
 		public static makePlainError(err: Error): { name: string, message: string, stack: string };
 		public static mergeDefault(def: object, given: object): object;
