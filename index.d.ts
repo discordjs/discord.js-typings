@@ -147,7 +147,8 @@ declare module 'discord.js' {
 		public on(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
 		public on(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
 		public on(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
-		public on(event: 'ready' | 'reconnecting' | 'resumed', listener: () => void): this;
+		public on(event: 'ready' | 'reconnecting', listener: () => void): this;
+		public on(event: 'resumed', listener: (replayed: number) => void): this;
 		public on(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
 		public on(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
 		public on(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
@@ -178,7 +179,8 @@ declare module 'discord.js' {
 		public once(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
 		public once(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
 		public once(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
-		public once(event: 'ready' | 'reconnecting' | 'resumed', listener: () => void): this;
+		public once(event: 'ready' | 'reconnecting', listener: () => void): this;
+		public once(event: 'resumed', listener: (replayed: number) => void): this;
 		public once(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
 		public once(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
 		public once(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
@@ -890,15 +892,22 @@ declare module 'discord.js' {
 
 	export class Shard {
 		constructor(manager: ShardingManager, id: number, args?: string[]);
+		private _evals: Map<string, Promise<any>>;
+		private _fetches: Map<string, Promise<any>>;
 		private _handleMessage(message: any): void;
 
 		public env: object;
-		public id: string;
+		public id: number;
 		public manager: ShardingManager;
 		public process: ChildProcess;
+		public ready: boolean;
 		public eval(script: string): Promise<any>;
 		public fetchClientValue(prop: string): Promise<any>;
 		public send(message: any): Promise<Shard>;
+
+		public on(event: 'disconnect' | 'ready' | 'reconnect', listener: () => void): this;
+
+		public once(event: 'disconnect' | 'ready' | 'reconnect', listener: () => void): this;
 	}
 
 	export class ShardClientUtil {
@@ -1636,10 +1645,10 @@ declare module 'discord.js' {
 	};
 
 	type GuildFeatures = 'INVITE_SPLASH'
-	| 'MORE_EMOJI'
-	| 'VERIFIED'
-	| 'VIP_REGIONS'
-	| 'VANITY_URL';
+		| 'MORE_EMOJI'
+		| 'VERIFIED'
+		| 'VIP_REGIONS'
+		| 'VANITY_URL';
 
 	type GuildMemberEditData = {
 		nick?: string;
