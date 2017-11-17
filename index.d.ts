@@ -333,7 +333,7 @@ declare module 'discord.js' {
 		public sort(compareFunction?: (a: V, b: V, c?: K, d?: K) => number): Collection<K, V>;
 	}
 
-	export abstract class Collector<K, V> {
+	export abstract class Collector<K, V> extends EventEmitter {
 		constructor(client: Client, filter: CollectorFilter, options?: CollectorOptions);
 		private _timeout: NodeJS.Timer;
 
@@ -890,7 +890,7 @@ declare module 'discord.js' {
 		public static comparePositions(role1: Role, role2: Role): number;
 	}
 
-	export class Shard {
+	export class Shard extends EventEmitter {
 		constructor(manager: ShardingManager, id: number, args?: string[]);
 		private _evals: Map<string, Promise<any>>;
 		private _fetches: Map<string, Promise<any>>;
