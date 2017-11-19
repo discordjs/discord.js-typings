@@ -432,6 +432,7 @@ declare module 'discord.js' {
 		constructor(client: Client, data: object);
 		private _sortedRoles(): Collection<Snowflake, Role>;
 		private _sortedChannels(channel: Channel): Collection<Snowflake, GuildChannel>;
+		private _memberSpeakUpdate(user: Snowflake, speaking: boolean): void;
 
 		protected setup(data: any): void;
 
@@ -1033,6 +1034,7 @@ declare module 'discord.js' {
 
 	export class Util {
 		public static arraysEqual(a: any[], b: any[]): boolean;
+		public static basename(path: string, ext?: string): string;
 		public static binaryToID(num: string): Snowflake;
 		public static cloneObject(obj: object): object;
 		public static convertToBuffer(ab: ArrayBuffer | string): Buffer;
@@ -1047,6 +1049,14 @@ declare module 'discord.js' {
 		public static parseEmoji(text: string): { name: string; id: string; };
 		public static resolveColor(color: ColorResolvable): number;
 		public static resolveString(data: StringResolvable): string;
+		public static setPosition<T extends (Channel | Role)>(
+			item: T,
+			position: number,
+			relative: boolean,
+			sorted: Collection<Snowflake, T>,
+			route: object,
+			reason?: string
+		): Promise<{ id: Snowflake, position: number }[]>;
 		public static splitMessage(text: string, options?: SplitOptions): string | string[];
 		public static str2ab(str: string): ArrayBuffer;
 	}
