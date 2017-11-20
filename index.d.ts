@@ -1,4 +1,4 @@
-// Type definitions for discord.js 11.2.0
+// Type definitions for discord.js 11.3.0
 // Project: https://github.com/hydrabolt/discord.js
 // Definitions by:
 //   acdenisSK <acdenissk69@gmail.com> (https://github.com/acdenisSK)
@@ -41,13 +41,17 @@ declare module 'discord.js' {
 		public options: object;
 	}
 
+	export class CategoryChannel extends GuildChannel {
+		public readonly children: Collection<Snowflake, GuildChannel>;
+	}
+
 	export class Channel {
 		constructor(client: Client, data: object);
 		public readonly client: Client;
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
 		public id: Snowflake;
-		public type: 'dm' | 'group' | 'text' | 'voice';
+		public type: 'dm' | 'group' | 'text' | 'voice' | 'category';
 		public delete(): Promise<Channel>;
 	}
 
@@ -296,7 +300,7 @@ declare module 'discord.js' {
 		public sort(compareFunction?: (a: V, b: V, c?: K, d?: K) => number): Collection<K, V>;
 	}
 
-	abstract class Collector<K, V> {
+	abstract class Collector<K, V> extends EventEmitter {
 		constructor(client: Client, filter: CollectorFilter, options?: CollectorOptions);
 		private _timeout: NodeJS.Timer;
 		private _handle(...args: any[]): void;
@@ -323,6 +327,7 @@ declare module 'discord.js' {
 		private static flattenErrors(obj: object, key: string): string[];
 
 		public code: number;
+		public path: string;
 	}
 
 	export class DMChannel extends TextBasedChannel(Channel) {
@@ -405,7 +410,7 @@ declare module 'discord.js' {
 		public embedEnabled: boolean;
 		public emojis: Collection<Snowflake, Emoji>;
 		public explicitContentFilter: number;
-		public features: object[];
+		public features: string[];
 		public icon: string;
 		public readonly iconURL: string;
 		public id: Snowflake;
@@ -430,7 +435,7 @@ declare module 'discord.js' {
 		public readonly splashURL: string;
 		public readonly suppressEveryone: boolean;
 		public readonly systemChannel: GuildChannel;
-		public systemChannelID: Snowflake
+		public systemChannelID: Snowflake;
 		public verificationLevel: number;
 		public readonly voiceConnection: VoiceConnection;
 		public acknowledge(): Promise<Guild>;
@@ -509,6 +514,8 @@ declare module 'discord.js' {
 		public readonly messageNotifications: GuildChannelMessageNotifications;
 		public readonly muted: boolean;
 		public name: string;
+		public readonly parent: CategoryChannel;
+		public parentID: Snowflake;
 		public permissionOverwrites: Collection<Snowflake, PermissionOverwrites>;
 		public position: number;
 		public clone(name?: string, withPermissions?: boolean, withTopic?: boolean, reason?: string): Promise<GuildChannel>;
@@ -519,6 +526,7 @@ declare module 'discord.js' {
 		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions, reason?: string): Promise<void>;
 		public permissionsFor(member: GuildMemberResolvable): Permissions;
 		public setName(name: string, reason?: string): Promise<GuildChannel>;
+		public setParent(parent: ChannelResolvable, reason?: string): Promise<GuildChannel>
 		public setPosition(position: number, relative?: boolean): Promise<GuildChannel>;
 		public setTopic(topic: string, reason?: string): Promise<GuildChannel>;
 		public toString(): string;
@@ -1611,7 +1619,7 @@ declare module 'discord.js' {
 		embed?: RichEmbedOptions;
 		code?: string | boolean;
 	};
-	
+
 	type MessageNotifications = 'EVERYTHING'
 		| 'MENTIONS'
 		| 'NOTHING';
