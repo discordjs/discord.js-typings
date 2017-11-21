@@ -481,6 +481,8 @@ declare module 'discord.js' {
 
 	export class GuildAuditLogs {
 		constructor(guild: Guild, data: object);
+		private webhooks: Collection<Snowflake, Webhook>;
+
 		public entries: Collection<Snowflake, GuildAuditLogsEntry>;
 
 		public static Actions: GuildAuditLogsActions;
@@ -492,7 +494,7 @@ declare module 'discord.js' {
 	}
 
 	class GuildAuditLogsEntry {
-		constructor(guild: Guild, data: object);
+		constructor(logs: GuildAuditLogs, guild: Guild, data: object);
 		public action: GuildAuditLogsAction;
 		public actionType: GuildAuditLogsActionType;
 		public changes: AuditLogChange[];
