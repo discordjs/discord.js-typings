@@ -894,9 +894,12 @@ declare module 'discord.js' {
 	export class Shard extends EventEmitter {
 		constructor(manager: ShardingManager, id: number, args?: string[]);
 		private _evals: Map<string, Promise<any>>;
+		private _exitListener: Function;
 		private _fetches: Map<string, Promise<any>>;
+		private _handleExit(respawn?: boolean): void;
 		private _handleMessage(message: any): void;
 
+		public args: string[];
 		public env: object;
 		public id: number;
 		public manager: ShardingManager;
@@ -904,11 +907,21 @@ declare module 'discord.js' {
 		public ready: boolean;
 		public eval(script: string): Promise<any>;
 		public fetchClientValue(prop: string): Promise<any>;
+		public respawn(delay?: number, waitForReady?: boolean): Promise<ChildProcess>;
 		public send(message: any): Promise<Shard>;
+		public spawn(waitForReady?: boolean): Promise<ChildProcess>;
 
-		public on(event: 'disconnect' | 'ready' | 'reconnect', listener: () => void): this;
+		public on(event: 'death', listener: (child: ChildProcess) => void): this;
+		public on(event: 'disconnect' | 'ready' | 'reconnecting', listener: () => void): this;
+		public on(event: 'error', listener: (error: Error) => void): this;
+		public on(event: 'message', listener: (message: any) => void): this;
+		public on(event: 'spawn', listener: (child: ChildProcess) => void): this;
 
-		public once(event: 'disconnect' | 'ready' | 'reconnect', listener: () => void): this;
+		public once(event: 'death', listener: (child: ChildProcess) => void): this;
+		public once(event: 'disconnect' | 'ready' | 'reconnecting', listener: () => void): this;
+		public once(event: 'error', listener: (error: Error) => void): this;
+		public once(event: 'message', listener: (message: any) => void): this;
+		public once(event: 'spawn', listener: (child: ChildProcess) => void): this;
 	}
 
 	export class ShardClientUtil {
@@ -920,6 +933,7 @@ declare module 'discord.js' {
 		public readonly id: number;
 		public broadcastEval(script: string): Promise<any[]>;
 		public fetchClientValues(prop: string): Promise<any[]>;
+		public respawnAll(shardDelay?: number, respawnDelay?: number, waitForReady?: boolean): Promise<void>;
 		public send(message: any): Promise<void>;
 
 		public static singleton(client: Client): ShardClientUtil;
@@ -932,7 +946,6 @@ declare module 'discord.js' {
 			shardArgs?: string[];
 			token?: string;
 		});
-		private _spawn(amount: number, delay: number): Promise<Collection<number, Shard>>;
 
 		public file: string;
 		public respawn: boolean;
@@ -942,15 +955,14 @@ declare module 'discord.js' {
 		public totalShards: number | string;
 		public broadcast(message: any): Promise<Shard[]>;
 		public broadcastEval(script: string): Promise<any[]>;
-		public createShard(id: number): Promise<Shard>;
+		public createShard(id: number): Shard;
 		public fetchClientValues(prop: string): Promise<any[]>;
-		public spawn(amount?: number, delay?: number): Promise<Collection<number, Shard>>;
+		public respawnAll(shardDelay?: number, respawnDelay?: number, waitForReady?: boolean): Promise<Collection<number, Shard>>;
+		public spawn(amount?: number, delay?: number, waitForReady?: boolean): Promise<Collection<number, Shard>>;
 
-		public on(event: 'launch', listener: (shard: Shard) => void): this;
-		public on(event: 'message', listener: (shard: Shard, message: any) => void): this;
+		public on(event: 'shardCreate', listener: (shard: Shard) => void): this;
 
-		public once(event: 'launch', listener: (shard: Shard) => void): this;
-		public once(event: 'message', listener: (shard: Shard, message: any) => void): this;
+		public once(event: 'shardCreate', listener: (shard: Shard) => void): this;
 	}
 
 	export class SnowflakeUtil {
@@ -1036,6 +1048,7 @@ declare module 'discord.js' {
 		public static arraysEqual(a: any[], b: any[]): boolean;
 		public static basename(path: string, ext?: string): string;
 		public static binaryToID(num: string): Snowflake;
+		public static delayFor(ms: number): Promise<void>;
 		public static cloneObject(obj: object): object;
 		public static convertToBuffer(ab: ArrayBuffer | string): Buffer;
 		public static discordSort<K, V extends { rawPosition: number; id: string; }>(collection: Collection<K, V>): Collection<K, V>
