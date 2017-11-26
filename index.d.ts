@@ -763,7 +763,11 @@ declare module 'discord.js' {
 		public readonly members: Collection<Snowflake, GuildMember>;
 		public roles: Collection<Snowflake, Role>;
 		public users: Collection<Snowflake, User>;
-		public has(data: UserResolvable | GuildMember | Role | GuildChannel): boolean;
+		public has(data: User | GuildMember | Role | GuildChannel, options?: {
+			ignoreDirect?: boolean;
+			ignoreRoles?: boolean;
+			ignoreEveryone?: boolean;
+		}): boolean;
 
 		public static CHANNELS_PATTERN: RegExp;
 		public static EVERYONE_PATTERN: RegExp;
@@ -1068,8 +1072,8 @@ declare module 'discord.js' {
 			relative: boolean,
 			sorted: Collection<Snowflake, T>,
 			route: object,
-			reason?: string
-		): Promise<{ id: Snowflake, position: number }[]>;
+			reason?: string,
+		): Promise<{ id: Snowflake; position: number }[]>;
 		public static splitMessage(text: string, options?: SplitOptions): string | string[];
 		public static str2ab(str: string): ArrayBuffer;
 	}
