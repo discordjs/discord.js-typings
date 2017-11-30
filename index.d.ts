@@ -119,7 +119,7 @@ declare module 'discord.js' {
 		public fetchVoiceRegions(): Promise<Collection<string, VoiceRegion>>;
 		public fetchWebhook(id: Snowflake, token?: string): Promise<Webhook>;
 		public generateInvite(permissions?: PermissionResolvable[] | number): Promise<string>;
-		public login(token: string): Promise<string>;
+		public login(token?: string): Promise<string>;
 		public sweepMessages(lifetime?: number): number;
 		public syncGuilds(guilds?: Guild[] | Collection<Snowflake, Guild>): void;
 
@@ -987,6 +987,11 @@ declare module 'discord.js' {
 		public pause(): void;
 		public resume(): void;
 		public setBitrate(bitrate: number | 'auto'): void;
+	}
+
+	export class Structures {
+		static get(structure: string): Function;
+		static extend(structure: string, extender: (baseClass: Function) => Function): Function;
 	}
 
 	export class TextChannel extends TextBasedChannel(GuildChannel) {
