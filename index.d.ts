@@ -100,7 +100,7 @@ declare module 'discord.js' {
 		public fetchVoiceRegions(): Promise<Collection<string, VoiceRegion>>;
 		public fetchWebhook(id: Snowflake, token?: string): Promise<Webhook>;
 		public generateInvite(permissions?: PermissionResolvable[] | number): Promise<string>;
-		public login(token: string): Promise<string>;
+		public login(token?: string): Promise<string>;
 		public setInterval(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 		public setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 		public sweepMessages(lifetime?: number): number;
