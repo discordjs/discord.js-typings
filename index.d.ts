@@ -443,7 +443,7 @@ declare module 'discord.js' {
 		public addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		public allowDMs(allow: boolean): Promise<Guild>;
 		public ban(user: UserResolvable, options?: BanOptions | number | string): Promise<GuildMember | User | string>;
-		public createChannel(name: string, type: 'text' | 'voice', overwrites?: PermissionOverwrites[] | object[], reason?: string): Promise<TextChannel | VoiceChannel>;
+		public createChannel(name: string, type?: 'category' | 'text' | 'voice', overwrites?: PermissionOverwrites[] | object[], reason?: string): Promise<CategoryChannel | TextChannel | VoiceChannel>;
 		public createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, roles?: Collection<Snowflake, Role> | Role[], reason?: string): Promise<Emoji>;
 		public createRole(data?: RoleData, reason?: string): Promise<Role>;
 		public delete(): Promise<Guild>;
