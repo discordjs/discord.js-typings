@@ -478,7 +478,7 @@ declare module 'discord.js' {
 		public addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		public allowDMs(allow: boolean): Promise<Guild>;
 		public ban(user: UserResolvable, options?: BanOptions): Promise<GuildMember | User | Snowflake>;
-		public createChannel(name: string, type: 'text' | 'voice' | 'category', options: GuildCreateChannelOptions): Promise<TextChannel | VoiceChannel>;
+		public createChannel(name: string, options?: GuildCreateChannelOptions): Promise<TextChannel | VoiceChannel>;
 		public createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, options?: GuildCreateEmojiOptions): Promise<Emoji>;
 		public createRole(options?: { data?: RoleData, reason?: string}): Promise<Role>;
 		public delete(): Promise<Guild>;
@@ -1649,6 +1649,7 @@ declare module 'discord.js' {
 	type GuildChannelResolvable = Snowflake | GuildChannel;
 
 	type GuildCreateChannelOptions = {
+		type?: 'text' | 'voice' | 'category'
 		nsfw?: boolean;
 		bitrate?: number;
 		userLimit?: number;
