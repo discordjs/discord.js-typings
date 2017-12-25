@@ -355,11 +355,11 @@ declare module 'discord.js' {
 
 		public on(event: 'collect', listener: (element: V, collector: Collector<K, V>) => void): this;
 		public on(event: 'dispose', listener: (element: V, collector: Collector<K, V>) => void): this;
-		public on(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): string;
+		public on(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): this;
 
 		public once(event: 'collect', listener: (element: V, collector: Collector<K, V>) => void): this;
 		public once(event: 'dispose', listener: (element: V, collector: Collector<K, V>) => void): this;
-		public once(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): string;
+		public once(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): this;
 	}
 
 	export class DataResolver {
@@ -835,13 +835,13 @@ declare module 'discord.js' {
 
 		public on(event: 'collect', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
 		public on(event: 'dispose', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
-		public on(event: 'end', listener: (collected: Collection<Snowflake, MessageReaction>, reason: string) => void): string;
-		public on(event: 'remove', listener: (reaction: MessageReaction) => void): string;
+		public on(event: 'end', listener: (collected: Collection<Snowflake, MessageReaction>, reason: string) => void): this;
+		public on(event: 'remove', listener: (reaction: MessageReaction) => void): this;
 
 		public once(event: 'collect', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
 		public once(event: 'dispose', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
-		public once(event: 'end', listener: (collected: Collection<Snowflake, MessageReaction>, reason: string) => void): string;
-		public once(event: 'remove', listener: (reaction: MessageReaction) => void): string;
+		public once(event: 'end', listener: (collected: Collection<Snowflake, MessageReaction>, reason: string) => void): this;
+		public once(event: 'remove', listener: (reaction: MessageReaction) => void): this;
 	}
 
 	export class ReactionEmoji {
