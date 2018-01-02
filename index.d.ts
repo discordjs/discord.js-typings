@@ -386,6 +386,7 @@ declare module 'discord.js' {
 
 	export class Emoji extends Base {
 		constructor(client: Client, data: object, guild: Guild);
+		public animated: boolean;
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
 		public guild: Guild;
@@ -1068,7 +1069,7 @@ declare module 'discord.js' {
 		public static makePlainError(err: Error): { name: string, message: string, stack: string };
 		public static mergeDefault(def: object, given: object): object;
 		public static moveElementInArray(array: any[], element: any, newIndex: number, offset?: boolean): number;
-		public static parseEmoji(text: string): { name: string; id: string; };
+		public static parseEmoji(text: string): { animated: boolean; name: string; id: string; };
 		public static resolveColor(color: ColorResolvable): number;
 		public static resolveString(data: StringResolvable): string;
 		public static setPosition<T extends (Channel | Role)>(
