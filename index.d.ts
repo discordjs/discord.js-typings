@@ -82,6 +82,7 @@ declare module 'discord.js' {
 		public id: Snowflake;
 		public type: 'dm' | 'group' | 'text' | 'voice' | 'category' | 'unknown';
 		public delete(reason?: string): Promise<Channel>;
+		public toString(): string;
 	}
 
 
@@ -381,7 +382,6 @@ declare module 'discord.js' {
 		constructor(client: Client, data: object);
 		public messages: MessageStore;
 		public recipient: User;
-		public toString(): string;
 	}
 
 	export class Emoji extends Base {
@@ -426,7 +426,6 @@ declare module 'discord.js' {
 		public removeUser(user: UserResolvable): Promise<GroupDMChannel>;
 		public setIcon(icon: Base64Resolvable | BufferResolvable): Promise<GroupDMChannel>;
 		public setName(name: string): Promise<GroupDMChannel>;
-		public toString(): string;
 	}
 
 	export class Guild extends Base {
@@ -567,7 +566,6 @@ declare module 'discord.js' {
 		public setParent(channel: GuildChannel | Snowflake, options?: { lockPermissions?: boolean, reason?: string }): Promise<GuildChannel>;
 		public setPosition(position: number, options?: { relative?: boolean, reason?: string }): Promise<GuildChannel>;
 		public setTopic(topic: string, reason?: string): Promise<GuildChannel>;
-		public toString(): string;
 	}
 
 	export class GuildMember extends PartialTextBasedChannel(Base) {
