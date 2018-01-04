@@ -790,7 +790,7 @@ declare module 'discord.js' {
 		public me: boolean;
 		public message: Message;
 		public users: Collection<string, User>;
-		public fetchUsers(limit?: number): Promise<Collection<Snowflake, User>>;
+		public fetchUsers(limit?: number, options?: { after?: number; before?: number }): Promise<Collection<Snowflake, User>>;
 		public remove(user?: UserResolvable): Promise<MessageReaction>;
 	}
 
