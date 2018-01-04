@@ -1941,7 +1941,7 @@ declare module 'discord.js' {
 
 	type PermissionOverwriteOptions = PermissionObject;
 
-	type PermissionResolvable = PermissionString | number;
+	type PermissionResolvable = Permissions | PermissionString | number;
 
 	type PresenceData = {
 		status?: PresenceStatus;
