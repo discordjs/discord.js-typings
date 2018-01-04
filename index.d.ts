@@ -119,7 +119,7 @@ declare module 'discord.js' {
 		public fetchInvite(invite: InviteResolvable): Promise<Invite>;
 		public fetchVoiceRegions(): Promise<Collection<string, VoiceRegion>>;
 		public fetchWebhook(id: Snowflake, token?: string): Promise<Webhook>;
-		public generateInvite(permissions?: PermissionResolvable[] | number): Promise<string>;
+		public generateInvite(permissions?: PermissionResolvable | PermissionResolvable[]): Promise<string>;
 		public login(token?: string): Promise<string>;
 		public sweepMessages(lifetime?: number): number;
 		public syncGuilds(guilds?: Guild[] | Collection<Snowflake, Guild>): void;
@@ -795,7 +795,7 @@ declare module 'discord.js' {
 	}
 
 	export class Permissions {
-		constructor(permissions: number | PermissionResolvable[]);
+		constructor(permissions: PermissionResolvable | PermissionResolvable[]);
 
 		public bitfield: number;
 		public add(...permissions: PermissionResolvable[]): this;
@@ -887,7 +887,7 @@ declare module 'discord.js' {
 		public setHoist(hoist: boolean, reason?: string): Promise<Role>;
 		public setMentionable(mentionable: boolean, reason?: string): Promise<Role>;
 		public setName(name: string, reason?: string): Promise<Role>;
-		public setPermissions(permissions: PermissionResolvable[], reason?: string): Promise<Role>;
+		public setPermissions(permissions: PermissionResolvable | PermissionResolvable[], reason?: string): Promise<Role>;
 		public setPosition(position: number, options?: { relative?: boolean; reason?: string }): Promise<Role>;
 		public toString(): string;
 
@@ -1977,7 +1977,7 @@ declare module 'discord.js' {
 		color?: ColorResolvable;
 		hoist?: boolean;
 		position?: number;
-		permissions?: PermissionResolvable[] | number;
+		permissions?: PermissionResolvable | PermissionResolvable[] | number;
 		mentionable?: boolean;
 	};
 
