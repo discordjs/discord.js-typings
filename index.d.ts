@@ -603,7 +603,7 @@ declare module 'discord.js' {
 		public createDM(): Promise<DMChannel>;
 		public deleteDM(): Promise<DMChannel>;
 		public edit(data: GuildMemberEditData, reason?: string): Promise<GuildMember>;
-		public hasPermission(permission: PermissionResolvable | PermissionResolvable[], checkAdmin?: boolean, checkOwner?: boolean): boolean;
+		public hasPermission(permission: PermissionResolvable | PermissionResolvable[], options?: { checkAdmin?: boolean; checkOwner?: boolean }): boolean;
 		public kick(reason?: string): Promise<GuildMember>;
 		public missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
 		public permissionsIn(channel: ChannelResolvable): Permissions;
