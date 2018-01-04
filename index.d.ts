@@ -1378,7 +1378,7 @@ declare module 'discord.js' {
 		fetchMessages(options?: ChannelLogsQueryOptions): Promise<Collection<string, Message>>;
 		fetchPinnedMessages(): Promise<Collection<string, Message>>;
 		search(options?: MessageSearchOptions): Promise<MessageSearchResult>;
-		startTyping(count?: number): void;
+		startTyping(count?: number): Promise<void>;
 		stopTyping(force?: boolean): void;
 	} & PartialTextBasedChannelFields;
 
