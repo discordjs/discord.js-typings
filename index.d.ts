@@ -235,7 +235,6 @@ declare module 'discord.js' {
 		public settings: ClientUserSettings;
 		public verified: boolean;
 		public createGroupDM(recipients: GroupDMRecipientOptions[]): Promise<GroupDMChannel>;
-		public createGuild(name: string, options?: { region?: string, icon?: BufferResolvable | Base64Resolvable }): Promise<Guild>;
 		public fetchMentions(options?: { limit?: number; roles?: boolean, everyone?: boolean; guild?: Guild | Snowflake }): Promise<Message[]>;
 		public setActivity(name: string, options?: { url?: string, type?: ActivityType | number }): Promise<Presence>;
 		public setAFK(afk: boolean): Promise<Presence>;
@@ -477,10 +476,6 @@ declare module 'discord.js' {
 		public acknowledge(): Promise<Guild>;
 		public addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		public allowDMs(allow: boolean): Promise<Guild>;
-		public ban(user: UserResolvable, options?: BanOptions): Promise<GuildMember | User | Snowflake>;
-		public createChannel(name: string, options?: GuildCreateChannelOptions): Promise<TextChannel | VoiceChannel>;
-		public createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, options?: GuildCreateEmojiOptions): Promise<Emoji>;
-		public createRole(options?: { data?: RoleData, reason?: string}): Promise<Role>;
 		public delete(): Promise<Guild>;
 		public edit(data: GuildEditData, reason?: string): Promise<Guild>;
 		public equals(guild: Guild): boolean;
@@ -492,7 +487,6 @@ declare module 'discord.js' {
 		public iconURL(options?: AvatarOptions): string;
 		public leave(): Promise<Guild>;
 		public member(user: UserResolvable): GuildMember;
-		public pruneMembers(options?: GuildPruneMembersOptions): Promise<number>;
 		public search(options?: MessageSearchOptions): Promise<MessageSearchResult>;
 		public setAFKChannel(afkChannel: ChannelResolvable, reason?: string): Promise<Guild>;
 		public setAFKTimeout(afkTimeout: number, reason?: string): Promise<Guild>;
@@ -509,7 +503,6 @@ declare module 'discord.js' {
 		public splashURL(options?: AvatarOptions): string;
 		public sync(): void;
 		public toString(): string;
-		public unban(user: UserResolvable, reason?: string): Promise<User>;
 	}
 
 	export class GuildAuditLogs {
@@ -675,7 +668,6 @@ declare module 'discord.js' {
 		public webhookID: Snowflake;
 		public acknowledge(): Promise<Message>;
 		public awaitReactions(filter: CollectorFilter, options?: AwaitReactionsOptions): Promise<Collection<Snowflake, MessageReaction>>;
-		public clearReactions(): Promise<Message>;
 		public createReactionCollector(filter: CollectorFilter, options?: ReactionCollectorOptions): ReactionCollector;
 		public delete(options?: { timeout?: number, reason?: string }): Promise<Message>;
 		public edit(content: StringResolvable, options?: MessageEditOptions | MessageEmbed): Promise<Message>;
@@ -781,7 +773,6 @@ declare module 'discord.js' {
 		public me: boolean;
 		public message: Message;
 		public users: ReactionUserStore;
-		public remove(user?: UserResolvable): Promise<MessageReaction>;
 	}
 
 	export class PermissionOverwrites {
@@ -1239,16 +1230,6 @@ declare module 'discord.js' {
 
 //#region Stores
 
-	export class DataStore<K, V, VConstructor = Constructable<V>, R = any> extends Collection<K, V> {
-		constructor(client: Client, iterable: Iterable<any>, holds: VConstructor);
-		public client: Client;
-		public holds: VConstructor;
-		public create(data: any, cache?: boolean, { id, extras }?: { id: K, extras: any[] }): V;
-		public remove(key: K): void;
-		public resolve(resolvable: R): V;
-		public resolveID(resolvable: R): K;
-	}
-
 	export class ChannelStore extends DataStore<Snowflake, Channel, typeof Channel, ChannelResolvable> {
 		constructor(client: Client, iterable: Iterable<any>, options?: { lru: boolean });
 		constructor(client: Client, options?: { lru: boolean });
@@ -1258,29 +1239,40 @@ declare module 'discord.js' {
 		public setClientPresence(data: PresenceData): Promise<Presence>;
 	}
 
+	export class DataStore<K, V, VConstructor = Constructable<V>, R = any> extends Collection<K, V> {
+		constructor(client: Client, iterable: Iterable<any>, holds: VConstructor);
+		public client: Client;
+		public holds: VConstructor;
+		public add(data: any, cache?: boolean, { id, extras }?: { id: K, extras: any[] }): V;
+		public remove(key: K): void;
+		public resolve(resolvable: R): V;
+		public resolveID(resolvable: R): K;
+	}
+
 	export class EmojiStore extends DataStore<Snowflake, Emoji, typeof Emoji, EmojiResolvable> {
 		constructor(guild: Guild, iterable?: Iterable<any>);
+		public create(attachment: BufferResolvable | Base64Resolvable, name: string, options?: GuildCreateEmojiOptions): Promise<Emoji>;
 		public resolveIdentifier(emoji: EmojiIdentifierResolvable): string;
 	}
 
 	export class GuildChannelStore extends DataStore<Snowflake, GuildChannel, typeof GuildChannel, GuildChannelResolvable> {
 		constructor(guild: Guild, iterable?: Iterable<any>);
+		public create(name: string, options?: GuildCreateChannelOptions): Promise<TextChannel | VoiceChannel>;
 	}
 
 	export class GuildMemberStore extends DataStore<Snowflake, GuildMember, typeof GuildMember, GuildMemberResolvable> {
 		constructor(guild: Guild, iterable?: Iterable<any>);
+		public ban(user: UserResolvable, options?: BanOptions): Promise<GuildMember | User | Snowflake>;
 		public fetch(options: UserResolvable | FetchMemberOptions): Promise<GuildMember>;
 		public fetch(): Promise<GuildMemberStore>;
 		public fetch(options: FetchMembersOptions): Promise<Collection<Snowflake, GuildMember>>;
+		public prune(options?: GuildPruneMembersOptions): Promise<number>;
+		public unban(user: UserResolvable, reason?: string): Promise<User>;
 	}
 
 	export class GuildStore extends DataStore<Snowflake, Guild, typeof Guild, GuildResolvable> {
 		constructor(client: Client, iterable?: Iterable<any>);
-	}
-
-	export class ReactionUserStore extends DataStore<Snowflake, User, typeof User, UserResolvable> {
-		constructor(client: Client, iterable: Iterable<any> | undefined, reaction: MessageReaction);
-		public fetch(options?: { limit?: number, after?: Snowflake, before?: Snowflake }): Promise<this>;
+		public create(name: string, options?: { region?: string, icon?: BufferResolvable | Base64Resolvable }): Promise<Guild>;
 	}
 
 	export class MessageStore extends DataStore<Snowflake, Message, typeof Message, MessageResolvable> {
@@ -1296,10 +1288,18 @@ declare module 'discord.js' {
 
 	export class ReactionStore extends DataStore<Snowflake, MessageReaction, typeof MessageReaction, MessageReactionResolvable> {
 		constructor(message: Message, iterable?: Iterable<any>);
+		public removeAll(): Promise<Message>;
+	}
+
+	export class ReactionUserStore extends DataStore<Snowflake, User, typeof User, UserResolvable> {
+		constructor(client: Client, iterable: Iterable<any> | undefined, reaction: MessageReaction);
+		public fetch(options?: { limit?: number, after?: Snowflake, before?: Snowflake }): Promise<this>;
+		public remove(user?: UserResolvable): Promise<MessageReaction>;
 	}
 
 	export class RoleStore extends DataStore<Snowflake, Role, typeof Role, RoleResolvable> {
 		constructor(guild: Guild, iterable?: Iterable<any>);
+		public create(options?: { data?: RoleData, reason?: string}): Promise<Role>;
 	}
 
 	export class UserStore extends DataStore<Snowflake, User, typeof User, UserResolvable> {
