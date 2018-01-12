@@ -900,6 +900,7 @@ declare module 'discord.js' {
 		public process: ChildProcess;
 		public ready: boolean;
 		public eval(script: string): Promise<any>;
+		public eval<T>(fn: (client: Client) => T): Promise<T[]>;
 		public fetchClientValue(prop: string): Promise<any>;
 		public respawn(delay?: number, waitForReady?: boolean): Promise<ChildProcess>;
 		public send(message: any): Promise<Shard>;
@@ -926,6 +927,7 @@ declare module 'discord.js' {
 		public readonly count: number;
 		public readonly id: number;
 		public broadcastEval(script: string): Promise<any[]>;
+		public broadcastEval<T>(fn: (client: Client) => T): Promise<T[]>;
 		public fetchClientValues(prop: string): Promise<any[]>;
 		public respawnAll(shardDelay?: number, respawnDelay?: number, waitForReady?: boolean): Promise<void>;
 		public send(message: any): Promise<void>;
