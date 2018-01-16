@@ -1641,10 +1641,14 @@ declare module 'discord.js' {
 	};
 
 	type GuildChannelCloneOptions = {
+		bitrate?: number;
 		name?: string;
+		nsfw?: boolean;
+		parent?: ChannelResolvable;
+		reason?: string;
+		userLimit?: number;
 		withPermissions?: boolean;
 		withTopic?: boolean;
-		reason?: string
 	};
 
 	type GuildChannelResolvable = Snowflake | GuildChannel;
