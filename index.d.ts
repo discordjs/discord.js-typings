@@ -349,16 +349,16 @@ declare module 'discord.js' {
 		public stop(reason?: string): void;
 
 		protected listener: Function;
-		public abstract collect(...args: any[]): CollectorHandler<K, V>;
-		public abstract dispose(...args: any[]): any | null;
-		public abstract endReason(): string;
+		public abstract collect(...args: any[]): K;
+		public abstract dispose(...args: any[]): K;
+		public abstract endReason(): void;
 
-		public on(event: 'collect', listener: (element: V, collector: Collector<K, V>) => void): this;
-		public on(event: 'dispose', listener: (element: V, collector: Collector<K, V>) => void): this;
+		public on(event: 'collect', listener: (...args: any[]) => void): this;
+		public on(event: 'dispose', listener: (...args: any[]) => void): this;
 		public on(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): this;
 
-		public once(event: 'collect', listener: (element: V, collector: Collector<K, V>) => void): this;
-		public once(event: 'dispose', listener: (element: V, collector: Collector<K, V>) => void): this;
+		public once(event: 'collect', listener: (...args: any[]) => void): this;
+		public once(event: 'dispose', listener: (...args: any[]) => void): this;
 		public once(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): this;
 	}
 
@@ -703,8 +703,8 @@ declare module 'discord.js' {
 		public options: MessageCollectorOptions;
 		public received: number;
 
-		public collect(message: Message): CollectorHandler<Snowflake, Message>;
-		public dispose(message: Message): string;
+		public collect(message: Message): Snowflake;
+		public dispose(message: Message): Snowflake;
 		public endReason(): string;
 	}
 
@@ -820,19 +820,20 @@ declare module 'discord.js' {
 
 		public static key(reaction: MessageReaction): Snowflake | string;
 
-		public collect(reaction: MessageReaction): CollectorHandler<Snowflake, MessageReaction>;
-		public dispose(reaction: MessageReaction, user: User): string;
+		public collect(reaction: MessageReaction): Snowflake | string;
+		public dispose(reaction: MessageReaction, user: User): Snowflake | string;
+		public empty(): void;
 		public endReason(): string;
 
-		public on(event: 'collect', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
-		public on(event: 'dispose', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
+		public on(event: 'collect', listener: (reaction: MessageReaction, user: User) => void): this;
+		public on(event: 'dispose', listener: (reaction: MessageReaction, user: User) => void): this;
 		public on(event: 'end', listener: (collected: Collection<Snowflake, MessageReaction>, reason: string) => void): this;
-		public on(event: 'remove', listener: (reaction: MessageReaction) => void): this;
+		public on(event: 'remove', listener: (reaction: MessageReaction, user: User) => void): this;
 
-		public once(event: 'collect', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
-		public once(event: 'dispose', listener: (element: MessageReaction, collector: Collector<Snowflake, MessageReaction>) => void): this;
+		public once(event: 'collect', listener: (reaction: MessageReaction, user: User) => void): this;
+		public once(event: 'dispose', listener: (reaction: MessageReaction, user: User) => void): this;
 		public once(event: 'end', listener: (collected: Collection<Snowflake, MessageReaction>, reason: string) => void): this;
-		public once(event: 'remove', listener: (reaction: MessageReaction) => void): this;
+		public once(event: 'remove', listener: (reaction: MessageReaction, user: User) => void): this;
 	}
 
 	export class ReactionEmoji {
@@ -1504,7 +1505,6 @@ declare module 'discord.js' {
 		http?: HTTPOptions;
 	};
 
-	type CollectorHandler<K, V> = { key: K, value: V };
 	type CollectorFilter = (...args: any[]) => boolean;
 	type CollectorOptions = {
 		time?: number;
