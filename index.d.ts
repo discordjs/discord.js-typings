@@ -576,6 +576,7 @@ declare module 'discord.js' {
 		public readonly joinedAt: Date;
 		public joinedTimestamp: number;
 		public readonly kickable: boolean;
+		public readonly manageable: boolean;
 		public readonly mute: boolean;
 		public nickname: string;
 		public readonly permissions: Permissions;
