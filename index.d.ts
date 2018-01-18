@@ -99,7 +99,7 @@ declare module 'discord.js' {
 
 		public broadcasts: VoiceBroadcast[];
 		public channels: ChannelStore;
-		public readonly emojis: EmojiStore;
+		public readonly emojis: GuildEmojiStore;
 		public guilds: GuildStore;
 		public readonly ping: number;
 		public pings: number[];
@@ -133,8 +133,8 @@ declare module 'discord.js' {
 		public on(event: 'clientUserGuildSettingsUpdate', listener: (clientUserGuildSettings: ClientUserGuildSettings) => void): this;
 		public on(event: 'debug' | 'warn', listener: (info: string) => void): this;
 		public on(event: 'disconnect', listener: (event: any) => void): this;
-		public on(event: 'emojiCreate' | 'emojiDelete', listener: (emoji: Emoji) => void): this;
-		public on(event: 'emojiUpdate', listener: (oldEmoji: Emoji, newEmoji: Emoji) => void): this;
+		public on(event: 'emojiCreate' | 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
+		public on(event: 'emojiUpdate', listener: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => void): this;
 		public on(event: 'error', listener: (error: Error) => void): this;
 		public on(event: 'guildBanAdd' | 'guildBanRemove', listener: (guild: Guild, user: User) => void): this;
 		public on(event: 'guildCreate' | 'guildDelete' | 'guildUnavailable', listener: (guild: Guild) => void): this;
@@ -165,8 +165,8 @@ declare module 'discord.js' {
 		public once(event: 'clientUserGuildSettingsUpdate', listener: (clientUserGuildSettings: ClientUserGuildSettings) => void): this;
 		public once(event: 'debug' | 'warn', listener: (info: string) => void): this;
 		public once(event: 'disconnect', listener: (event: any) => void): this;
-		public once(event: 'emojiCreate' | 'emojiDelete', listener: (emoji: Emoji) => void): this;
-		public once(event: 'emojiUpdate', listener: (oldEmoji: Emoji, newEmoji: Emoji) => void): this;
+		public once(event: 'emojiCreate' | 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
+		public once(event: 'emojiUpdate', listener: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => void): this;
 		public once(event: 'error', listener: (error: Error) => void): this;
 		public once(event: 'guildBanAdd' | 'guildBanRemove', listener: (guild: Guild, user: User) => void): this;
 		public once(event: 'guildCreate' | 'guildDelete' | 'guildUnavailable', listener: (guild: Guild) => void): this;
@@ -384,26 +384,12 @@ declare module 'discord.js' {
 	}
 
 	export class Emoji extends Base {
-		constructor(client: Client, data: object, guild: Guild);
+		constructor(client: Client, emoji: object);
 		public animated: boolean;
-		public readonly createdAt: Date;
-		public readonly createdTimestamp: number;
-		public guild: Guild;
 		public id: Snowflake;
-		public readonly identifier: string;
-		public managed: boolean;
 		public name: string;
-		public requiresColons: boolean;
-		public readonly roles: Collection<Snowflake, Role>;
+		public readonly identifier: string;
 		public readonly url: string;
-		public addRestrictedRole(role: RoleResolvable): Promise<Emoji>;
-		public addRestrictedRoles(roles: Collection<Snowflake, Role> | RoleResolvable[]): Promise<Emoji>;
-		public delete(reason?: string): Promise<Emoji>;
-		public edit(data: EmojiEditData, reason?: string): Promise<Emoji>;
-		public equals(other: Emoji | object): boolean;
-		public removeRestrictedRole(role: RoleResolvable): Promise<Emoji>;
-		public removeRestrictedRoles(roles: Collection<Snowflake, Role> | RoleResolvable[]): Promise<Emoji>;
-		public setName(name: string, reason?: string): Promise<Emoji>;
 		public toString(): string;
 	}
 
@@ -444,7 +430,7 @@ declare module 'discord.js' {
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
 		public embedEnabled: boolean;
-		public emojis: EmojiStore;
+		public emojis: GuildEmojiStore;
 		public explicitContentFilter: number;
 		public features: GuildFeatures[];
 		public icon: string;
@@ -530,7 +516,7 @@ declare module 'discord.js' {
 		public extra: object | Role | GuildMember;
 		public id: Snowflake;
 		public reason: string;
-		public target: Guild | User | Role | Emoji | Invite | Webhook;
+		public target: Guild | User | Role | GuildEmoji | Invite | Webhook;
 		public targetType: GuildAuditLogsTarget;
 	}
 
@@ -562,6 +548,26 @@ declare module 'discord.js' {
 		public setParent(channel: GuildChannel | Snowflake, options?: { lockPermissions?: boolean, reason?: string }): Promise<GuildChannel>;
 		public setPosition(position: number, options?: { relative?: boolean, reason?: string }): Promise<GuildChannel>;
 		public setTopic(topic: string, reason?: string): Promise<GuildChannel>;
+	}
+
+	export class GuildEmoji extends Emoji {
+		constructor(client: Client, data: object, guild: Guild);
+		private _roles: string[];
+
+		public readonly createdAt: Date;
+		public readonly createdTimestamp: number;
+		public guild: Guild;
+		public managed: boolean;
+		public requiresColons: boolean;
+		public readonly roles: Collection<Snowflake, Role>;
+		public addRestrictedRole(role: RoleResolvable): Promise<GuildEmoji>;
+		public addRestrictedRoles(roles: Collection<Snowflake, Role> | RoleResolvable[]): Promise<GuildEmoji>;
+		public delete(reason?: string): Promise<GuildEmoji>;
+		public edit(data: GuildEmojiEditData, reason?: string): Promise<GuildEmoji>;
+		public equals(other: GuildEmoji | object): boolean;
+		public removeRestrictedRole(role: RoleResolvable): Promise<GuildEmoji>;
+		public removeRestrictedRoles(roles: Collection<Snowflake, Role> | RoleResolvable[]): Promise<GuildEmoji>;
+		public setName(name: string, reason?: string): Promise<GuildEmoji>;
 	}
 
 	export class GuildMember extends PartialTextBasedChannel(Base) {
@@ -772,8 +778,10 @@ declare module 'discord.js' {
 
 	export class MessageReaction {
 		constructor(client: Client, data: object, message: Message);
+		private _emoji: GuildEmoji | ReactionEmoji;
+
 		public count: number;
-		public readonly emoji: Emoji | ReactionEmoji;
+		public readonly emoji: GuildEmoji | ReactionEmoji;
 		public me: boolean;
 		public message: Message;
 		public users: ReactionUserStore;
@@ -841,13 +849,9 @@ declare module 'discord.js' {
 		public once(event: 'remove', listener: (reaction: MessageReaction, user: User) => void): this;
 	}
 
-	export class ReactionEmoji {
-		constructor(reaction: MessageReaction, name: string, id: string);
-		public id: Snowflake;
-		public readonly identifier: string;
-		public name: string;
+	export class ReactionEmoji extends Emoji {
+		constructor(reaction: MessageReaction, emoji: object);
 		public reaction: MessageReaction;
-		public toString(): string;
 	}
 
 	export class RichPresenceAssets {
@@ -1259,9 +1263,9 @@ declare module 'discord.js' {
 		public resolveID(resolvable: R): K;
 	}
 
-	export class EmojiStore extends DataStore<Snowflake, Emoji, typeof Emoji, EmojiResolvable> {
+	export class GuildEmojiStore extends DataStore<Snowflake, GuildEmoji, typeof GuildEmoji, EmojiResolvable> {
 		constructor(guild: Guild, iterable?: Iterable<any>);
-		public create(attachment: BufferResolvable | Base64Resolvable, name: string, options?: GuildCreateEmojiOptions): Promise<Emoji>;
+		public create(attachment: BufferResolvable | Base64Resolvable, name: string, options?: GuildEmojiCreateOptions): Promise<GuildEmoji>;
 		public resolveIdentifier(emoji: EmojiIdentifierResolvable): string;
 	}
 
@@ -1552,14 +1556,14 @@ declare module 'discord.js' {
 		binary: string;
 	};
 
-	type EmojiEditData = {
+	type GuildEmojiEditData = {
 		name?: string;
 		roles?: Collection<Snowflake, Role> | RoleResolvable[];
 	};
 
 	type EmojiIdentifierResolvable = string | EmojiResolvable;
 
-	type EmojiResolvable = Snowflake | Emoji | ReactionEmoji
+	type EmojiResolvable = Snowflake | GuildEmoji | ReactionEmoji;
 
 	type FetchMemberOptions = {
 		user: UserResolvable;
@@ -1670,7 +1674,7 @@ declare module 'discord.js' {
 		reason?: string
 	};
 
-	type GuildCreateEmojiOptions = {
+	type GuildEmojiCreateOptions = {
 		roles?: Collection<Snowflake, Role> | RoleResolvable[];
 		reason?: string;
 	};
