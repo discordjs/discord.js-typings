@@ -536,6 +536,9 @@ declare module 'discord.js' {
 
 	export class GuildChannel extends Channel {
 		constructor(guild: Guild, data: object);
+		private memberPermissions(member: GuildMember): Permissions;
+		private rolePermissions(role: Role): Permissions;
+
 		public readonly calculatedPosition: number;
 		public readonly deletable: boolean;
 		public guild: Guild;
@@ -554,7 +557,7 @@ declare module 'discord.js' {
 		public equals(channel: GuildChannel): boolean;
 		public lockPermissions(): Promise<GuildChannel>;
 		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions, reason?: string): Promise<void>;
-		public permissionsFor(member: GuildMemberResolvable): Permissions;
+		public permissionsFor(memberOrRole: GuildMemberResolvable | RoleResolvable): Permissions;
 		public setName(name: string, reason?: string): Promise<GuildChannel>;
 		public setParent(channel: GuildChannel | Snowflake, options?: { lockPermissions?: boolean, reason?: string }): Promise<GuildChannel>;
 		public setPosition(position: number, options?: { relative?: boolean, reason?: string }): Promise<GuildChannel>;
@@ -876,6 +879,7 @@ declare module 'discord.js' {
 		public delete(reason?: string): Promise<Role>;
 		public edit(data: RoleData, reason?: string): Promise<Role>;
 		public equals(role: Role): boolean;
+		public permissionsIn(channel: ChannelResolvable): Permissions;
 		public setColor(color: ColorResolvable, reason?: string): Promise<Role>;
 		public setHoist(hoist: boolean, reason?: string): Promise<Role>;
 		public setMentionable(mentionable: boolean, reason?: string): Promise<Role>;
