@@ -119,7 +119,7 @@ declare module 'discord.js' {
 		public fetchInvite(invite: InviteResolvable): Promise<Invite>;
 		public fetchVoiceRegions(): Promise<Collection<string, VoiceRegion>>;
 		public fetchWebhook(id: Snowflake, token?: string): Promise<Webhook>;
-		public generateInvite(permissions?: PermissionResolvable | PermissionResolvable[]): Promise<string>;
+		public generateInvite(permissions?: number | PermissionResolvable[]): Promise<string>;
 		public login(token?: string): Promise<string>;
 		public sweepMessages(lifetime?: number): number;
 		public syncGuilds(guilds?: Guild[] | Collection<Snowflake, Guild>): void;
@@ -600,9 +600,9 @@ declare module 'discord.js' {
 		public createDM(): Promise<DMChannel>;
 		public deleteDM(): Promise<DMChannel>;
 		public edit(data: GuildMemberEditData, reason?: string): Promise<GuildMember>;
-		public hasPermission(permission: PermissionResolvable | PermissionResolvable[], options?: { checkAdmin?: boolean; checkOwner?: boolean }): boolean;
+		public hasPermission(permission: PermissionResolvable, options?: { checkAdmin?: boolean; checkOwner?: boolean }): boolean;
 		public kick(reason?: string): Promise<GuildMember>;
-		public missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
+		public missingPermissions(permissions: PermissionResolvable, explicit?: boolean): PermissionString[];
 		public permissionsIn(channel: ChannelResolvable): Permissions;
 		public removeRole(role: RoleResolvable, reason?: string): Promise<GuildMember>;
 		public removeRoles(roles: Collection<Snowflake, Role> | RoleResolvable[], reason?: string): Promise<GuildMember>;
@@ -790,20 +790,22 @@ declare module 'discord.js' {
 	}
 
 	export class Permissions {
-		constructor(permissions: PermissionResolvable | PermissionResolvable[]);
+		constructor(permissions: PermissionResolvable);
 
 		public bitfield: number;
 		public add(...permissions: PermissionResolvable[]): this;
 		public freeze(): this;
-		public has(permission: PermissionResolvable | PermissionResolvable[], checkAdmin?: boolean): boolean;
-		public missing(permissions: PermissionResolvable[], checkAdmin?: boolean): PermissionResolvable[];
+		public has(permission: PermissionResolvable, checkAdmin?: boolean): boolean;
+		public missing(permissions: PermissionResolvable, checkAdmin?: boolean): PermissionString[];
 		public remove(...permissions: PermissionResolvable[]): this;
 		public serialize(checkAdmin?: boolean): PermissionObject;
+		public toArray(checkAdmin?: boolean): PermissionString[];
+		public [Symbol.iterator](): IterableIterator<PermissionString>;
 
 		public static ALL: number;
 		public static DEFAULT: number;
 		public static FLAGS: PermissionFlags;
-		public static resolve(permission: PermissionResolvable | PermissionResolvable[]): number;
+		public static resolve(permission: PermissionResolvable): number;
 	}
 
 	export class Presence {
@@ -884,7 +886,7 @@ declare module 'discord.js' {
 		public setHoist(hoist: boolean, reason?: string): Promise<Role>;
 		public setMentionable(mentionable: boolean, reason?: string): Promise<Role>;
 		public setName(name: string, reason?: string): Promise<Role>;
-		public setPermissions(permissions: PermissionResolvable | PermissionResolvable[], reason?: string): Promise<Role>;
+		public setPermissions(permissions: PermissionResolvable, reason?: string): Promise<Role>;
 		public setPosition(position: number, options?: { relative?: boolean; reason?: string }): Promise<Role>;
 		public toString(): string;
 
@@ -1952,7 +1954,8 @@ declare module 'discord.js' {
 
 	type PermissionOverwriteOptions = PermissionObject;
 
-	type PermissionResolvable = Permissions | PermissionString | number;
+	interface RecursiveArray<T> extends Array<T | RecursiveArray<T>> { }
+	type PermissionResolvable = RecursiveArray<Permissions | PermissionString | number> | Permissions | PermissionString | number;
 
 	type PresenceData = {
 		status?: PresenceStatus;
@@ -1988,7 +1991,7 @@ declare module 'discord.js' {
 		color?: ColorResolvable;
 		hoist?: boolean;
 		position?: number;
-		permissions?: PermissionResolvable | PermissionResolvable[] | number;
+		permissions?: PermissionResolvable;
 		mentionable?: boolean;
 	};
 
