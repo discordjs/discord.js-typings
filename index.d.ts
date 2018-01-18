@@ -994,8 +994,35 @@ declare module 'discord.js' {
 	}
 
 	export class Structures {
+		static get(structure :'GuildEmoji'): typeof GuildEmoji;
+		static get(structure :'DMChannel'): typeof DMChannel;
+		static get(structure :'GroupDMChannel'): typeof GroupDMChannel;
+		static get(structure :'TextChannel'): typeof TextChannel;
+		static get(structure :'VoiceChannel'): typeof VoiceChannel;
+		static get(structure :'CategoryChannel'): typeof CategoryChannel;
+		static get(structure :'GuildChannel'): typeof GuildChannel;
+		static get(structure :'GuildMember'): typeof GuildMember;
+		static get(structure :'Guild'): typeof Guild;
+		static get(structure :'Message'): typeof Message;
+		static get(structure :'MessageReaction'): typeof MessageReaction;
+		static get(structure :'Presence'): typeof Presence;
+		static get(structure :'Role'): typeof Role;
+		static get(structure :'User'): typeof User;
 		static get(structure: string): Function;
-		static extend(structure: string, extender: (baseClass: Function) => Function): Function;
+		static extend<T extends typeof GuildEmoji>(structure: 'GuildEmoji', extender: (baseClass: typeof GuildEmoji) => T): T;
+		static extend<T extends typeof DMChannel>(structure: 'DMChannel', extender: (baseClass: typeof DMChannel) => T): T;
+		static extend<T extends typeof GroupDMChannel>(structure: 'GroupDMChannel', extender: (baseClass: typeof GroupDMChannel) => T): T;
+		static extend<T extends typeof VoiceChannel>(structure: 'VoiceChannel', extender: (baseClass: typeof VoiceChannel) => T): T;
+		static extend<T extends typeof CategoryChannel>(structure: 'CategoryChannel', extender: (baseClass: typeof CategoryChannel) => T): T;
+		static extend<T extends typeof GuildChannel>(structure: 'GuildChannel', extender: (baseClass: typeof GuildChannel) => T): T;
+		static extend<T extends typeof GuildMember>(structure: 'GuildMember', extender: (baseClass: typeof GuildMember) => T): T;
+		static extend<T extends typeof Guild>(structure: 'Guild', extender: (baseClass: typeof Guild) => T): T;
+		static extend<T extends typeof Message>(structure: 'Message', extender: (baseClass: typeof Message) => T): T;
+		static extend<T extends typeof MessageReaction>(structure: 'MessageReaction', extender: (baseClass: typeof MessageReaction) => T): T;
+		static extend<T extends typeof Presence>(structure: 'Presence', extender: (baseClass: typeof Presence) => T): T;
+		static extend<T extends typeof Role>(structure: 'Role', extender: (baseClass: typeof Role) => T): T;
+		static extend<T extends typeof User>(structure: 'User', extender: (baseClass: typeof User) => T): T;
+		static extend<T extends Function>(structure: string, extender: (baseClass: typeof Function) => T): T;
 	}
 
 	export class TextChannel extends TextBasedChannel(GuildChannel) {
