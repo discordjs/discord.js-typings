@@ -71,6 +71,10 @@ declare module 'discord.js' {
 		public options: object;
 	}
 
+	class BroadcastDispatcher extends StreamDispatcher {
+		public broadcast: VoiceBroadcast;
+	}
+
 	export class CategoryChannel extends GuildChannel {
 		public readonly children: Collection<Snowflake, GuildChannel>;
 	}
@@ -1123,7 +1127,7 @@ declare module 'discord.js' {
 		public destroy(): void;
 		public end(): void;
 		public pause(): void;
-		public play(input: string | ReadableStream, options?: StreamOptions): StreamDispatcher;
+		public play(input: string | ReadableStream, options?: StreamOptions): BroadcastDispatcher;
 		public resume(): void;
 
 		on(event: string, listener: Function): this;
