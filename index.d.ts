@@ -2035,11 +2035,16 @@ declare module 'discord.js' {
 	type Status = number;
 
 	type StreamOptions = {
+		type?: StreamType;
 		seek?: number;
 		volume?: number;
 		passes?: number;
+		plp?: number;
+		fec?: boolean;
 		bitrate?: number | 'auto';
 	};
+
+	type StreamType = 'unknown' | 'converted' | 'opus' | 'ogg/opus' | 'webm/opus';
 
 	type StringResolvable = string | string[] | any;
 
