@@ -71,6 +71,10 @@ declare module 'discord.js' {
 		public options: object;
 	}
 
+	class BroadcastDispatcher extends StreamDispatcher {
+		public broadcast: VoiceBroadcast;
+	}
+
 	export class CategoryChannel extends GuildChannel {
 		public readonly children: Collection<Snowflake, GuildChannel>;
 	}
@@ -1123,11 +1127,7 @@ declare module 'discord.js' {
 		public destroy(): void;
 		public end(): void;
 		public pause(): void;
-		public playArbitraryInput(input: string, options?: StreamOptions): VoiceBroadcast;
-		public playConvertedStream(stream: ReadableStream, options?: StreamOptions): VoiceBroadcast;
-		public playFile(file: string, options?: StreamOptions): StreamDispatcher;
-		public playOpusStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
-		public playStream(stream: ReadableStream, options?: StreamOptions): VoiceBroadcast;
+		public play(input: string | ReadableStream, options?: StreamOptions): BroadcastDispatcher;
 		public resume(): void;
 
 		on(event: string, listener: Function): this;
@@ -1181,12 +1181,7 @@ declare module 'discord.js' {
 		public voiceManager: object;
 		public createReceiver(): VoiceReceiver;
 		public disconnect(): void;
-		public playArbitraryInput(input: string, options?: StreamOptions): StreamDispatcher;
-		public playBroadcast(broadcast: VoiceBroadcast, options?: StreamOptions): StreamDispatcher;
-		public playConvertedStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
-		public playFile(file: string, options?: StreamOptions): StreamDispatcher;
-		public playOpusStream(steam: ReadableStream, options?: StreamOptions): StreamDispatcher;
-		public playStream(stream: ReadableStream, options?: StreamOptions): StreamDispatcher;
+		public play(input: VoiceBroadcast | ReadableStream | string, options?: StreamOptions): StreamDispatcher;
 		public sendVoiceStateUpdate(options: object): void;
 		public setSessionID(sessionID: string): void;
 		public setTokenAndEndpoint(token: string, endpoint: string): void;
@@ -2040,11 +2035,16 @@ declare module 'discord.js' {
 	type Status = number;
 
 	type StreamOptions = {
+		type?: StreamType;
 		seek?: number;
 		volume?: number;
 		passes?: number;
+		plp?: number;
+		fec?: boolean;
 		bitrate?: number | 'auto';
 	};
+
+	type StreamType = 'unknown' | 'converted' | 'opus' | 'ogg/opus' | 'webm/opus';
 
 	type StringResolvable = string | string[] | any;
 
