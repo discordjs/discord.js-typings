@@ -8,7 +8,7 @@
 
 declare module 'discord.js' {
 	import { EventEmitter } from 'events';
-	import { Stream, Readable as ReadableStream } from 'stream';
+	import { Stream, Readable, Writable } from 'stream';
 	import { ChildProcess } from 'child_process';
 
 	export const version: string;
@@ -35,16 +35,6 @@ declare module 'discord.js' {
 		public equals(activity: Activity): boolean;
 	}
 
-	class AudioPlayer extends EventEmitter {
-		constructor(voiceConnection: VoiceConnection);
-		public readonly dispatcher: StreamDispatcher;
-		public opusEncoder: object;
-		public prism: object;
-		public readonly transcoder: object;
-		public voiceConnection: VoiceConnection;
-		public setBitrate(value: number | 'auto'): void;
-	}
-
 	export class Base {
 		constructor (client: Client);
 		public readonly client: Client;
@@ -65,13 +55,7 @@ declare module 'discord.js' {
 		public setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 	}
 
-	class BaseOpus {
-		constructor(options?: { bitrate?: number, fec?: boolean, plp?: number });
-		public bitrate: number;
-		public options: object;
-	}
-
-	class BroadcastDispatcher extends StreamDispatcher {
+	class BroadcastDispatcher extends VolumeMixin(StreamDispatcher) {
 		public broadcast: VoiceBroadcast;
 	}
 
@@ -827,7 +811,6 @@ declare module 'discord.js' {
 		public equals(presence: Presence): boolean;
 	}
 
-
 	export class ReactionCollector extends Collector<Snowflake, MessageReaction> {
 		constructor(message: Message, filter: CollectorFilter, options?: ReactionCollectorOptions);
 		public message: Message;
@@ -982,19 +965,50 @@ declare module 'discord.js' {
 		public static generate(): Snowflake;
 	}
 
-	class StreamDispatcher extends VolumeInterface {
-		constructor(player: AudioPlayer, stream: NodeJS.ReadableStream, streamOptions: StreamOptions);
-		public destroyed: boolean;
-		public readonly passes: number;
-		public paused: boolean;
-		public player: AudioPlayer;
-		public stream: ReadableStream | VoiceBroadcast;
-		public readonly time: number;
+	const VolumeMixin: <T>(base: Constructable<T>) => Constructable<T & VolumeInterface>;
+
+	class StreamDispatcher extends VolumeMixin(Writable) {
+		constructor(player: Object, options?: StreamOptions, streams?: Object);
+		public player: object;
+		public pausedSince: number;
+		public broadcast: VoiceBroadcast;
+		public readonly paused: boolean;
+		public readonly pausedTime: boolean;
+		public readonly streamTime: number;
 		public readonly totalStreamTime: number;
-		public end(reason?: string): void;
+		public readonly bitrateEditable: boolean;
+
+		public setBitrate(value: number | 'auto'): boolean;
+		public setPLP(value: number): boolean;
+		public setFEC(enabled: boolean): boolean;
 		public pause(): void;
 		public resume(): void;
-		public setBitrate(bitrate: number | 'auto'): void;
+
+		public on(event: string, listener: Function): this;
+		public on(event: 'close', listener: () => void): this;
+		public on(event: 'debug', listener: (info: string) => void): this;
+		public on(event: 'drain', listener: () => void): this;
+		public on(event: 'end', listener: () => void): this;
+		public on(event: 'error', listener: (err: Error) => void): this;
+		public on(event: 'finish', listener: () => void): this;
+		public on(event: 'pipe', listener: (src: Readable) => void): this;
+		public on(event: 'start', listener: () => void): this;
+		public on(event: 'speaking', listener: (speaking: boolean) => void): this;
+		public on(event: 'unpipe', listener: (src: Readable) => void): this;
+		public on(event: 'volumeChange', listener: (oldVolume: number, newVolume: number) => void): this;
+
+		public once(event: string, listener: Function): this;
+		public once(event: 'close', listener: () => void): this;
+		public once(event: 'debug', listener: (info: string) => void): this;
+		public once(event: 'drain', listener: () => void): this;
+		public once(event: 'end', listener: () => void): this;
+		public once(event: 'error', listener: (err: Error) => void): this;
+		public once(event: 'finish', listener: () => void): this;
+		public once(event: 'pipe', listener: (src: Readable) => void): this;
+		public once(event: 'start', listener: () => void): this;
+		public once(event: 'speaking', listener: (speaking: boolean) => void): this;
+		public once(event: 'unpipe', listener: (src: Readable) => void): this;
+		public on(event: 'volumeChange', listener: (oldVolume: number, newVolume: number) => void): this;
 	}
 
 	export class Structures {
@@ -1120,22 +1134,23 @@ declare module 'discord.js' {
 
 	class VoiceBroadcast extends EventEmitter {
 		constructor(client: Client);
-		public readonly client: Client;
-		public currentTranscoder: object;
-		public readonly dispatchers: StreamDispatcher[];
-		public prism: object;
-		public destroy(): void;
-		public end(): void;
-		public pause(): void;
-		public play(input: string | ReadableStream, options?: StreamOptions): BroadcastDispatcher;
-		public resume(): void;
+		public client: Client;
+		public readonly dispatcher: BroadcastDispatcher;
+		public play(input: string | Readable, options?: StreamOptions): BroadcastDispatcher;
 
-		on(event: string, listener: Function): this;
-		on(event: 'end', listener: () => void): this;
-		on(event: 'error', listener: (error: Error) => void): this;
-		on(event: 'subscribe', listener: (dispatcher: StreamDispatcher) => void): this;
-		on(event: 'unsubscribe', listener: (dispatcher: StreamDispatcher) => void): this;
-		on(event: 'warn', listener: (warning: string | Error) => void): this;
+		public on(event: string, listener: Function): this;
+		public on(event: 'end', listener: () => void): this;
+		public on(event: 'error', listener: (error: Error) => void): this;
+		public on(event: 'subscribe', listener: (dispatcher: StreamDispatcher) => void): this;
+		public on(event: 'unsubscribe', listener: (dispatcher: StreamDispatcher) => void): this;
+		public on(event: 'warn', listener: (warning: string | Error) => void): this;
+
+		public once(event: string, listener: Function): this;
+		public once(event: 'end', listener: () => void): this;
+		public once(event: 'error', listener: (error: Error) => void): this;
+		public once(event: 'subscribe', listener: (dispatcher: StreamDispatcher) => void): this;
+		public once(event: 'unsubscribe', listener: (dispatcher: StreamDispatcher) => void): this;
+		public once(event: 'warn', listener: (warning: string | Error) => void): this;
 	}
 
 	export class VoiceChannel extends GuildChannel {
@@ -1173,45 +1188,51 @@ declare module 'discord.js' {
 		public channel: VoiceChannel;
 		public readonly client: Client;
 		public readonly dispatcher: StreamDispatcher;
-		public player: AudioPlayer;
-		public prism: object;
+		public player: object;
 		public receivers: VoiceReceiver[];
 		public speaking: boolean;
 		public status: VoiceStatus;
 		public voiceManager: object;
 		public createReceiver(): VoiceReceiver;
 		public disconnect(): void;
-		public play(input: VoiceBroadcast | ReadableStream | string, options?: StreamOptions): StreamDispatcher;
+		public play(input: VoiceBroadcast | Readable | string, options?: StreamOptions): StreamDispatcher;
 		public sendVoiceStateUpdate(options: object): void;
 		public setSessionID(sessionID: string): void;
 		public setTokenAndEndpoint(token: string, endpoint: string): void;
 
-		on(event: 'authenticated', listener: () => void): this;
-		on(event: 'debug', listener: (message: string) => void): this;
-		on(event: 'disconnect', listener: (error: Error) => void): this;
-		on(event: 'error', listener: (error: Error) => void): this;
-		on(event: 'failed', listener: (error: Error) => void): this;
-		on(event: 'newSession', listener: () => void): this;
-		on(event: 'ready', listener: () => void): this;
-		on(event: 'reconnecting', listener: () => void): this;
-		on(event: 'speaking', listener: (user: User, speaking: boolean) => void): this;
-		on(event: 'warn', listener: (warning: string | Error) => void): this;
+		public on(event: 'authenticated', listener: () => void): this;
+		public on(event: 'closing', listener: () => void): this;
+		public on(event: 'debug', listener: (message: string) => void): this;
+		public on(event: 'disconnect', listener: (error: Error) => void): this;
+		public on(event: 'error', listener: (error: Error) => void): this;
+		public on(event: 'failed', listener: (error: Error) => void): this;
+		public on(event: 'newSession', listener: () => void): this;
+		public on(event: 'ready', listener: () => void): this;
+		public on(event: 'reconnecting', listener: () => void): this;
+		public on(event: 'speaking', listener: (user: User, speaking: boolean) => void): this;
+		public on(event: 'warn', listener: (warning: string | Error) => void): this;
+
+		public once(event: 'authenticated', listener: () => void): this;
+		public once(event: 'closing', listener: () => void): this;
+		public once(event: 'debug', listener: (message: string) => void): this;
+		public once(event: 'disconnect', listener: (error: Error) => void): this;
+		public once(event: 'error', listener: (error: Error) => void): this;
+		public once(event: 'failed', listener: (error: Error) => void): this;
+		public once(event: 'newSession', listener: () => void): this;
+		public once(event: 'ready', listener: () => void): this;
+		public once(event: 'reconnecting', listener: () => void): this;
+		public once(event: 'speaking', listener: (user: User, speaking: boolean) => void): this;
+		public once(event: 'warn', listener: (warning: string | Error) => void): this;
 	}
 
 	class VoiceReceiver extends EventEmitter {
 		constructor(connection: VoiceConnection);
-		private stoppedSpeaking(user: User): void;
 
-		public destroyed: boolean;
-		public voiceConnection: VoiceConnection;
-		public createOpusStream(user: UserResolvable): ReadableStream;
-		public createPCMStream(user: UserResolvable): ReadableStream;
-		public destroy(): void;
-		public recreate(): void;
+		public createStream(user: UserResolvable, options?: { mode?: string }): ReadableStream;
 
-		on(event: 'opus', listener: (user: User, buffer: Buffer) => void): this;
-		on(event: 'pcm', listener: (user: User, buffer: Buffer) => void): this;
-		on(event: 'warn', listener: (reason: string, message: string) => void): this;
+		public on(event: 'debug', listener: (error: Error | string) => void): this;
+
+		public once(event: 'debug', listener: (error: Error | string) => void): this;
 	}
 
 	export class VoiceRegion {
@@ -1226,26 +1247,17 @@ declare module 'discord.js' {
 	}
 
 	class VolumeInterface extends EventEmitter {
-		constructor(object?: { volume?: number })
+		constructor(options?: { volume?: number })
 		public readonly volume: number;
 		public readonly volumeDecibels: number;
+		public readonly volumeEditable: boolean;
 		public readonly volumeLogarithmic: number;
 		public setVolume(volume: number): void;
 		public setVolumeDecibels(db: number): void;
 		public setVolumeLogarithmic(value: number): void;
 
-		public on(event: 'debug', listener: (information: string) => void): this;
-		public on(event: 'end', listener: (reason: string) => void): this;
-		public on(event: 'error', listener: (err: Error) => void): this;
-		public on(event: 'speaking', listener: (value: boolean) => void): this;
-		public on(event: 'start', listener: () => void): this;
 		public on(event: 'volumeChange', listener: (oldVolume: number, newVolume: number) => void): this;
 
-		public once(event: 'debug', listener: (information: string) => void): this;
-		public once(event: 'end', listener: (reason: string) => void): this;
-		public once(event: 'error', listener: (err: Error) => void): this;
-		public once(event: 'speaking', listener: (value: boolean) => void): this;
-		public once(event: 'start', listener: () => void): this;
 		public once(event: 'volumeChange', listener: (oldVolume: number, newVolume: number) => void): this;
 	}
 
@@ -2041,7 +2053,8 @@ declare module 'discord.js' {
 		passes?: number;
 		plp?: number;
 		fec?: boolean;
-		bitrate?: number | 'auto';
+		bitrate?: number | 'auto'
+		highWaterMark?: number;
 	};
 
 	type StreamType = 'unknown' | 'converted' | 'opus' | 'ogg/opus' | 'webm/opus';
