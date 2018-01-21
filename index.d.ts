@@ -1012,20 +1012,20 @@ declare module 'discord.js' {
 	}
 
 	export class Structures {
-		static get(structure :'GuildEmoji'): typeof GuildEmoji;
-		static get(structure :'DMChannel'): typeof DMChannel;
-		static get(structure :'GroupDMChannel'): typeof GroupDMChannel;
-		static get(structure :'TextChannel'): typeof TextChannel;
-		static get(structure :'VoiceChannel'): typeof VoiceChannel;
-		static get(structure :'CategoryChannel'): typeof CategoryChannel;
-		static get(structure :'GuildChannel'): typeof GuildChannel;
-		static get(structure :'GuildMember'): typeof GuildMember;
-		static get(structure :'Guild'): typeof Guild;
-		static get(structure :'Message'): typeof Message;
-		static get(structure :'MessageReaction'): typeof MessageReaction;
-		static get(structure :'Presence'): typeof Presence;
-		static get(structure :'Role'): typeof Role;
-		static get(structure :'User'): typeof User;
+		static get(structure: 'GuildEmoji'): typeof GuildEmoji;
+		static get(structure: 'DMChannel'): typeof DMChannel;
+		static get(structure: 'GroupDMChannel'): typeof GroupDMChannel;
+		static get(structure: 'TextChannel'): typeof TextChannel;
+		static get(structure: 'VoiceChannel'): typeof VoiceChannel;
+		static get(structure: 'CategoryChannel'): typeof CategoryChannel;
+		static get(structure: 'GuildChannel'): typeof GuildChannel;
+		static get(structure: 'GuildMember'): typeof GuildMember;
+		static get(structure: 'Guild'): typeof Guild;
+		static get(structure: 'Message'): typeof Message;
+		static get(structure: 'MessageReaction'): typeof MessageReaction;
+		static get(structure: 'Presence'): typeof Presence;
+		static get(structure: 'Role'): typeof Role;
+		static get(structure: 'User'): typeof User;
 		static get(structure: string): Function;
 		static extend<T extends typeof GuildEmoji>(structure: 'GuildEmoji', extender: (baseClass: typeof GuildEmoji) => T): T;
 		static extend<T extends typeof DMChannel>(structure: 'DMChannel', extender: (baseClass: typeof DMChannel) => T): T;
@@ -1228,7 +1228,7 @@ declare module 'discord.js' {
 	class VoiceReceiver extends EventEmitter {
 		constructor(connection: VoiceConnection);
 
-		public createStream(user: UserResolvable, options?: { mode?: string }): ReadableStream;
+		public createStream(user: UserResolvable, options?: { mode?: string }): Readable;
 
 		public on(event: 'debug', listener: (error: Error | string) => void): this;
 
