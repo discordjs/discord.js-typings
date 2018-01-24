@@ -1299,14 +1299,14 @@ declare module 'discord.js' {
 		public create(name: string, options?: GuildCreateChannelOptions): Promise<TextChannel | VoiceChannel>;
 	}
 
-	// Hacky wordaround because changing the signature of an overriden method errors
+	// Hacky workaround because changing the signature of an overriden method errors
 	class OverridableDataStore<V, K, VConstructor = Constructable<V>, R = any> extends DataStore<V, K , VConstructor, R> {
 		public add(data: any, cache: any): any;
 		public set(key: any): any;
 	}
 
 	export class GuildMemberRoleStore extends OverridableDataStore<Snowflake, Role, typeof Role, RoleResolvable> {
-		constructor(guild: Guild, iterable?: Iterable<any>);
+		constructor(member: GuildMember);
 		public readonly hoist: Role;
 		public readonly color: Role;
 		public readonly highest: Role;
