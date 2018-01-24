@@ -1355,7 +1355,7 @@ declare module 'discord.js' {
 
 	export class RoleStore extends DataStore<Snowflake, Role, typeof Role, RoleResolvable> {
 		constructor(guild: Guild, iterable?: Iterable<any>);
-		public create(options?: { data?: RoleData, reason?: string}): Promise<Role>;
+		public create(options?: { data?: RoleData, reason?: string }): Promise<Role>;
 	}
 
 	export class UserStore extends DataStore<Snowflake, User, typeof User, UserResolvable> {
@@ -1386,8 +1386,8 @@ declare module 'discord.js' {
 	type TextBasedChannelFields = {
 		typing: boolean;
 		typingCount: number;
-		awaitMessages(filter: CollectorFilter, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
+		awaitMessages(filter: CollectorFilter, options?: AwaitMessagesOptions): Promise<Collection<Snowflake, Message>>;
+		bulkDelete(messages: Collection<Snowflake, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<Snowflake, Message>>;
 		createMessageCollector(filter: CollectorFilter, options?: CollectorOptions): MessageCollector;
 		search(options?: MessageSearchOptions): Promise<MessageSearchResult>;
 		startTyping(count?: number): Promise<void>;
@@ -1465,7 +1465,7 @@ declare module 'discord.js' {
 	type AddGuildMemberOptions = {
 		accessToken: String;
 		nick?: string;
-		roles?: Collection<string, Role> | RoleResolvable[];
+		roles?: Collection<Snowflake, Role> | RoleResolvable[];
 		mute?: boolean;
 		deaf?: boolean;
 	};
