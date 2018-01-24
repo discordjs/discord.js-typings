@@ -561,14 +561,11 @@ declare module 'discord.js' {
 	export class GuildMember extends PartialTextBasedChannel(Base) {
 		constructor(client: Client, data: object, guild: Guild);
 		public readonly bannable: boolean;
-		public readonly colorRole: Role;
 		public readonly deaf: boolean;
 		public readonly displayColor: number;
 		public readonly displayHexColor: string;
 		public readonly displayName: string;
 		public guild: Guild;
-		public readonly highestRole: Role;
-		public readonly hoistRole: Role;
 		public readonly id: Snowflake;
 		public readonly joinedAt: Date;
 		public joinedTimestamp: number;
@@ -578,7 +575,7 @@ declare module 'discord.js' {
 		public nickname: string;
 		public readonly permissions: Permissions;
 		public readonly presence: Presence;
-		public readonly roles: Collection<Snowflake, Role>;
+		public roles: GuildMemberRoleStore;
 		public readonly selfDeaf: boolean;
 		public readonly selfMute: boolean;
 		public readonly serverDeaf: boolean;
@@ -588,8 +585,6 @@ declare module 'discord.js' {
 		public readonly voiceChannel: VoiceChannel;
 		public readonly voiceChannelID: Snowflake;
 		public readonly voiceSessionID: string;
-		public addRole(role: RoleResolvable, reason?: string): Promise<GuildMember>;
-		public addRoles(roles: Collection<Snowflake, Role> | RoleResolvable[], reason?: string): Promise<GuildMember>;
 		public ban(options?: BanOptions): Promise<GuildMember>;
 		public createDM(): Promise<DMChannel>;
 		public deleteDM(): Promise<DMChannel>;
@@ -598,12 +593,9 @@ declare module 'discord.js' {
 		public kick(reason?: string): Promise<GuildMember>;
 		public missingPermissions(permissions: PermissionResolvable, explicit?: boolean): PermissionString[];
 		public permissionsIn(channel: ChannelResolvable): Permissions;
-		public removeRole(role: RoleResolvable, reason?: string): Promise<GuildMember>;
-		public removeRoles(roles: Collection<Snowflake, Role> | RoleResolvable[], reason?: string): Promise<GuildMember>;
 		public setDeaf(deaf: boolean, reason?: string): Promise<GuildMember>;
 		public setMute(mute: boolean, reason?: string): Promise<GuildMember>;
 		public setNickname(nickname: string, reason?: string): Promise<GuildMember>;
-		public setRoles(roles: Collection<Snowflake, Role> | RoleResolvable[], reason?: string): Promise<GuildMember>;
 		public setVoiceChannel(voiceChannel: ChannelResolvable): Promise<GuildMember>;
 		public toString(): string;
 	}
@@ -1305,6 +1297,23 @@ declare module 'discord.js' {
 	export class GuildChannelStore extends DataStore<Snowflake, GuildChannel, typeof GuildChannel, GuildChannelResolvable> {
 		constructor(guild: Guild, iterable?: Iterable<any>);
 		public create(name: string, options?: GuildCreateChannelOptions): Promise<TextChannel | VoiceChannel>;
+	}
+
+	// Hacky wordaround because changing the signature of an overriden method errors
+	class OverridableDataStore<V, K, VConstructor = Constructable<V>, R = any> extends DataStore<V, K , VConstructor, R> {
+		public add(data: any, cache: any): any;
+		public set(key: any): any;
+	}
+
+	export class GuildMemberRoleStore extends OverridableDataStore<Snowflake, Role, typeof Role, RoleResolvable> {
+		constructor(guild: Guild, iterable?: Iterable<any>);
+		public readonly hoist: Role;
+		public readonly color: Role;
+		public readonly highest: Role;
+
+		public add(roleOrRoles: RoleResolvable | RoleResolvable[] | Collection<Snowflake, Role>, reason?: string): Promise<GuildMember>;
+		public set(roles: RoleResolvable[] | Collection<Snowflake, Role>, reason?: string): Promise<GuildMember>;
+		public remove(roleOrRoles: RoleResolvable | RoleResolvable[] | Collection<Snowflake, Role>, reason?: string): Promise<GuildMember>;
 	}
 
 	export class GuildMemberStore extends DataStore<Snowflake, GuildMember, typeof GuildMember, GuildMemberResolvable> {
