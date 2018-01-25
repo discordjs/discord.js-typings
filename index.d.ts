@@ -547,14 +547,10 @@ declare module 'discord.js' {
 		public guild: Guild;
 		public managed: boolean;
 		public requiresColons: boolean;
-		public readonly roles: Collection<Snowflake, Role>;
-		public addRestrictedRole(role: RoleResolvable): Promise<GuildEmoji>;
-		public addRestrictedRoles(roles: Collection<Snowflake, Role> | RoleResolvable[]): Promise<GuildEmoji>;
+		public roles: GuildEmojiRoleStore;
 		public delete(reason?: string): Promise<GuildEmoji>;
 		public edit(data: GuildEmojiEditData, reason?: string): Promise<GuildEmoji>;
 		public equals(other: GuildEmoji | object): boolean;
-		public removeRestrictedRole(role: RoleResolvable): Promise<GuildEmoji>;
-		public removeRestrictedRoles(roles: Collection<Snowflake, Role> | RoleResolvable[]): Promise<GuildEmoji>;
 		public setName(name: string, reason?: string): Promise<GuildEmoji>;
 	}
 
@@ -1286,6 +1282,13 @@ declare module 'discord.js' {
 		public remove(key: K): void;
 		public resolve(resolvable: R): V;
 		public resolveID(resolvable: R): K;
+	}
+
+	export class GuildEmojiRoleStore extends OverridableDataStore<Snowflake, Role, typeof Role, RoleResolvable> {
+		constructor(emoji: GuildEmoji);
+		public add(roleOrRoles: RoleResolvable | RoleResolvable[] | Collection<Snowflake, Role>, reason?: string): Promise<GuildEmoji>;
+		public set(roles: RoleResolvable[] | Collection<Snowflake, Role>, reason?: string): Promise<GuildEmoji>;
+		public remove(roleOrRoles: RoleResolvable | RoleResolvable[] | Collection<Snowflake, Role>, reason?: string): Promise<GuildEmoji>;
 	}
 
 	export class GuildEmojiStore extends DataStore<Snowflake, GuildEmoji, typeof GuildEmoji, EmojiResolvable> {
