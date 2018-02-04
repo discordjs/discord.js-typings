@@ -1545,6 +1545,7 @@ declare module 'discord.js' {
 
 	type ClientOptions = {
 		apiRequestMethod?: 'sequential' | 'burst';
+		presence?: PresenceData;
 		shardId?: number;
 		shardCount?: number;
 		messageCacheMaxSize?: number;
