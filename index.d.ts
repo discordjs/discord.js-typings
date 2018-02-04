@@ -1627,7 +1627,7 @@ declare module 'discord.js' {
 
 	type GroupActivity = {
 		partyID: string;
-		type: string;
+		type: number;
 	};
 
 	type GroupDMRecipientOptions = {
