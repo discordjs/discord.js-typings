@@ -1522,6 +1522,7 @@ declare module 'discord.js' {
 		before?: Snowflake
 		after?: Snowflake
 		around?: Snowflake
+		author?: UserResolvable
 	};
 
 	type ChannelPosition = {
