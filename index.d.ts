@@ -529,6 +529,7 @@ declare module 'discord.js' {
 		public createInvite(options?: InviteOptions): Promise<Invite>;
 		public edit(data: ChannelData, reason?: string): Promise<GuildChannel>;
 		public equals(channel: GuildChannel): boolean;
+		public fetchInvites(): Promise<Collection<string, Invite>>;
 		public lockPermissions(): Promise<GuildChannel>;
 		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions, reason?: string): Promise<void>;
 		public permissionsFor(memberOrRole: GuildMemberResolvable | RoleResolvable): Permissions;
