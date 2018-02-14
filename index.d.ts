@@ -1177,7 +1177,7 @@ declare module 'discord.js' {
 		private setSpeaking(value: boolean): void;
 		private setTokenAndEndpoint(token: string, endpoint: string): void;
 		private updateChannel(channel: VoiceChannel): void;
-		
+
 		public channel: VoiceChannel;
 		public readonly client: Client;
 		public readonly dispatcher: StreamDispatcher;
