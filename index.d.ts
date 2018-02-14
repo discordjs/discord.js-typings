@@ -1162,6 +1162,7 @@ declare module 'discord.js' {
 		private authentication: object;
 		private sockets: object;
 		private ssrcMap: Map<number, boolean>;
+		private _disconnect(): void;
 		private authenticate(): void;
 		private authenticateFailed(reason: string): void;
 		private checkAuthenticated(): void;
@@ -1171,9 +1172,12 @@ declare module 'discord.js' {
 		private onSessionDescription(mode: string, secret: string): void;
 		private onSpeaking(data: object): void;
 		private reconnect(token: string, endpoint: string): void;
+		private sendVoiceStateUpdate(options: object): void;
+		private setSessionID(sessionID: string): void;
 		private setSpeaking(value: boolean): void;
+		private setTokenAndEndpoint(token: string, endpoint: string): void;
 		private updateChannel(channel: VoiceChannel): void;
-
+		
 		public channel: VoiceChannel;
 		public readonly client: Client;
 		public readonly dispatcher: StreamDispatcher;
@@ -1185,9 +1189,6 @@ declare module 'discord.js' {
 		public createReceiver(): VoiceReceiver;
 		public disconnect(): void;
 		public play(input: VoiceBroadcast | Readable | string, options?: StreamOptions): StreamDispatcher;
-		public sendVoiceStateUpdate(options: object): void;
-		public setSessionID(sessionID: string): void;
-		public setTokenAndEndpoint(token: string, endpoint: string): void;
 
 		public on(event: 'authenticated', listener: () => void): this;
 		public on(event: 'closing', listener: () => void): this;
