@@ -106,7 +106,6 @@ declare module 'discord.js' {
 		public sweepMessages(lifetime?: number): number;
 		public syncGuilds(guilds?: Guild[] | Collection<Snowflake, Guild>): void;
 
-		public on(event: string, listener: Function): this;
 		public on(event: 'channelCreate', listener: (channel: Channel) => void): this;
 		public on(event: 'channelDelete', listener: (channel: Channel) => void): this;
 		public on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
@@ -151,6 +150,53 @@ declare module 'discord.js' {
 		public on(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
 		public on(event: 'voiceStateUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
 		public on(event: 'warn', listener: (info: string) => void): this;
+		public on(event: string, listener: Function): this;
+
+		public once(event: 'channelCreate', listener: (channel: Channel) => void): this;
+		public once(event: 'channelDelete', listener: (channel: Channel) => void): this;
+		public once(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
+		public once(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
+		public once(event: 'clientUserGuildSettingsUpdate', listener: (clientUserGuildSettings: ClientUserGuildSettings) => void): this;
+		public once(event: 'clientUserSettingsUpdate', listener: (clientUserSettings: ClientUserSettings) => void): this;
+		public once(event: 'debug', listener: (info: string) => void): this;
+		public once(event: 'disconnect', listener: (event: any) => void): this;
+		public once(event: 'emojiCreate', listener: (emoji: Emoji) => void): this;
+		public once(event: 'emojiDelete', listener: (emoji: Emoji) => void): this;
+		public once(event: 'emojiUpdate', listener: (oldEmoji: Emoji, newEmoji: Emoji) => void): this;
+		public once(event: 'error', listener: (error: Error) => void): this;
+		public once(event: 'guildBanAdd', listener: (guild: Guild, user: User) => void): this;
+		public once(event: 'guildBanRemove', listener: (guild: Guild, user: User) => void): this;
+		public once(event: 'guildCreate', listener: (guild: Guild) => void): this;
+		public once(event: 'guildDelete', listener: (guild: Guild) => void): this;
+		public once(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
+		public once(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
+		public once(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
+		public once(event: 'guildMembersChunk', listener: (members: GuildMember[], guild: Guild) => void): this;
+		public once(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: boolean) => void): this;
+		public once(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+		public once(event: 'guildUnavailable', listener: (guild: Guild) => void): this;
+		public once(event: 'guildUpdate', listener: (oldGuild: Guild, newGuild: Guild) => void): this;
+		public once(event: 'message', listener: (message: Message) => void): this;
+		public once(event: 'messageDelete', listener: (message: Message) => void): this;
+		public once(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, Message>) => void): this;
+		public once(event: 'messageReactionAdd', listener: (messageReaction: MessageReaction, user: User) => void): this;
+		public once(event: 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
+		public once(event: 'messageReactionRemoveAll', listener: (message: Message) => void): this;
+		public once(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
+		public once(event: 'presenceUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+		public once(event: 'ready', listener: () => void): this;
+		public once(event: 'reconnecting', listener: () => void): this;
+		public once(event: 'resume', listener: (replayed: number) => void): this;
+		public once(event: 'roleCreate', listener: (role: Role) => void): this;
+		public once(event: 'roleDelete', listener: (role: Role) => void): this;
+		public once(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
+		public once(event: 'typingStart', listener: (channel: Channel, user: User) => void): this;
+		public once(event: 'typingStop', listener: (channel: Channel, user: User) => void): this;
+		public once(event: 'userNoteUpdate', listener: (user: UserResolvable, oldNote: string, newNote: string) => void): this;
+		public once(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
+		public once(event: 'voiceStateUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+		public once(event: 'warn', listener: (info: string) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	class ClientDataResolver {
@@ -320,7 +366,12 @@ declare module 'discord.js' {
 		public abstract postCheck(...args: any[]): string | null;
 
 		public on(event: 'collect', listener: (element: V, collector: Collector<K, V>) => void): this;
-		public on(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): string;
+		public on(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): this;
+		public on(event: string, listener: Function): this;
+
+		public once(event: 'collect', listener: (element: V, collector: Collector<K, V>) => void): this;
+		public once(event: 'end', listener: (collected: Collection<K, V>, reason: string) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	class DiscordAPIError extends Error {
@@ -1033,8 +1084,13 @@ declare module 'discord.js' {
 		public fetchClientValues(prop: string): Promise<any[]>;
 		public spawn(amount?: number, delay?: number): Promise<Collection<number, Shard>>;
 
-		on(event: 'launch', listener: (shard: Shard) => void): this;
-		on(event: 'message', listener: (shard: Shard, message: any) => void): this;
+		public on(event: 'launch', listener: (shard: Shard) => void): this;
+		public on(event: 'message', listener: (shard: Shard, message: any) => void): this;
+		public on(event: string, listener: Function): this;
+
+		public once(event: 'launch', listener: (shard: Shard) => void): this;
+		public once(event: 'message', listener: (shard: Shard, message: any) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class SnowflakeUtil {
@@ -1152,12 +1208,20 @@ declare module 'discord.js' {
 		public playStream(stream: ReadableStream, options?: StreamOptions): VoiceBroadcast;
 		public resume(): void;
 
-		on(event: string, listener: Function): this;
-		on(event: 'end', listener: () => void): this;
-		on(event: 'error', listener: (error: Error) => void): this;
-		on(event: 'subscribe', listener: (dispatcher: StreamDispatcher) => void): this;
-		on(event: 'unsubscribe', listener: (dispatcher: StreamDispatcher) => void): this;
-		on(event: 'warn', listener: (warning: string | Error) => void): this;
+		public on(event: string, listener: Function): this;
+		public on(event: 'end', listener: () => void): this;
+		public on(event: 'error', listener: (error: Error) => void): this;
+		public on(event: 'subscribe', listener: (dispatcher: StreamDispatcher) => void): this;
+		public on(event: 'unsubscribe', listener: (dispatcher: StreamDispatcher) => void): this;
+		public on(event: 'warn', listener: (warning: string | Error) => void): this;
+		public on(event: string, listener: Function): this;
+
+		public once(event: 'end', listener: () => void): this;
+		public once(event: 'error', listener: (error: Error) => void): this;
+		public once(event: 'subscribe', listener: (dispatcher: StreamDispatcher) => void): this;
+		public once(event: 'unsubscribe', listener: (dispatcher: StreamDispatcher) => void): this;
+		public once(event: 'warn', listener: (warning: string | Error) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class VoiceChannel extends GuildChannel {
@@ -1213,16 +1277,29 @@ declare module 'discord.js' {
 		public setSessionID(sessionID: string): void;
 		public setTokenAndEndpoint(token: string, endpoint: string): void;
 
-		on(event: 'authenticated', listener: () => void): this;
-		on(event: 'debug', listener: (message: string) => void): this;
-		on(event: 'disconnect', listener: (error: Error) => void): this;
-		on(event: 'error', listener: (error: Error) => void): this;
-		on(event: 'failed', listener: (error: Error) => void): this;
-		on(event: 'newSession', listener: () => void): this;
-		on(event: 'ready', listener: () => void): this;
-		on(event: 'reconnecting', listener: () => void): this;
-		on(event: 'speaking', listener: (user: User, speaking: boolean) => void): this;
-		on(event: 'warn', listener: (warning: string | Error) => void): this;
+		public on(event: 'authenticated', listener: () => void): this;
+		public on(event: 'debug', listener: (message: string) => void): this;
+		public on(event: 'disconnect', listener: (error: Error) => void): this;
+		public on(event: 'error', listener: (error: Error) => void): this;
+		public on(event: 'failed', listener: (error: Error) => void): this;
+		public on(event: 'newSession', listener: () => void): this;
+		public on(event: 'ready', listener: () => void): this;
+		public on(event: 'reconnecting', listener: () => void): this;
+		public on(event: 'speaking', listener: (user: User, speaking: boolean) => void): this;
+		public on(event: 'warn', listener: (warning: string | Error) => void): this;
+		public on(event: string, listener: Function): this;
+
+		public once(event: 'authenticated', listener: () => void): this;
+		public once(event: 'debug', listener: (message: string) => void): this;
+		public once(event: 'disconnect', listener: (error: Error) => void): this;
+		public once(event: 'error', listener: (error: Error) => void): this;
+		public once(event: 'failed', listener: (error: Error) => void): this;
+		public once(event: 'newSession', listener: () => void): this;
+		public once(event: 'ready', listener: () => void): this;
+		public once(event: 'reconnecting', listener: () => void): this;
+		public once(event: 'speaking', listener: (user: User, speaking: boolean) => void): this;
+		public once(event: 'warn', listener: (warning: string | Error) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	class VoiceConnectionUDPClient extends EventEmitter {
@@ -1248,9 +1325,15 @@ declare module 'discord.js' {
 		public destroy(): void;
 		public recreate(): void;
 
-		on(event: 'opus', listener: (user: User, buffer: Buffer) => void): this;
-		on(event: 'pcm', listener: (user: User, buffer: Buffer) => void): this;
-		on(event: 'warn', listener: (reason: string, message: string) => void): this;
+		public on(event: 'opus', listener: (user: User, buffer: Buffer) => void): this;
+		public on(event: 'pcm', listener: (user: User, buffer: Buffer) => void): this;
+		public on(event: 'warn', listener: (reason: string, message: string) => void): this;
+		public on(event: string, listener: Function): this;
+
+		public once(event: 'opus', listener: (user: User, buffer: Buffer) => void): this;
+		public once(event: 'pcm', listener: (user: User, buffer: Buffer) => void): this;
+		public once(event: 'warn', listener: (reason: string, message: string) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class VoiceRegion {
@@ -1283,11 +1366,19 @@ declare module 'discord.js' {
 		public sendPacket(packet: object): Promise<string>;
 		public setHeartbeat(interval: number): void;
 
-		on(event: 'ready', listener: (packet: object) => void): this;
-		on(event: 'sessionDescription', listener: (encryptionMode: string, secretKey: SecretKey) => void): this;
-		on(event: 'speaking', listener: (data: object) => void): this;
-		on(event: 'unknownPacket', listener: (packet: object) => void): this;
-		on(event: 'warn', listener: (warn: string) => void): this;
+		public on(event: 'ready', listener: (packet: object) => void): this;
+		public on(event: 'sessionDescription', listener: (encryptionMode: string, secretKey: SecretKey) => void): this;
+		public on(event: 'speaking', listener: (data: object) => void): this;
+		public on(event: 'unknownPacket', listener: (packet: object) => void): this;
+		public on(event: 'warn', listener: (warn: string) => void): this;
+		public on(event: string, listener: Function): this;
+
+		public once(event: 'ready', listener: (packet: object) => void): this;
+		public once(event: 'sessionDescription', listener: (encryptionMode: string, secretKey: SecretKey) => void): this;
+		public once(event: 'speaking', listener: (data: object) => void): this;
+		public once(event: 'unknownPacket', listener: (packet: object) => void): this;
+		public once(event: 'warn', listener: (warn: string) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class VolumeInterface extends EventEmitter {
@@ -1299,12 +1390,21 @@ declare module 'discord.js' {
 		public setVolumeDecibels(db: number): void;
 		public setVolumeLogarithmic(value: number): void;
 
-		on(event: 'debug', listener: (information: string) => void): this;
-		on(event: 'end', listener: (reason: string) => void): this;
-		on(event: 'error', listener: (err: Error) => void): this;
-		on(event: 'speaking', listener: (value: boolean) => void): this;
-		on(event: 'start', listener: () => void): this;
-		on(event: 'volumeChange', listener: (oldVolume: number, newVolume: number) => void): this;
+		public on(event: 'debug', listener: (information: string) => void): this;
+		public on(event: 'end', listener: (reason: string) => void): this;
+		public on(event: 'error', listener: (err: Error) => void): this;
+		public on(event: 'speaking', listener: (value: boolean) => void): this;
+		public on(event: 'start', listener: () => void): this;
+		public on(event: 'volumeChange', listener: (oldVolume: number, newVolume: number) => void): this;
+		public on(event: string, listener: Function): this;
+
+		public once(event: 'debug', listener: (information: string) => void): this;
+		public once(event: 'end', listener: (reason: string) => void): this;
+		public once(event: 'error', listener: (err: Error) => void): this;
+		public once(event: 'speaking', listener: (value: boolean) => void): this;
+		public once(event: 'start', listener: () => void): this;
+		public once(event: 'volumeChange', listener: (oldVolume: number, newVolume: number) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class Webhook {
