@@ -112,7 +112,6 @@ declare module 'discord.js' {
 		public sweepMessages(lifetime?: number): number;
 		public syncGuilds(guilds?: Guild[] | Collection<Snowflake, Guild>): void;
 
-		public on(event: string, listener: Function): this;
 		public on(event: 'channelCreate' | 'channelDelete', listener: (channel: Channel) => void): this;
 		public on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
 		public on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
@@ -143,8 +142,8 @@ declare module 'discord.js' {
 		public on(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
 		public on(event: 'userNoteUpdate', listener: (user: UserResolvable, oldNote: string, newNote: string) => void): this;
 		public on(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
+		public on(event: string, listener: Function): this;
 
-		public once(event: string, listener: Function): this;
 		public once(event: 'channelCreate' | 'channelDelete', listener: (channel: Channel) => void): this;
 		public once(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
 		public once(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
@@ -175,6 +174,7 @@ declare module 'discord.js' {
 		public once(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
 		public once(event: 'userNoteUpdate', listener: (user: UserResolvable, oldNote: string, newNote: string) => void): this;
 		public once(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class ClientApplication extends Base {
@@ -818,12 +818,14 @@ declare module 'discord.js' {
 		public on(event: 'dispose', listener: (reaction: MessageReaction, user: User) => void): this;
 		public on(event: 'end', listener: (collected: Collection<Snowflake, MessageReaction>, reason: string) => void): this;
 		public on(event: 'remove', listener: (reaction: MessageReaction, user: User) => void): this;
+		public on(event: string, listener: Function): this;
 
 		public once(event: 'collect', listener: (reaction: MessageReaction, user: User) => void): this;
 		public once(event: 'dispose', listener: (reaction: MessageReaction, user: User) => void): this;
 		public once(event: 'end', listener: (collected: Collection<Snowflake, MessageReaction>, reason: string) => void): this;
 		public once(event: 'remove', listener: (reaction: MessageReaction, user: User) => void): this;
-	}
+		public once(event: string, listener: Function): this;
+}
 
 	export class ReactionEmoji extends Emoji {
 		constructor(reaction: MessageReaction, emoji: object);
@@ -899,12 +901,14 @@ declare module 'discord.js' {
 		public on(event: 'error', listener: (error: Error) => void): this;
 		public on(event: 'message', listener: (message: any) => void): this;
 		public on(event: 'spawn', listener: (child: ChildProcess) => void): this;
+		public on(event: string, listener: Function): this;
 
 		public once(event: 'death', listener: (child: ChildProcess) => void): this;
 		public once(event: 'disconnect' | 'ready' | 'reconnecting', listener: () => void): this;
 		public once(event: 'error', listener: (error: Error) => void): this;
 		public once(event: 'message', listener: (message: any) => void): this;
 		public once(event: 'spawn', listener: (child: ChildProcess) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class ShardClientUtil {
@@ -973,7 +977,6 @@ declare module 'discord.js' {
 		public pause(): void;
 		public resume(): void;
 
-		public on(event: string, listener: Function): this;
 		public on(event: 'close', listener: () => void): this;
 		public on(event: 'debug', listener: (info: string) => void): this;
 		public on(event: 'drain', listener: () => void): this;
@@ -985,8 +988,8 @@ declare module 'discord.js' {
 		public on(event: 'speaking', listener: (speaking: boolean) => void): this;
 		public on(event: 'unpipe', listener: (src: Readable) => void): this;
 		public on(event: 'volumeChange', listener: (oldVolume: number, newVolume: number) => void): this;
+		public on(event: string, listener: Function): this;
 
-		public once(event: string, listener: Function): this;
 		public once(event: 'close', listener: () => void): this;
 		public once(event: 'debug', listener: (info: string) => void): this;
 		public once(event: 'drain', listener: () => void): this;
@@ -998,6 +1001,7 @@ declare module 'discord.js' {
 		public once(event: 'speaking', listener: (speaking: boolean) => void): this;
 		public once(event: 'unpipe', listener: (src: Readable) => void): this;
 		public on(event: 'volumeChange', listener: (oldVolume: number, newVolume: number) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class Structures {
@@ -1127,19 +1131,19 @@ declare module 'discord.js' {
 		public readonly dispatcher: BroadcastDispatcher;
 		public play(input: string | Readable, options?: StreamOptions): BroadcastDispatcher;
 
-		public on(event: string, listener: Function): this;
 		public on(event: 'end', listener: () => void): this;
 		public on(event: 'error', listener: (error: Error) => void): this;
 		public on(event: 'subscribe', listener: (dispatcher: StreamDispatcher) => void): this;
 		public on(event: 'unsubscribe', listener: (dispatcher: StreamDispatcher) => void): this;
 		public on(event: 'warn', listener: (warning: string | Error) => void): this;
+		public on(event: string, listener: Function): this;
 
-		public once(event: string, listener: Function): this;
 		public once(event: 'end', listener: () => void): this;
 		public once(event: 'error', listener: (error: Error) => void): this;
 		public once(event: 'subscribe', listener: (dispatcher: StreamDispatcher) => void): this;
 		public once(event: 'unsubscribe', listener: (dispatcher: StreamDispatcher) => void): this;
 		public once(event: 'warn', listener: (warning: string | Error) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class VoiceChannel extends GuildChannel {
@@ -1201,6 +1205,7 @@ declare module 'discord.js' {
 		public on(event: 'reconnecting', listener: () => void): this;
 		public on(event: 'speaking', listener: (user: User, speaking: boolean) => void): this;
 		public on(event: 'warn', listener: (warning: string | Error) => void): this;
+		public on(event: string, listener: Function): this;
 
 		public once(event: 'authenticated', listener: () => void): this;
 		public once(event: 'closing', listener: () => void): this;
@@ -1213,6 +1218,7 @@ declare module 'discord.js' {
 		public once(event: 'reconnecting', listener: () => void): this;
 		public once(event: 'speaking', listener: (user: User, speaking: boolean) => void): this;
 		public once(event: 'warn', listener: (warning: string | Error) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	class VoiceReceiver extends EventEmitter {
@@ -1220,8 +1226,10 @@ declare module 'discord.js' {
 		public createStream(user: UserResolvable, options?: { mode?: 'opus' | 'pcm' }): Readable;
 
 		public on(event: 'debug', listener: (error: Error | string) => void): this;
+		public on(event: string, listener: Function): this;
 
 		public once(event: 'debug', listener: (error: Error | string) => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class VoiceRegion {
