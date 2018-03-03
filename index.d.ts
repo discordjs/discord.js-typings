@@ -744,7 +744,7 @@ declare module 'discord.js' {
 		public readonly client: Client;
 		public color: number;
 		public readonly createdAt: Date;
-		public createdTimestamp: number;
+		public timestamp: number;
 		public description: string;
 		public fields: MessageEmbedField[];
 		public footer: MessageEmbedFooter;
