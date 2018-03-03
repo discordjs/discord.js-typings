@@ -38,6 +38,8 @@ declare module 'discord.js' {
 	export class Base {
 		constructor (client: Client);
 		public readonly client: Client;
+		public toJSON(...props: { [key: string]: boolean | string }[]): object;
+		public valueOf(): string;
 	}
 
 	export class BaseClient extends EventEmitter {
@@ -53,6 +55,7 @@ declare module 'discord.js' {
 		public destroy(): void;
 		public setInterval(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 		public setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
+		public toJSON(...props: { [key: string]: boolean | string }[]): object;
 	}
 
 	class BroadcastDispatcher extends VolumeMixin(StreamDispatcher) {
@@ -111,6 +114,7 @@ declare module 'discord.js' {
 		public login(token?: string): Promise<string>;
 		public sweepMessages(lifetime?: number): number;
 		public syncGuilds(guilds?: Guild[] | Collection<Snowflake, Guild>): void;
+		public toJSON(): object;
 
 		public on(event: 'channelCreate' | 'channelDelete', listener: (channel: Channel) => void): this;
 		public on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
@@ -200,6 +204,7 @@ declare module 'discord.js' {
 		public iconURL(options?: AvatarOptions): string;
 		public resetSecret(): Promise<ClientApplication>;
 		public resetToken(): Promise<ClientApplication>;
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -232,6 +237,7 @@ declare module 'discord.js' {
 		public setPresence(data: PresenceData): Promise<Presence>;
 		public setStatus(status: PresenceStatus): Promise<Presence>;
 		public setUsername(username: string, password?: string): Promise<ClientUser>;
+		public toJSON(): object;
 	}
 
 	export class ClientUserChannelOverride {
@@ -319,6 +325,7 @@ declare module 'discord.js' {
 		public reduce<T>(fn: (accumulator: any, value: V, key: K, collection: Collection<K, V>) => T, initialValue?: any): T;
 		public some(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
 		public sort(compareFunction?: (a: V, b: V, c?: K, d?: K) => number): Collection<K, V>;
+		public toJSON(): object;
 	}
 
 	export abstract class Collector<K, V> extends EventEmitter {
@@ -335,6 +342,7 @@ declare module 'discord.js' {
 		public handleCollect(...args: any[]): void;
 		public handleDispose(...args: any[]): void;
 		public stop(reason?: string): void;
+		public toJSON(): object;
 
 		protected listener: Function;
 		public abstract collect(...args: any[]): K;
@@ -378,6 +386,7 @@ declare module 'discord.js' {
 		public name: string;
 		public readonly identifier: string;
 		public readonly url: string;
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -476,6 +485,7 @@ declare module 'discord.js' {
 		public setVerificationLevel(verificationLevel: number, reason?: string): Promise<Guild>;
 		public splashURL(options?: AvatarOptions): string;
 		public sync(): void;
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -491,6 +501,7 @@ declare module 'discord.js' {
 		public static actionType(action: number): GuildAuditLogsActionType;
 		public static build(...args: any[]): Promise<GuildAuditLogs>;
 		public static targetType(target: number): GuildAuditLogsTarget;
+		public toJSON(): object;
 	}
 
 	class GuildAuditLogsEntry {
@@ -506,6 +517,7 @@ declare module 'discord.js' {
 		public reason: string;
 		public target: Guild | User | Role | GuildEmoji | Invite | Webhook;
 		public targetType: GuildAuditLogsTarget;
+		public toJSON(): object;
 	}
 
 	export class GuildChannel extends Channel {
@@ -594,6 +606,7 @@ declare module 'discord.js' {
 		public setMute(mute: boolean, reason?: string): Promise<GuildMember>;
 		public setNickname(nickname: string, reason?: string): Promise<GuildMember>;
 		public setVoiceChannel(voiceChannel: ChannelResolvable): Promise<GuildMember>;
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -617,6 +630,7 @@ declare module 'discord.js' {
 		public uses: number;
 		public voiceChannelCount: number;
 		public delete(reason?: string): Promise<Invite>;
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -664,6 +678,7 @@ declare module 'discord.js' {
 		public react(emoji: EmojiIdentifierResolvable): Promise<MessageReaction>;
 		public reply(content?: StringResolvable, options?: MessageOptions): Promise<Message | Message[]>;
 		public reply(options?: MessageOptions): Promise<Message | Message[]>;
+		public toJSON(): object;
 		public toString(): string;
 		public unpin(): Promise<Message>;
 	}
@@ -681,7 +696,9 @@ declare module 'discord.js' {
 		public width: number;
 		public setAttachment(file: BufferResolvable | Stream, name: string): this;
 		public setFile(attachment: BufferResolvable | Stream): this;
-		public setName(name: string): this;	}
+		public setName(name: string): this;
+		public toJSON(): object;
+	}
 
 	export class MessageCollector extends Collector<Snowflake, Message> {
 		constructor(channel: TextChannel | DMChannel | GroupDMChannel, filter: CollectorFilter, options?: MessageCollectorOptions);
@@ -726,6 +743,7 @@ declare module 'discord.js' {
 		public setTimestamp(timestamp?: Date): this;
 		public setTitle(title: StringResolvable): this;
 		public setURL(url: string): this;
+		public toJSON(): object;
 	}
 
 	export class MessageMentions {
@@ -738,14 +756,15 @@ declare module 'discord.js' {
 
 		public readonly channels: Collection<Snowflake, TextChannel>;
 		public everyone: boolean;
-		public readonly members: Collection<Snowflake, GuildMember>;
-		public roles: Collection<Snowflake, Role>;
-		public users: Collection<Snowflake, User>;
 		public has(data: User | GuildMember | Role | GuildChannel, options?: {
 			ignoreDirect?: boolean;
 			ignoreRoles?: boolean;
 			ignoreEveryone?: boolean;
 		}): boolean;
+		public readonly members: Collection<Snowflake, GuildMember>;
+		public roles: Collection<Snowflake, Role>;
+		public users: Collection<Snowflake, User>;
+		public toJSON(): object;
 
 		public static CHANNELS_PATTERN: RegExp;
 		public static EVERYONE_PATTERN: RegExp;
@@ -762,6 +781,7 @@ declare module 'discord.js' {
 		public me: boolean;
 		public message: Message;
 		public users: ReactionUserStore;
+		public toJSON(): object;
 	}
 
 	export class PermissionOverwrites {
@@ -772,6 +792,7 @@ declare module 'discord.js' {
 		public id: Snowflake;
 		public type: OverwriteType;
 		public delete(reason?: string): Promise<PermissionOverwrites>;
+		public toJSON(): object;
 	}
 
 	export class Permissions {
@@ -785,6 +806,7 @@ declare module 'discord.js' {
 		public remove(...permissions: PermissionResolvable[]): this;
 		public serialize(checkAdmin?: boolean): PermissionObject;
 		public toArray(checkAdmin?: boolean): PermissionString[];
+		public toJSON(): object;
 		public valueOf(): number;
 		public [Symbol.iterator](): IterableIterator<PermissionString>;
 
@@ -831,6 +853,7 @@ declare module 'discord.js' {
 	export class ReactionEmoji extends Emoji {
 		constructor(reaction: MessageReaction, emoji: object);
 		public reaction: MessageReaction;
+		public toJSON(): object;
 	}
 
 	export class RichPresenceAssets {
@@ -871,6 +894,7 @@ declare module 'discord.js' {
 		public setName(name: string, reason?: string): Promise<Role>;
 		public setPermissions(permissions: PermissionResolvable, reason?: string): Promise<Role>;
 		public setPosition(position: number, options?: { relative?: boolean; reason?: string }): Promise<Role>;
+		public toJSON(): object;
 		public toString(): string;
 
 		public static comparePositions(role1: Role, role2: Role): number;
@@ -962,7 +986,7 @@ declare module 'discord.js' {
 	const VolumeMixin: <T>(base: Constructable<T>) => Constructable<T & VolumeInterface>;
 
 	class StreamDispatcher extends VolumeMixin(Writable) {
-		constructor(player: Object, options?: StreamOptions, streams?: Object);
+		constructor(player: object, options?: StreamOptions, streams?: object);
 		public player: object;
 		public pausedSince: number;
 		public broadcast: VoiceBroadcast;
@@ -1082,6 +1106,7 @@ declare module 'discord.js' {
 		public revoked: boolean;
 		public type: string;
 		public user: User;
+		public toJSON(): object;
 	}
 
 	class UserProfile extends Base {
@@ -1094,6 +1119,7 @@ declare module 'discord.js' {
 		public premium: boolean;
 		public premiumSince: Date;
 		public user: User;
+		public toJSON(): object;
 	}
 
 	export class Util {
@@ -1106,6 +1132,7 @@ declare module 'discord.js' {
 		public static discordSort<K, V extends { rawPosition: number; id: string; }>(collection: Collection<K, V>): Collection<K, V>
 		public static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string;
 		public static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
+		public static flatten(obj: object, ...props: { [key: string]: boolean | string }[]): object;
 		public static idToBinary(num: Snowflake): string;
 		public static makeError(obj: { name: string, message: string, stack: string }): Error;
 		public static makePlainError(err: Error): { name: string, message: string, stack: string };
@@ -1242,6 +1269,7 @@ declare module 'discord.js' {
 		public optimal: boolean;
 		public sampleHostname: string;
 		public vip: boolean;
+		public toJSON(): object;
 	}
 
 	class VolumeInterface extends EventEmitter {
