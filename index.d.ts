@@ -785,6 +785,7 @@ declare module 'discord.js' {
 		public remove(...permissions: PermissionResolvable[]): this;
 		public serialize(checkAdmin?: boolean): PermissionObject;
 		public toArray(checkAdmin?: boolean): PermissionString[];
+		public valueOf(): number;
 		public [Symbol.iterator](): IterableIterator<PermissionString>;
 
 		public static ALL: number;
