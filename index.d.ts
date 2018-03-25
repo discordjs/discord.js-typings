@@ -1422,7 +1422,8 @@ declare module 'discord.js' {
 
 	type PartialTextBasedChannelFields = {
 		lastMessageID: Snowflake;
-		lastMessage: Message;
+		lastMessageChannelID: Snowflake;
+		readonly lastMessage: Message;
 		acknowledge(): Promise<DMChannel | GroupDMChannel | TextChannel>;
 		send(content?: StringResolvable, options?: MessageOptions | MessageEmbed | MessageAttachment): Promise<Message | Message[]>;
 		send(options?: MessageOptions | MessageEmbed | MessageAttachment): Promise<Message | Message[]>;
