@@ -1079,6 +1079,7 @@ declare module 'discord.js' {
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
 		public discriminator: string;
+		public readonly defaultAvatarURL: string;
 		public readonly dmChannel: DMChannel;
 		public id: Snowflake;
 		public readonly note: string;
