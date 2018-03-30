@@ -1901,6 +1901,7 @@ declare module 'discord.js' {
 		game?: {
 			name?: string;
 			url?: string;
+			type?: ActivityType;
 		}
 	}
 
