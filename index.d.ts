@@ -1252,7 +1252,7 @@ declare module 'discord.js' {
 
 	class VoiceReceiver extends EventEmitter {
 		constructor(connection: VoiceConnection);
-		public createStream(user: UserResolvable, options?: { mode?: 'opus' | 'pcm' }): Readable;
+		public createStream(user: UserResolvable, options?: { mode?: 'opus' | 'pcm', end?: 'silence' | 'manual' }): Readable;
 
 		public on(event: 'debug', listener: (error: Error | string) => void): this;
 		public on(event: string, listener: Function): this;
