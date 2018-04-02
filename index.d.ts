@@ -529,6 +529,7 @@ declare module 'discord.js' {
 		public readonly deletable: boolean;
 		public guild: Guild;
 		public readonly messageNotifications: GuildChannelMessageNotifications;
+		public readonly manageable: boolean;
 		public readonly muted: boolean;
 		public name: string;
 		public readonly parent: CategoryChannel;
