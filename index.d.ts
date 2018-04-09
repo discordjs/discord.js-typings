@@ -439,6 +439,7 @@ declare module 'discord.js' {
 		public memberCount: number;
 		public members: GuildMemberStore;
 		public readonly messageNotifications: MessageNotifications;
+		public mfaLevel: number;
 		public readonly mobilePush: boolean;
 		public readonly muted: boolean;
 		public name: string;
