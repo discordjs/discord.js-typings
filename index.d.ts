@@ -967,13 +967,13 @@ declare module 'discord.js' {
 		public shardArgs: string[];
 		public shards: Collection<number, Shard>;
 		public token: string;
-		public totalShards: number | string;
+		public totalShards: number | 'auto';
 		public broadcast(message: any): Promise<Shard[]>;
 		public broadcastEval(script: string): Promise<any[]>;
 		public createShard(id: number): Shard;
 		public fetchClientValues(prop: string): Promise<any[]>;
 		public respawnAll(shardDelay?: number, respawnDelay?: number, waitForReady?: boolean): Promise<Collection<number, Shard>>;
-		public spawn(amount?: number, delay?: number, waitForReady?: boolean): Promise<Collection<number, Shard>>;
+		public spawn(amount?: number | 'auto', delay?: number, waitForReady?: boolean): Promise<Collection<number, Shard>>;
 
 		public on(event: 'shardCreate', listener: (shard: Shard) => void): this;
 
