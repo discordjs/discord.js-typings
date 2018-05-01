@@ -243,7 +243,7 @@ declare module 'discord.js' {
 		public createGuild(name: string, region: string, icon?: BufferResolvable | Base64Resolvable): Promise<Guild>;
 		public fetchMentions(options?: { limit?: number; roles?: boolean, everyone?: boolean; guild?: Guild | Snowflake }): Promise<Message[]>;
 		public removeFriend(user?: UserResolvable): Promise<User>;
-		public setActivity(name: string, options?: { url?: string, type?: ActivityType | number }): Promise<ClientUser>;
+		public setActivity(name: string, options?: { url?: string, type?: ActivityType | number }): Promise<Presence>;
 		public setAFK(afk: boolean): Promise<ClientUser>;
 		public setAvatar(avatar: BufferResolvable | Base64Resolvable): Promise<ClientUser>;
 		public setEmail(email: string, password: string): Promise<ClientUser>;
