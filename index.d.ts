@@ -370,6 +370,7 @@ declare module 'discord.js' {
 		private static flattenErrors(obj: object, key: string): string[];
 
 		public code: number;
+		public method: string;
 		public path: string;
 	}
 
