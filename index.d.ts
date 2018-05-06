@@ -383,6 +383,7 @@ declare module 'discord.js' {
 	export class Emoji extends Base {
 		constructor(client: Client, emoji: object);
 		public animated: boolean;
+		public readonly deletable: boolean;
 		public id: Snowflake;
 		public name: string;
 		public readonly identifier: string;
