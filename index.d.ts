@@ -397,6 +397,7 @@ declare module 'discord.js' {
 		public readonly client: Client;
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
+		public readonly deletable: boolean;
 		public guild: Guild;
 		public id: Snowflake;
 		public readonly identifier: string;
