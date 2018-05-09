@@ -1126,6 +1126,7 @@ declare module 'discord.js' {
 		public topic: string;
 		public createWebhook(name: string, avatar: BufferResolvable, reason?: string): Promise<Webhook>;
 		public fetchWebhooks(): Promise<Collection<Snowflake, Webhook>>;
+		public setNSFW(nsfw: boolean, reason: string): Promise<this>;
 	}
 
 	export class User extends PartialTextBasedChannel() {
@@ -1529,6 +1530,7 @@ declare module 'discord.js' {
 		name?: string;
 		position?: number;
 		topic?: string;
+		nsfw?: boolean;
 		bitrate?: number;
 		userLimit?: number;
 	};
