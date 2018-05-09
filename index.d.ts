@@ -491,6 +491,7 @@ declare module 'discord.js' {
 		public readonly suppressEveryone: boolean;
 		public readonly systemChannel: GuildChannel;
 		public systemChannelID: Snowflake;
+		public readonly verified: boolean;
 		public verificationLevel: number;
 		public readonly voiceConnection: VoiceConnection;
 		public acknowledge(): Promise<Guild>;
