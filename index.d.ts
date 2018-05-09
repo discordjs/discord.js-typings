@@ -583,6 +583,7 @@ declare module 'discord.js' {
 		public delete(reason?: string): Promise<GuildChannel>
 		public edit(data: ChannelData, reason?: string): Promise<GuildChannel>;
 		public equals(channel: GuildChannel): boolean;
+		public fetchInvites(): Promise<Collection<string, Invite>>;
 		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions, reason?: string): Promise<void>;
 		public permissionsFor(member: GuildMemberResolvable): Permissions;
 		public setName(name: string, reason?: string): Promise<GuildChannel>;
