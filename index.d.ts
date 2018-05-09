@@ -423,6 +423,7 @@ declare module 'discord.js' {
 		public type: number;
 		public url: string;
 		public equals(game: Game): boolean;
+		public toString(): string;
 	}
 
 	export class GroupDMChannel extends TextBasedChannel(Channel) {
