@@ -612,6 +612,7 @@ declare module 'discord.js' {
 		public lastMessageID: string;
 		public readonly mute: boolean;
 		public nickname: string;
+		public readonly manageable: boolean;
 		public readonly permissions: Permissions;
 		public readonly presence: Presence;
 		public readonly roles: Collection<Snowflake, Role>;
