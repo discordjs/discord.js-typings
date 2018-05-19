@@ -299,14 +299,8 @@ declare module 'discord.js' {
 		public deleteAll(): Promise<V>[];
 		public equals(collection: Collection<any, any>): boolean;
 		public every(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
-		public exists(prop: keyof V, value: any): boolean;
-		public exists(fn: (value: V, key: K, collection: Collection<K, V>) => boolean): V;
 		public filter(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): Collection<K, V>;
-		public filterArray(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): V[];
-		public find(prop: keyof V, value: any): V;
 		public find(fn: (value: V, key: K, collection: Collection<K, V>) => boolean): V;
-		public findAll(prop: keyof V, value: any): V[];
-		public findKey(prop: keyof V, value: any): K;
 		public findKey(fn: (value: V, key: K, collection: Collection<K, V>) => boolean): K;
 		public first(): V;
 		public first(count: number): V[];
@@ -318,6 +312,7 @@ declare module 'discord.js' {
 		public lastKey(): K;
 		public lastKey(count: number): K[];
 		public map<T>(fn: (value: V, key: K, collection: Collection<K, V>) => T, thisArg?: any): T[];
+		public partition(fn: (value: V, key: K, collection: Collection<K, V>) => boolean): [Collection<K, V>, Collection<K, V>]
 		public random(): V;
 		public random(count: number): V[];
 		public randomKey(): K;
