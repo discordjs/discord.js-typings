@@ -916,6 +916,7 @@ declare module 'discord.js' {
 		public eval(script: string): Promise<any>;
 		public eval<T>(fn: (client: Client) => T): Promise<T[]>;
 		public fetchClientValue(prop: string): Promise<any>;
+		public kill(): void;
 		public respawn(delay?: number, waitForReady?: boolean): Promise<ChildProcess>;
 		public send(message: any): Promise<Shard>;
 		public spawn(waitForReady?: boolean): Promise<ChildProcess>;
