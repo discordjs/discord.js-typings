@@ -423,6 +423,7 @@ declare module 'discord.js' {
 		public channels: GuildChannelStore;
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
+		public defaultMessageNotifications: DefaultMessageNotifications | number;
 		public embedEnabled: boolean;
 		public emojis: GuildEmojiStore;
 		public explicitContentFilter: number;
@@ -1646,6 +1647,8 @@ declare module 'discord.js' {
 		increment: number;
 		binary: string;
 	};
+
+	type DefaultMessageNotifications = 'ALL' | 'MENTIONS';
 
 	type GuildEmojiEditData = {
 		name?: string;
