@@ -70,6 +70,7 @@ declare module 'discord.js' {
 		constructor(client: Client, data: object);
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
+		public deleted: boolean;
 		public id: Snowflake;
 		public type: 'dm' | 'group' | 'text' | 'voice' | 'category' | 'unknown';
 		public delete(reason?: string): Promise<Channel>;
@@ -424,6 +425,7 @@ declare module 'discord.js' {
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
 		public defaultMessageNotifications: DefaultMessageNotifications | number;
+		public deleted: boolean;
 		public embedEnabled: boolean;
 		public emojis: GuildEmojiStore;
 		public explicitContentFilter: number;
@@ -557,6 +559,7 @@ declare module 'discord.js' {
 
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
+		public deleted: boolean;
 		public guild: Guild;
 		public managed: boolean;
 		public requiresColons: boolean;
@@ -571,6 +574,7 @@ declare module 'discord.js' {
 		constructor(client: Client, data: object, guild: Guild);
 		public readonly bannable: boolean;
 		public readonly deaf: boolean;
+		public deleted: boolean;
 		public readonly displayColor: number;
 		public readonly displayHexColor: string;
 		public readonly displayName: string;
@@ -649,6 +653,7 @@ declare module 'discord.js' {
 		public readonly createdAt: Date;
 		public createdTimestamp: number;
 		public readonly deletable: boolean;
+		public deleted: boolean;
 		public readonly editable: boolean;
 		public readonly editedAt: Date;
 		public editedTimestamp: number;
@@ -871,6 +876,7 @@ declare module 'discord.js' {
 		public color: number;
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
+		public deleted: boolean;
 		public readonly editable: boolean;
 		public guild: Guild;
 		public readonly hexColor: string;
