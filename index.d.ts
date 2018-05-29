@@ -1131,7 +1131,6 @@ declare module 'discord.js' {
 	}
 
 	export class Util {
-		public static arraysEqual(a: any[], b: any[]): boolean;
 		public static basename(path: string, ext?: string): string;
 		public static binaryToID(num: string): Snowflake;
 		public static delayFor(ms: number): Promise<void>;
