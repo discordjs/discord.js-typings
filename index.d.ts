@@ -420,13 +420,28 @@ declare module 'discord.js' {
 	}
 
 	export class Game {
-		constructor(data: object);
+		constructor(data: object, presence: Presence);
+		public applicationID: string;
+		public assets: RichPresenceAssets;
+		public details: string;
 		public name: string;
 		public readonly streaming: boolean;
+		public party: {
+			id: string;
+			size: [number, number];
+		};
+		public state: string;
+		public timestamps: {
+			start: Date;
+			end: Date;
+		};
+		public readonly flags: string[];
 		public type: number;
 		public url: string;
 		public equals(game: Game): boolean;
 		public toString(): string;
+		private _flags: string[];
+		private syncID: string;
 	}
 
 	export class GroupDMChannel extends TextBasedChannel(Channel) {
@@ -929,7 +944,8 @@ declare module 'discord.js' {
 	}
 
 	export class Presence {
-		constructor(data: object);
+		constructor(data: object, client: Client);
+		public readonly client: Client;
 		public game: Game;
 		public status: 'online' | 'offline' | 'idle' | 'dnd';
 		public equals(presence: Presence): boolean;
@@ -990,6 +1006,16 @@ declare module 'discord.js' {
 		public setTimestamp(timestamp?: Date): this;
 		public setTitle(title: StringResolvable): this;
 		public setURL(url: string): this;
+	}
+
+	export class RichPresenceAssets {
+		constructor(game: Game, assets: object);
+		public largeImage: Snowflake;
+		public largeText: string;
+		public smallImage: Snowflake;
+		public smallText: string;
+		public readonly smallImageURL: string;
+		public readonly largeImageURL: string;
 	}
 
 	export class Role {
@@ -1804,6 +1830,15 @@ declare module 'discord.js' {
 	type MessageSearchResult = {
 		totalResults: number;
 		messages: Message[][];
+	}
+
+	type ActivityFlags = {
+		INSTANCE?: number;
+		JOIN?: number;
+		SPECTATE?: number;
+		JOIN_REQUEST?: number;
+		SYNC?: number;
+		PLAY?: number;
 	}
 
 	type PermissionFlags = {
