@@ -545,7 +545,7 @@ declare module 'discord.js' {
 		public equals(channel: GuildChannel): boolean;
 		public fetchInvites(): Promise<Collection<string, Invite>>;
 		public lockPermissions(): Promise<GuildChannel>;
-		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions, reason?: string): Promise<void>;
+		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: Partial<PermissionObject>, reason?: string): Promise<void>;
 		public permissionsFor(memberOrRole: GuildMemberResolvable | RoleResolvable): Permissions;
 		public setName(name: string, reason?: string): Promise<GuildChannel>;
 		public setParent(channel: GuildChannel | Snowflake, options?: { lockPermissions?: boolean, reason?: string }): Promise<GuildChannel>;
@@ -1964,67 +1964,9 @@ declare module 'discord.js' {
 
 	type OverwriteType = 'member' | 'role';
 
-	type PermissionFlags = {
-		CREATE_INSTANT_INVITE?: number;
-		KICK_MEMBERS?: number;
-		BAN_MEMBERS?: number;
-		ADMINISTRATOR?: number;
-		MANAGE_CHANNELS?: number;
-		MANAGE_GUILD?: number;
-		ADD_REACTIONS?: number;
-		VIEW_AUDIT_LOG?: number;
-		VIEW_CHANNEL?: number;
-		SEND_MESSAGES?: number;
-		SEND_TTS_MESSAGES?: number;
-		MANAGE_MESSAGES?: number;
-		EMBED_LINKS?: number;
-		ATTACH_FILES?: number;
-		READ_MESSAGE_HISTORY?: number;
-		MENTION_EVERYONE?: number;
-		USE_EXTERNAL_EMOJIS?: number;
-		CONNECT?: number;
-		SPEAK?: number;
-		MUTE_MEMBERS?: number;
-		DEAFEN_MEMBERS?: number;
-		MOVE_MEMBERS?: number;
-		USE_VAD?: number;
-		CHANGE_NICKNAME?: number;
-		MANAGE_NICKNAMES?: number;
-		MANAGE_ROLES?: number;
-		MANAGE_WEBHOOKS?: number;
-		MANAGE_EMOJIS?: number;
-	};
+	type PermissionFlags = Record<PermissionString, number>;
 
-	type PermissionObject = {
-		CREATE_INSTANT_INVITE?: boolean;
-		KICK_MEMBERS?: boolean;
-		BAN_MEMBERS?: boolean;
-		ADMINISTRATOR?: boolean;
-		MANAGE_CHANNELS?: boolean;
-		MANAGE_GUILD?: boolean;
-		ADD_REACTIONS?: boolean;
-		VIEW_AUDIT_LOG?: boolean;
-		VIEW_CHANNEL?: number;
-		SEND_MESSAGES?: boolean;
-		SEND_TTS_MESSAGES?: boolean;
-		MANAGE_MESSAGES?: boolean;
-		EMBED_LINKS?: boolean;
-		ATTACH_FILES?: boolean;
-		READ_MESSAGE_HISTORY?: boolean;
-		MENTION_EVERYONE?: boolean;
-		USE_EXTERNAL_EMOJIS?: boolean;
-		CONNECT?: boolean;
-		SPEAK?: boolean;
-		MUTE_MEMBERS?: boolean;
-		DEAFEN_MEMBERS?: boolean;
-		MOVE_MEMBERS?: boolean;
-		USE_VAD?: boolean;
-		CHANGE_NICKNAME?: boolean;
-		MANAGE_NICKNAMES?: boolean;
-		MANAGE_ROLES?: boolean;
-		MANAGE_WEBHOOKS?: boolean;
-		MANAGE_EMOJIS?: boolean;
-	};
+	type PermissionObject = Record<PermissionString, boolean>;
 
 	type PermissionString = 'CREATE_INSTANT_INVITE'
 		| 'KICK_MEMBERS'
@@ -2054,8 +1996,6 @@ declare module 'discord.js' {
 		| 'MANAGE_ROLES'
 		| 'MANAGE_WEBHOOKS'
 		| 'MANAGE_EMOJIS';
-
-	type PermissionOverwriteOptions = PermissionObject;
 
 	interface RecursiveArray<T> extends Array<T | RecursiveArray<T>> { }
 	type PermissionResolvable = RecursiveArray<Permissions | PermissionString | number> | Permissions | PermissionString | number;
