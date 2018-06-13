@@ -1646,7 +1646,7 @@ declare module 'discord.js' {
 
 	type DeconstructedSnowflake = {
 		timestamp: number;
-		date: Date;
+		readonly date: Date;
 		workerID: number;
 		processID: number;
 		increment: number;
