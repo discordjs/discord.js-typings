@@ -1064,6 +1064,7 @@ declare module 'discord.js' {
 		public readonly defaultAvatarURL: string;
 		public readonly dmChannel: DMChannel;
 		public id: Snowflake;
+		public locale: string;
 		public readonly note: string;
 		public readonly presence: Presence;
 		public readonly tag: string;
