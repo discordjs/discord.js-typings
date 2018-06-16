@@ -754,13 +754,13 @@ declare module 'discord.js' {
 	export class MessageMentions {
 		constructor(message: Message, users: any[], roles: any[], everyone: boolean);
 		private _channels: Collection<Snowflake, GuildChannel>;
-		private _client: Client;
-		private _content: Message;
-		private _guild: Guild;
+		private readonly _content: Message;
 		private _members: Collection<Snowflake, GuildMember>;
 
 		public readonly channels: Collection<Snowflake, TextChannel>;
+		public readonly client: Client;
 		public everyone: boolean;
+		public readonly guild: Guild;
 		public has(data: User | GuildMember | Role | GuildChannel, options?: {
 			ignoreDirect?: boolean;
 			ignoreRoles?: boolean;
