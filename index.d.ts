@@ -1875,7 +1875,7 @@ declare module 'discord.js' {
 		content?: string;
 		embed?: MessageEmbed | MessageEmbedOptions,
 		disableEveryone?: boolean;
-		files?: FileOptions[] | string[];
+		files?: (FileOptions | BufferResolvable | MessageAttachment)[];
 		code?: string | boolean;
 		split?: boolean | SplitOptions;
 		reply?: UserResolvable;
