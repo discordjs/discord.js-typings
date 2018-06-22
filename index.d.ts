@@ -1779,7 +1779,7 @@ declare module 'discord.js' {
 		embed?: RichEmbed | RichEmbedOptions,
 		disableEveryone?: boolean;
 		file?: FileOptions | string;
-		files?: FileOptions[] | string[];
+		files?: (FileOptions | BufferResolvable | Attachment)[];
 		code?: string | boolean;
 		split?: boolean | SplitOptions;
 		reply?: UserResolvable;
