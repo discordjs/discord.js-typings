@@ -915,6 +915,7 @@ declare module 'discord.js' {
 		private _handleMessage(message: any): void;
 
 		public args: string[];
+		public execArgv: string[];
 		public env: object;
 		public id: number;
 		public manager: ShardingManager;
