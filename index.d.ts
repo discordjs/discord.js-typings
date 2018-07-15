@@ -967,6 +967,7 @@ declare module 'discord.js' {
 			respawn?: boolean;
 			shardArgs?: string[];
 			token?: string;
+			execArgv?: string[];
 		});
 
 		public file: string;
