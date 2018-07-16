@@ -321,6 +321,8 @@ declare module 'discord.js' {
 		public reduce<T>(fn: (accumulator: any, value: V, key: K, collection: Collection<K, V>) => T, initialValue?: any): T;
 		public some(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
 		public sort(compareFunction?: (a: V, b: V, c?: K, d?: K) => number): Collection<K, V>;
+		public sweep(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): number;
+		public tap(fn: (value: V, key: K, collection: Collection<K, V>) => any, thisArg?: any): Collection<K, V>;
 		public toJSON(): object;
 	}
 
