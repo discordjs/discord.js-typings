@@ -12,7 +12,7 @@ declare module 'discord.js' {
 
 	export const version: string;
 
-//#region Classes
+	//#region Classes
 
 	class Attachment {
 		constructor(file: BufferResolvable | Stream, name?: string);
@@ -99,7 +99,7 @@ declare module 'discord.js' {
 		public fetchUser(id: Snowflake, cache?: boolean): Promise<User>;
 		public fetchVoiceRegions(): Promise<Collection<string, VoiceRegion>>;
 		public fetchWebhook(id: Snowflake, token?: string): Promise<Webhook>;
-		public generateInvite(permissions?: PermissionResolvable[] | number): Promise<string>;
+		public generateInvite(permissions?: PermissionResolvable): Promise<string>;
 		public login(token?: string): Promise<string>;
 		public setInterval(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 		public setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
@@ -603,8 +603,10 @@ declare module 'discord.js' {
 		public edit(data: ChannelData, reason?: string): Promise<GuildChannel>;
 		public equals(channel: GuildChannel): boolean;
 		public fetchInvites(): Promise<Collection<string, Invite>>;
+		public lockPermissions(): Promise<GuildChannel>;
 		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions, reason?: string): Promise<void>;
 		public permissionsFor(member: GuildMemberResolvable): Permissions;
+		public replacePermissionOverwrites(options?: { overwrites?: (PermissionOverwrites | PermissionOverwriteOptions)[], reason?: string }): Promise<GuildChannel>;
 		public setName(name: string, reason?: string): Promise<GuildChannel>;
 		public setParent(parent: ChannelResolvable, reason?: string): Promise<GuildChannel>
 		public setPosition(position: number, relative?: boolean): Promise<GuildChannel>;
@@ -650,10 +652,10 @@ declare module 'discord.js' {
 		public createDM(): Promise<DMChannel>;
 		public deleteDM(): Promise<DMChannel>;
 		public edit(data: object, reason?: string): Promise<GuildMember>;
-		public hasPermission(permission: PermissionResolvable | PermissionResolvable[], explicit?: boolean, checkAdmin?: boolean, checkOwner?: boolean): boolean;
-		public hasPermissions(permission: PermissionResolvable[], explicit?: boolean): boolean;
+		public hasPermission(permission: PermissionResolvable, explicit?: boolean, checkAdmin?: boolean, checkOwner?: boolean): boolean;
+		public hasPermissions(permission: PermissionResolvable, explicit?: boolean): boolean;
 		public kick(reason?: string): Promise<GuildMember>;
-		public missingPermissions(permissions: PermissionResolvable[], explicit?: boolean): PermissionResolvable[];
+		public missingPermissions(permissions: PermissionResolvable, explicit?: boolean): PermissionResolvable;
 		public permissionsIn(channel: ChannelResolvable): Permissions;
 		public removeRole(role: Role | Snowflake, reason?: string): Promise<GuildMember>;
 		public removeRoles(roles: Collection<Snowflake, Role> | Role[] | Snowflake[], reason?: string): Promise<GuildMember>;
@@ -915,7 +917,9 @@ declare module 'discord.js' {
 	export class PermissionOverwrites {
 		constructor(guildChannel: GuildChannel, data: object);
 		public allow: number;
+		public allowed: Permissions;
 		public channel: GuildChannel;
+		public denied: Permissions;
 		public deny: number;
 		public id: Snowflake;
 		public type: string;
@@ -923,18 +927,19 @@ declare module 'discord.js' {
 	}
 
 	export class Permissions {
-		constructor(permissions: number | PermissionResolvable[]);
-		constructor(member: GuildMember, permissions: number | PermissionResolvable[]);
+		constructor(permissions: PermissionResolvable);
+		constructor(member: GuildMember, permissions: PermissionResolvable);
 		private readonly raw: number;
 
 		public bitfield: number;
 		public member: GuildMember;
 		public add(...permissions: PermissionResolvable[]): this;
-		public has(permission: PermissionResolvable | PermissionResolvable[], checkAdmin?: boolean): boolean;
+		public freeze(): this;
+		public has(permission: PermissionResolvable, checkAdmin?: boolean): boolean;
 		public hasPermission(permission: PermissionResolvable, explicit?: boolean): boolean;
-		public hasPermissions(permissions: PermissionResolvable[], explicit?: boolean): boolean;
-		public missing(permissions: PermissionResolvable[], checkAdmin?: boolean): PermissionResolvable[];
-		public missingPermissions(permissions: PermissionResolvable[], checkAdmin?: boolean): PermissionResolvable[];
+		public hasPermissions(permissions: PermissionResolvable, explicit?: boolean): boolean;
+		public missing(permissions: PermissionResolvable, checkAdmin?: boolean): PermissionResolvable;
+		public missingPermissions(permissions: PermissionResolvable, checkAdmin?: boolean): PermissionResolvable;
 		public remove(...permissions: PermissionResolvable[]): this;
 		public serialize(checkAdmin?: boolean): PermissionObject;
 		public valueOf(): number;
@@ -942,7 +947,7 @@ declare module 'discord.js' {
 		public static ALL: number;
 		public static DEFAULT: number;
 		public static FLAGS: PermissionFlags;
-		public static resolve(permission: PermissionResolvable | PermissionResolvable[]): number;
+		public static resolve(permission: PermissionResolvable): number;
 	}
 
 	export class Presence {
@@ -1042,14 +1047,14 @@ declare module 'discord.js' {
 		public delete(reason?: string): Promise<Role>;
 		public edit(data: RoleData, reason?: string): Promise<Role>;
 		public equals(role: Role): boolean;
-		public hasPermission(permission: PermissionResolvable | PermissionResolvable[], explicit?: boolean, checkAdmin?: boolean): boolean;
-		public hasPermissions(permissions: PermissionResolvable[], explicit?: boolean): boolean;
+		public hasPermission(permission: PermissionResolvable, explicit?: boolean, checkAdmin?: boolean): boolean;
+		public hasPermissions(permissions: PermissionResolvable, explicit?: boolean): boolean;
 		public serialize(): PermissionObject;
 		public setColor(color: string | number, reason?: string): Promise<Role>;
 		public setHoist(hoist: boolean, reason?: string): Promise<Role>;
 		public setMentionable(mentionable: boolean, reason?: string): Promise<Role>;
 		public setName(name: string, reason?: string): Promise<Role>;
-		public setPermissions(permissions: PermissionResolvable[], reason?: string): Promise<Role>;
+		public setPermissions(permissions: PermissionResolvable, reason?: string): Promise<Role>;
 		public setPosition(position: number, relative?: boolean): Promise<Role>;
 		public toString(): string;
 
@@ -1482,9 +1487,9 @@ declare module 'discord.js' {
 		public setTimeout(fn: Function, delay: number, ...args: any[]): NodeJS.Timer;
 	}
 
-//#endregion
+	//#endregion
 
-//#region Mixins
+	//#region Mixins
 
 	// Model the TextBasedChannel mixin system, allowing application of these fields
 	// to the classes that use these methods without having to manually add them
@@ -1522,9 +1527,9 @@ declare module 'discord.js' {
 		stopTyping(force?: boolean): void;
 	} & PartialTextBasedChannelFields;
 
-//#endregion
+	//#endregion
 
-//#region Typedefs
+	//#region Typedefs
 
 	type ActivityType = 'PLAYING'
 		| 'STREAMING'
@@ -1795,25 +1800,25 @@ declare module 'discord.js' {
 		maxID?: Snowflake;
 		minID?: Snowflake;
 		has?: 'link'
-			| 'embed'
-			| 'file'
-			| 'video'
-			| 'image'
-			| 'sound'
-			| '-link'
-			| '-embed'
-			| '-file'
-			| '-video'
-			| '-image'
-			| '-sound';
+		| 'embed'
+		| 'file'
+		| 'video'
+		| 'image'
+		| 'sound'
+		| '-link'
+		| '-embed'
+		| '-file'
+		| '-video'
+		| '-image'
+		| '-sound';
 		channel?: ChannelResolvable;
 		author?: UserResolvable;
 		authorType?: 'user'
-			| 'bot'
-			| 'webhook'
-			| '-user'
-			| '-bot'
-			| '-webhook';
+		| 'bot'
+		| 'webhook'
+		| '-user'
+		| '-bot'
+		| '-webhook';
 		sortBy?: 'relevant' | 'recent';
 		sortOrder?: 'asc' | 'desc';
 		contextSize?: number;
@@ -1947,7 +1952,7 @@ declare module 'discord.js' {
 
 	type PermissionOverwriteOptions = PermissionObject;
 
-	type PermissionResolvable = PermissionString | number;
+	type PermissionResolvable = Permissions | PermissionString | number | (Permissions | PermissionString | number)[];
 
 	type PresenceData = {
 		status?: PresenceStatus;
@@ -1974,7 +1979,7 @@ declare module 'discord.js' {
 		timestamp?: Date;
 		color?: number | string;
 		fields?: { name: string; value: string; inline?: boolean; }[];
-		file?: Attachment| string | FileOptions;
+		file?: Attachment | string | FileOptions;
 		author?: { name: string; url?: string; icon_url?: string; };
 		thumbnail?: { url: string; height?: number; width?: number; };
 		image?: { url: string; proxy_url?: string; height?: number; width?: number; };
@@ -1987,7 +1992,7 @@ declare module 'discord.js' {
 		color?: ColorResolvable;
 		hoist?: boolean;
 		position?: number;
-		permissions?: PermissionString[];
+		permissions?: PermissionResolvable;
 		mentionable?: boolean;
 	};
 
@@ -2072,5 +2077,5 @@ declare module 'discord.js' {
 		| 'RELATIONSHIP_ADD'
 		| 'RELATIONSHIP_REMOVE';
 
-//#endregion
+	//#endregion
 }
