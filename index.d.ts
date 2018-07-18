@@ -476,6 +476,7 @@ declare module 'discord.js' {
 		public applicationID: string;
 		public available: boolean;
 		public channels: Collection<Snowflake, GuildChannel>;
+		public defaultMessageNotifications: DefaultMessageNotifications | number;
 		public readonly client: Client;
 		public readonly createdAt: Date;
 		public readonly createdTimestamp: number;
@@ -539,6 +540,7 @@ declare module 'discord.js' {
 		public setAFKTimeout(afkTimeout: number, reason?: string): Promise<Guild>;
 		public setChannelPosition(channel: string | GuildChannel, position: number, relative?: boolean): Promise<Guild>;
 		public setChannelPositions(channelPositions: ChannelPosition[]): Promise<Guild>;
+		public setDefaultMessageNotification(defaultMessageNotifications: DefaultMessageNotifications, reason: string): Promise<Guild>;
 		public setExcplicitContentFilter(explicitContentFilter: number, reason?: string): Promise<Guild>;
 		public setIcon(icon: Base64Resolvable, reason?: string): Promise<Guild>;
 		public setName(name: string, reason?: string): Promise<Guild>;
@@ -1638,6 +1640,9 @@ declare module 'discord.js' {
 		increment: number;
 		binary: string;
 	};
+
+	type DefaultMessageNotifications = 'ALL'
+		| 'MENTIONS'
 
 	type EmojiEditData = {
 		name?: string;
