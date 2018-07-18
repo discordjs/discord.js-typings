@@ -619,7 +619,7 @@ declare module 'discord.js' {
 
 	export class Invite extends Base {
 		constructor(client: Client, data: object);
-		public channel: GuildChannel;
+		public channel: GuildChannel | GroupDMChannel;
 		public code: string;
 		public readonly createdAt: Date;
 		public createdTimestamp: number;
