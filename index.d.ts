@@ -243,11 +243,11 @@ declare module 'discord.js' {
 		public createGuild(name: string, region: string, icon?: BufferResolvable | Base64Resolvable): Promise<Guild>;
 		public fetchMentions(options?: { limit?: number; roles?: boolean, everyone?: boolean; guild?: Guild | Snowflake }): Promise<Message[]>;
 		public removeFriend(user?: UserResolvable): Promise<User>;
-		public setActivity(name: string, options?: { url?: string, type?: ActivityType | number }): Promise<Presence>;
+		public setActivity(name: string | null, options?: { url?: string, type?: ActivityType | number }): Promise<Presence>;
 		public setAFK(afk: boolean): Promise<ClientUser>;
 		public setAvatar(avatar: BufferResolvable | Base64Resolvable): Promise<ClientUser>;
 		public setEmail(email: string, password: string): Promise<ClientUser>;
-		public setGame(game: string, streamingURL?: string): Promise<ClientUser>;
+		public setGame(game: string | null, streamingURL?: string): Promise<ClientUser>;
 		public setPassword(newPassword: string, oldPassword: string): Promise<ClientUser>;
 		public setPresence(data: PresenceData): Promise<ClientUser>;
 		public setStatus(status: PresenceStatus): Promise<ClientUser>;
@@ -1961,7 +1961,7 @@ declare module 'discord.js' {
 			name?: string;
 			url?: string;
 			type?: ActivityType;
-		}
+		} | null;
 	}
 
 	type PresenceStatus = 'online' | 'idle' | 'invisible' | 'dnd';
