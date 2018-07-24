@@ -1998,13 +1998,13 @@ declare module 'discord.js' {
 
 	interface RecursiveArray<T> extends Array<T | RecursiveArray<T>> { }
 
-	type PermissionOverwriteOptions = {
-		allowed: Permissions;
-		denied: Permissions;
-		id: Snowflake;
-	}
-
 	type PermissionResolvable = RecursiveArray<Permissions | PermissionString | number> | Permissions | PermissionString | number;
+
+	type PermissionOverwriteOptions = {
+		allowed: PermissionResolvable;
+		denied: PermissionResolvable;
+		id: UserResolvable | RoleResolvable;
+	}
 
 	type PresenceData = {
 		status?: PresenceStatus;
