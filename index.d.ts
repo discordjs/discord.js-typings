@@ -548,12 +548,13 @@ declare module 'discord.js' {
 		public equals(channel: GuildChannel): boolean;
 		public fetchInvites(): Promise<Collection<string, Invite>>;
 		public lockPermissions(): Promise<GuildChannel>;
-		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: Partial<PermissionObject>, reason?: string): Promise<void>;
+		public overwritePermissions(options: Array<Partial<PermissionOverwrites|PermissionOverwriteOptions>>, reason?: string): Promise<GuildChannel>;
 		public permissionsFor(memberOrRole: GuildMemberResolvable | RoleResolvable): Permissions;
 		public setName(name: string, reason?: string): Promise<GuildChannel>;
 		public setParent(channel: GuildChannel | Snowflake, options?: { lockPermissions?: boolean, reason?: string }): Promise<GuildChannel>;
 		public setPosition(position: number, options?: { relative?: boolean, reason?: string }): Promise<GuildChannel>;
 		public setTopic(topic: string, reason?: string): Promise<GuildChannel>;
+		public updateOverwrite(userOrRole: RoleResolvable | UserResolvable, options: Partial<PermissionObject>, reason?: string): Promise<GuildChannel>;
 	}
 
 	export class GuildEmoji extends Emoji {
@@ -1996,6 +1997,13 @@ declare module 'discord.js' {
 		| 'MANAGE_EMOJIS';
 
 	interface RecursiveArray<T> extends Array<T | RecursiveArray<T>> { }
+
+	type PermissionOverwriteOptions = {
+		allowed: Permissions;
+		denied: Permissions;
+		id: Snowflake;
+	}
+
 	type PermissionResolvable = RecursiveArray<Permissions | PermissionString | number> | Permissions | PermissionString | number;
 
 	type PresenceData = {
