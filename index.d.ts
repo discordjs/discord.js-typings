@@ -1785,7 +1785,7 @@ declare module 'discord.js' {
 		region?: string;
 		verificationLevel?: number;
 		explicitContentFilter?: number;
-		defaultMessageNotifications?: number | "ALL" | "MENTIONS";
+		defaultMessageNotifications?: DefaultMessageNotifications | number;
 		afkChannel?: ChannelResolvable;
 		systemChannel?: ChannelResolvable;
 		afkTimeout?: number;
