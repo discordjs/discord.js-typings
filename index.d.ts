@@ -477,7 +477,7 @@ declare module 'discord.js' {
 		public setAFKChannel(afkChannel: ChannelResolvable, reason?: string): Promise<Guild>;
 		public setAFKTimeout(afkTimeout: number, reason?: string): Promise<Guild>;
 		public setChannelPositions(channelPositions: ChannelPosition[]): Promise<Guild>;
-		public setDefaultMessageNotifications(defaultMessageNotifications: DefaultMessageNotifications | number): Promise<Guild>;
+		public setDefaultMessageNotifications(defaultMessageNotifications: DefaultMessageNotifications | number, reason?: string): Promise<Guild>;
 		public setExplicitContentFilter(explicitContentFilter: number, reason?: string): Promise<Guild>;
 		public setIcon(icon: Base64Resolvable, reason?: string): Promise<Guild>;
 		public setName(name: string, reason?: string): Promise<Guild>;
@@ -1785,6 +1785,7 @@ declare module 'discord.js' {
 		region?: string;
 		verificationLevel?: number;
 		explicitContentFilter?: number;
+		defaultMessageNotifications?: number | "ALL" | "MENTIONS";
 		afkChannel?: ChannelResolvable;
 		systemChannel?: ChannelResolvable;
 		afkTimeout?: number;
