@@ -1864,6 +1864,7 @@ declare module 'discord.js' {
 		MANAGE_GUILD?: number;
 		ADD_REACTIONS?: number;
 		VIEW_AUDIT_LOG?: number;
+		PRIORITY_SPEAKER?: number;
 		VIEW_CHANNEL?: number;
 		READ_MESSAGES?: number;
 		SEND_MESSAGES?: number;
@@ -1898,7 +1899,8 @@ declare module 'discord.js' {
 		MANAGE_GUILD?: boolean;
 		ADD_REACTIONS?: boolean;
 		VIEW_AUDIT_LOG?: boolean;
-		VIEW_CHANNEL?: number;
+		PRIORITY_SPEAKER?: boolean;
+		VIEW_CHANNEL?: boolean;
 		READ_MESSAGES?: boolean;
 		SEND_MESSAGES?: boolean;
 		SEND_TTS_MESSAGES?: boolean;
@@ -1930,6 +1932,8 @@ declare module 'discord.js' {
 		| 'MANAGE_CHANNELS'
 		| 'MANAGE_GUILD'
 		| 'ADD_REACTIONS'
+		| 'VIEW_AUDIT_LOG'
+		| 'PRIORITY_SPEAKER'
 		| 'VIEW_CHANNEL'
 		| 'READ_MESSAGES'
 		| 'SEND_MESSAGES'
