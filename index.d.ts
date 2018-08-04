@@ -997,6 +997,7 @@ declare module 'discord.js' {
 		public description?: string;
 		public fields?: { name: string; value: string; inline?: boolean; }[];
 		public file?: Attachment | string | FileOptions;
+		public files?: Array<Attachment | string | FileOptions>;
 		public footer?: { text?: string; icon_url?: string; };
 		public image?: { url: string; proxy_url?: string; height?: number; width?: number; };
 		public thumbnail?: { url: string; height?: number; width?: number; };
@@ -1006,6 +1007,7 @@ declare module 'discord.js' {
 		public addBlankField(inline?: boolean): this;
 		public addField(name: StringResolvable, value: StringResolvable, inline?: boolean): this;
 		public attachFile(file: Attachment | FileOptions | string): this;
+		public attachFiles(file: Array<Attachment | FileOptions | string>): this;
 		public setAuthor(name: StringResolvable, icon?: string, url?: string): this;
 		public setColor(color: ColorResolvable): this;
 		public setDescription(description: StringResolvable): this;
