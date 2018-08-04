@@ -1976,6 +1976,7 @@ declare module 'discord.js' {
 		| 'MANAGE_GUILD'
 		| 'ADD_REACTIONS'
 		| 'VIEW_AUDIT_LOG'
+		| 'PRIORITY_SPEAKER'
 		| 'VIEW_CHANNEL'
 		| 'SEND_MESSAGES'
 		| 'SEND_TTS_MESSAGES'
