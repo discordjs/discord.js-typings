@@ -1002,7 +1002,7 @@ declare module 'discord.js' {
 		public footer?: { text?: string; icon_url?: string; };
 		public image?: { url: string; proxy_url?: string; height?: number; width?: number; };
 		public thumbnail?: { url: string; height?: number; width?: number; };
-		public timestamp?: number;
+		public timestamp?: Date;
 		public title?: string;
 		public url?: string;
 		public addBlankField(inline?: boolean): this;
