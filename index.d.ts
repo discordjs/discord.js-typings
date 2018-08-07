@@ -722,6 +722,7 @@ declare module 'discord.js' {
 		public system: boolean;
 		public tts: boolean;
 		public type: string;
+		public readonly url: string;
 		public webhookID: Snowflake;
 		public acknowledge(): Promise<Message>;
 		public awaitReactions(filter: CollectorFilter, options?: AwaitReactionsOptions): Promise<Collection<Snowflake, MessageReaction>>;
