@@ -1084,17 +1084,37 @@ declare module 'discord.js' {
 		public push(request: object): void;
 	}
 
-	export class Shard {
+	export class Shard extends EventEmitter {
 		constructor(manager: ShardingManager, id: number, args?: string[]);
+		private _exitListener: Function;
+		private _handleExit(respawn?: boolean): void;
 		private _handleMessage(message: any): void;
 
 		public env: object;
 		public id: string;
 		public manager: ShardingManager;
 		public process: ChildProcess;
+		public readonly: boolean;
 		public eval(script: string): Promise<any>;
 		public fetchClientValue(prop: string): Promise<any>;
+		public kill(): void;
+		public respawn(delay?: number): Promise<ChildProcess>;
+		public spawn(args?: string[], execArgv?: string[]): Promise<ChildProcess>;
 		public send(message: any): Promise<Shard>;
+
+		public on(event: 'death', listener: () => void): this;
+		public on(event: 'disconnect', listener: () => void): this;
+		public on(event: 'message', listener: (message: any) => void): this;
+		public on(event: 'ready', listener: () => void): this;
+		public on(event: 'reconnecting', listener: () => void): this;
+		public on(event: string, listener: Function): this;
+
+		public once(event: 'death', listener: () => void): this;
+		public once(event: 'disconnect', listener: () => void): this;
+		public once(event: 'message', listener: (message: any) => void): this;
+		public once(event: 'ready', listener: () => void): this;
+		public once(event: 'reconnecting', listener: () => void): this;
+		public once(event: string, listener: Function): this;
 	}
 
 	export class ShardClientUtil {
@@ -1120,6 +1140,7 @@ declare module 'discord.js' {
 		});
 		private _spawn(amount: number, delay: number): Promise<Collection<number, Shard>>;
 
+		public execArgv: string[];
 		public file: string;
 		public respawn: boolean;
 		public shardArgs: string[];
@@ -1130,6 +1151,7 @@ declare module 'discord.js' {
 		public broadcastEval(script: string): Promise<any[]>;
 		public createShard(id: number): Promise<Shard>;
 		public fetchClientValues(prop: string): Promise<any[]>;
+		public respawnAll(shardDelay?: number, respawnDelay?: number, waitForReady?: true, currentShardIndex?: number): Promise<Collection<number, Shard>>;
 		public spawn(amount?: number, delay?: number): Promise<Collection<number, Shard>>;
 
 		public on(event: 'launch', listener: (shard: Shard) => void): this;
@@ -1230,6 +1252,7 @@ declare module 'discord.js' {
 		public static arraysEqual(a: any[], b: any[]): boolean;
 		public static cloneObject(obj: object): object;
 		public static convertToBuffer(ab: ArrayBuffer | string): Buffer;
+		public static delayFor(ms: number): Promise<void>;
 		public static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string;
 		public static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
 		public static makeError(obj: { name: string, message: string, stack: string }): Error;
