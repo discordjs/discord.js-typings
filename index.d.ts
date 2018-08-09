@@ -943,6 +943,7 @@ declare module 'discord.js' {
 		public missingPermissions(permissions: PermissionResolvable, checkAdmin?: boolean): PermissionResolvable;
 		public remove(...permissions: PermissionResolvable[]): this;
 		public serialize(checkAdmin?: boolean): PermissionObject;
+		public toArray(checkAdmin?: boolean): PermissionString[];
 		public valueOf(): number;
 
 		public static ALL: number;
