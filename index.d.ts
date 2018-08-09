@@ -1547,7 +1547,7 @@ declare module 'discord.js' {
 		typing: boolean;
 		typingCount: number;
 		awaitMessages(filter: CollectorFilter, options?: AwaitMessagesOptions): Promise<Collection<string, Message>>;
-		bulkDelete(messages: Collection<string, Message> | Message[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
+		bulkDelete(messages: Collection<string, Message> | Message[] | Snowflake[] | number, filterOld?: boolean): Promise<Collection<string, Message>>;
 		createCollector(filter: CollectorFilter, options?: CollectorOptions): MessageCollector;
 		createMessageCollector(filter: CollectorFilter, options?: CollectorOptions): MessageCollector;
 		fetchMessage(messageID: string): Promise<Message>;
