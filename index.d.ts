@@ -518,7 +518,7 @@ declare module 'discord.js' {
 		public addMember(user: UserResolvable, options: AddGuildMemberOptions): Promise<GuildMember>;
 		public allowDMs(allow: boolean): Promise<Guild>;
 		public ban(user: UserResolvable, options?: BanOptions | number | string): Promise<GuildMember | User | string>;
-		public createChannel(name: string, type?: 'category' | 'text' | 'voice', overwrites?: PermissionOverwrites[] | object[], reason?: string): Promise<CategoryChannel | TextChannel | VoiceChannel>;
+		public createChannel(name: string, type?: 'category' | 'text' | 'voice', overwrites?: PermissionOverwrites[] | ChannelCreationOverwrites[], reason?: string): Promise<CategoryChannel | TextChannel | VoiceChannel>;
 		public createEmoji(attachment: BufferResolvable | Base64Resolvable, name: string, roles?: Collection<Snowflake, Role> | Role[], reason?: string): Promise<Emoji>;
 		public createRole(data?: RoleData, reason?: string): Promise<Role>;
 		public delete(): Promise<Guild>;
@@ -606,7 +606,7 @@ declare module 'discord.js' {
 		public lockPermissions(): Promise<GuildChannel>;
 		public overwritePermissions(userOrRole: RoleResolvable | UserResolvable, options: PermissionOverwriteOptions, reason?: string): Promise<void>;
 		public permissionsFor(member: GuildMemberResolvable): Permissions;
-		public replacePermissionOverwrites(options?: { overwrites?: (PermissionOverwrites | PermissionOverwriteOptions)[], reason?: string }): Promise<GuildChannel>;
+		public replacePermissionOverwrites(options?: { overwrites?: (PermissionOverwrites | ChannelCreationOverwrites)[], reason?: string }): Promise<GuildChannel>;
 		public setName(name: string, reason?: string): Promise<GuildChannel>;
 		public setParent(parent: ChannelResolvable, reason?: string): Promise<GuildChannel>
 		public setPosition(position: number, relative?: boolean): Promise<GuildChannel>;
@@ -1593,6 +1593,14 @@ declare module 'discord.js' {
 	type Base64String = string;
 
 	type BufferResolvable = Buffer | string;
+
+	type ChannelCreationOverwrites = {
+		allow?: PermissionResolvable | number;
+		deny?: PermissionResolvable | number;
+		allowed?: PermissionResolvable | number;
+		denied?: PermissionResolvable | number;
+		id: RoleResolvable | UserResolvable;
+	};
 
 	type ChannelData = {
 		name?: string;
