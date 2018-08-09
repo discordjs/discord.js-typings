@@ -138,6 +138,7 @@ declare module 'discord.js' {
 		public on(event: 'messageReactionRemoveAll', listener: (message: Message) => void): this;
 		public on(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
 		public on(event: 'presenceUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+		public on(event: 'rateLimit', listener: (rateLimit: RateLimitInfo) => void): this;
 		public on(event: 'ready', listener: () => void): this;
 		public on(event: 'reconnecting', listener: () => void): this;
 		public on(event: 'resume', listener: (replayed: number) => void): this;
@@ -184,6 +185,7 @@ declare module 'discord.js' {
 		public once(event: 'messageReactionRemoveAll', listener: (message: Message) => void): this;
 		public once(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
 		public once(event: 'presenceUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+		public once(event: 'rateLimit', listener: (rateLimit: RateLimitInfo) => void): this;
 		public once(event: 'ready', listener: () => void): this;
 		public once(event: 'reconnecting', listener: () => void): this;
 		public once(event: 'resume', listener: (replayed: number) => void): this;
@@ -2008,6 +2010,13 @@ declare module 'discord.js' {
 	}
 
 	type PresenceStatus = 'online' | 'idle' | 'invisible' | 'dnd';
+
+	type RateLimitInfo = {
+		requestLimit: number;
+		timeDifference: number;
+		method: string;
+		path: string;
+	};
 
 	type ReactionCollectorOptions = CollectorOptions & {
 		max?: number;
