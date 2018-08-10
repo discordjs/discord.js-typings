@@ -297,7 +297,7 @@ declare module 'discord.js' {
 		public array(): V[];
 		public clone(): Collection<K, V>;
 		public concat(...collections: Collection<K, V>[]): Collection<K, V>;
-		public deleteAll(): Promise<V>[];
+		public each(fn: (value: V, key: K, collection: Collection<K, V>) => void, thisArg?: any): void;
 		public equals(collection: Collection<any, any>): boolean;
 		public every(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
 		public filter(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): Collection<K, V>;
@@ -322,7 +322,7 @@ declare module 'discord.js' {
 		public some(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): boolean;
 		public sort(compareFunction?: (a: V, b: V, c?: K, d?: K) => number): Collection<K, V>;
 		public sweep(fn: (value: V, key: K, collection: Collection<K, V>) => boolean, thisArg?: any): number;
-		public tap(fn: (value: V, key: K, collection: Collection<K, V>) => any, thisArg?: any): Collection<K, V>;
+		public tap(fn: (collection: Collection<K, V>) => void, thisArg?: any): Collection<K, V>;
 		public toJSON(): object;
 	}
 
