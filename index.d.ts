@@ -597,7 +597,7 @@ declare module 'discord.js' {
 		public readonly selfMute: boolean;
 		public readonly serverDeaf: boolean;
 		public readonly serverMute: boolean;
-		public speaking: boolean;
+		public readonly speaking: boolean;
 		public user: User;
 		public readonly voiceChannel: VoiceChannel;
 		public readonly voiceChannelID: Snowflake;
