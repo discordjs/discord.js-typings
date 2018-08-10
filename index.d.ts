@@ -1115,9 +1115,10 @@ declare module 'discord.js' {
 	export class Util {
 		public static basename(path: string, ext?: string): string;
 		public static binaryToID(num: string): Snowflake;
-		public static delayFor(ms: number): Promise<void>;
+		public static cleanContent(str: string, message: Message): string;
 		public static cloneObject(obj: object): object;
 		public static convertToBuffer(ab: ArrayBuffer | string): Buffer;
+		public static delayFor(ms: number): Promise<void>;
 		public static discordSort<K, V extends { rawPosition: number; id: string; }>(collection: Collection<K, V>): Collection<K, V>
 		public static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string;
 		public static fetchRecommendedShards(token: string, guildsPerShard?: number): Promise<number>;
